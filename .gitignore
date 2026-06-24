@@ -1,0 +1,26 @@
+# ===== Dart / Flutter =====
+**/.dart_tool/
+**/.packages
+**/build/
+.flutter-plugins
+.flutter-plugins-dependencies
+**/doc/api/
+
+# ===== Repos de referência (estudo) — 96MB de terceiros, fora do versionamento =====
+/refs/
+
+# ===== Artefatos de teste / Playwright =====
+.playwright-mcp/
+*.png.tmp
+
+# ===== IDE / SO =====
+.idea/
+.vscode/
+*.iml
+*.iws
+.DS_Store
+*.log
+*.swp
+
+# Observação: os .gitignore de cada pacote (ex.: libs/flext_demo/.gitignore)
+# cuidam dos arquivos gerados pelo jaspr (entrypoints, *.options.dart, etc.).

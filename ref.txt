@@ -1,0 +1,21 @@
+BACKEND SERVER
+https://fluttergems.dev/web-server/
+https://pub.dev/packages/serverpod
+https://pub.dev/packages/darto
+
+
+SSR 
+https://pub.dev/packages/spark_framework
+https://pub.dev/packages/dartian_view
+https://pub.dev/packages/ssroute_data_eurostat
+https://pub.dev/packages/sfwf
+https://pub.dev/packages/ssr
+
+
+FLUTTER
+https://github.com/flutter
+
+
+NEXT
+https://github.com/nextjs
+

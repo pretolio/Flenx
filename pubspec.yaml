@@ -1,0 +1,14 @@
+name: flext_workspace
+publish_to: none
+
+environment:
+  sdk: ^3.5.0
+
+# Dart workspace (monorepo). Cada pacote vive em packages/ e é resolvido em conjunto.
+workspace:
+  - packages/flext_annotations
+  - packages/flext_core
+  - packages/flext_codegen
+  - packages/flext_styling
+  - packages/flext_cli
+  - example

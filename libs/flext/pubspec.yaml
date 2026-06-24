@@ -1,0 +1,25 @@
+name: flext
+description: Framework Flutter/Dart estilo Next.js — SSR, blog, SEO/GEO/AEO, shell e site institucional. Importe e monte seu site.
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: ^3.10.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  crypto: ^3.0.0
+  http: ^1.2.0
+  jaspr: ^0.23.1
+  markdown: ^7.3.1
+  shelf: ^1.4.0
+  shelf_router: ^1.1.0
+  web: ^1.1.0
+  yaml: ^3.1.3
+
+dev_dependencies:
+  flutter_lints: ^5.0.0
+  flutter_test:
+    sdk: flutter
+  jaspr_test: ^0.23.1

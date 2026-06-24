@@ -1,0 +1,9 @@
+name: flext_annotations
+description: Anotações do framework Flext (@Ssr, @FlextPage, @Api, @Persist, @Island).
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: ^3.5.0
+
+resolution: workspace

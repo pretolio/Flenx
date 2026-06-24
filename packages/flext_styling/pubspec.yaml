@@ -1,0 +1,12 @@
+name: flext_styling
+description: Camada de estilo unificada do Flext — sintaxe utility-first estilo Tailwind, com saída dupla (Tailwind CSS na web, estilo de widget no Flutter).
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: ^3.5.0
+
+resolution: workspace
+
+dev_dependencies:
+  test: ^1.25.0
