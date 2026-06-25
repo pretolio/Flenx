@@ -4,8 +4,8 @@ import 'package:jaspr/jaspr.dart';
 import '../../flext_palette.dart';
 import '../flext_card.dart';
 import '../flext_column.dart';
+import '../flext_grid.dart';
 import '../flext_heading.dart';
-import '../flext_row.dart';
 import '../flext_section.dart';
 import '../flext_text.dart';
 import '../flext_ui_enums.dart';
@@ -62,26 +62,17 @@ class FlextSteps extends StatelessComponent {
                 weight: 700),
           if (title != null)
             FlextHeading(title!, align: FlextTextAlign.center),
-          FlextRow(
-            gap: 20,
-            wrap: true,
-            cross: FlextAlign.stretch,
-            main: FlextAlign.center,
+          FlextGrid(
+            minItemWidth: 260,
             [
               for (var i = 0; i < steps.length; i++)
-                div(
-                  styles: Styles(raw: {'flex': '1 1 260px', 'max-width': '360px'}),
-                  [
-                    FlextCard(
-                      FlextColumn(gap: 10, [
-                        _badge(i + 1),
-                        FlextHeading(steps[i].title, level: 3),
-                        FlextText(steps[i].description,
-                            color: FlextPalette.muted),
-                      ]),
-                      background: FlextPalette.surface,
-                    ),
-                  ],
+                FlextCard(
+                  FlextColumn(gap: 10, [
+                    _badge(i + 1),
+                    FlextHeading(steps[i].title, level: 3),
+                    FlextText(steps[i].description, color: FlextPalette.muted),
+                  ]),
+                  background: FlextPalette.surface,
                 ),
             ],
           ),

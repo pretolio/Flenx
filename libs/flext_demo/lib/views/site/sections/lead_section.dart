@@ -1,5 +1,4 @@
 import 'package:flext/flext.dart';
-import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
 
 /// Seção de captura de leads: benefícios à esquerda, formulário à direita.
@@ -20,15 +19,12 @@ class LeadSection extends StatelessComponent {
   Component build(BuildContext context) {
     return FlextSection(
       id: 'contato',
-      child: FlextRow(
+      child: FlextGrid(
+        minItemWidth: 360,
         gap: 40,
-        wrap: true,
-        cross: FlextAlign.start,
-        main: FlextAlign.spaceBetween,
         [
           FlextColumn(
             gap: 14,
-            maxWidthPx: 460,
             [
               const FlextText('Fale com a gente',
                   color: FlextPalette.primary, weight: 700),
@@ -47,14 +43,9 @@ class LeadSection extends StatelessComponent {
               ),
             ],
           ),
-          div(
-            styles: Styles(raw: {'flex': '1 1 360px', 'max-width': '460px'}),
-            [
-              FlextCard(
-                LeadForm(action: action, submitted: submitted),
-                padding: 24,
-              ),
-            ],
+          FlextCard(
+            LeadForm(action: action, submitted: submitted),
+            padding: 24,
           ),
         ],
       ),

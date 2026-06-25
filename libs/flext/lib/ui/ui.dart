@@ -13,6 +13,9 @@ export 'flext_button.dart';
 export 'flext_card.dart';
 export 'flext_image.dart';
 export 'flext_section.dart';
+export 'flext_grid.dart';
+export 'flext_page.dart';
+export 'flext_fullscreen.dart';
 
 // Blocos de seção prontos
 export 'blocks/flext_hero.dart';

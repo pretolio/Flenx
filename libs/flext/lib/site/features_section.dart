@@ -51,25 +51,16 @@ class FeaturesSection extends StatelessComponent {
           FlextHeading(title, align: FlextTextAlign.center),
           FlextText(subtitle,
               align: FlextTextAlign.center, color: FlextPalette.muted),
-          FlextRow(
-            gap: 20,
-            wrap: true,
-            cross: FlextAlign.stretch,
-            main: FlextAlign.center,
+          FlextGrid(
+            minItemWidth: 300,
             [
               for (final f in features)
-                div(
-                  styles:
-                      Styles(raw: {'flex': '1 1 300px', 'max-width': '360px'}),
-                  [
-                    FlextCard(
-                      FlextColumn(gap: 10, [
-                        _icon(f.icon),
-                        FlextHeading(f.title, level: 3),
-                        FlextText(f.description, color: FlextPalette.muted),
-                      ]),
-                    ),
-                  ],
+                FlextCard(
+                  FlextColumn(gap: 10, [
+                    _icon(f.icon),
+                    FlextHeading(f.title, level: 3),
+                    FlextText(f.description, color: FlextPalette.muted),
+                  ]),
                 ),
             ],
           ),

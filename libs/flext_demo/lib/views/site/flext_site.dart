@@ -1,5 +1,4 @@
 import 'package:flext/flext.dart';
-import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
 
 import 'sections/lead_section.dart';
@@ -28,10 +27,7 @@ class FlextSite extends StatelessComponent {
 
   @override
   Component build(BuildContext context) {
-    return div(classes: 'flext-site', [
-      // CSS base do site (header/features/form ainda usam classes). Os blocos do
-      // kit são auto-estilizados (inline), então não dependem disto.
-      Component.element(tag: 'style', children: [RawText(flextSiteCss)]),
+    return FlextPage([
       const SiteHeader(
         brand: siteBrand,
         links: siteNavLinks,

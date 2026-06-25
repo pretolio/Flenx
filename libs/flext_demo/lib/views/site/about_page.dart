@@ -1,5 +1,4 @@
 import 'package:flext/flext.dart';
-import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
 
 import 'sections/site_footer.dart';
@@ -22,7 +21,7 @@ class AboutPage extends StatelessComponent {
       links: siteNavLinks,
       loginOptions: siteLoginOptions,
       footer: const SiteFooter(),
-      child: div([
+      child: FlextColumn(cross: FlextAlign.stretch, [
         FlextSection(
           child: FlextColumn(gap: 14, maxWidthPx: 760, [
             const FlextText('Sobre o projeto',
@@ -50,24 +49,15 @@ class AboutPage extends StatelessComponent {
                 weight: 700),
             const FlextHeading('A web merece a DX do Flutter',
                 align: FlextTextAlign.center),
-            FlextRow(
-              gap: 20,
-              wrap: true,
-              cross: FlextAlign.stretch,
-              main: FlextAlign.center,
+            FlextGrid(
+              minItemWidth: 280,
               [
                 for (final c in _cards)
-                  div(
-                    styles: Styles(
-                        raw: {'flex': '1 1 280px', 'max-width': '360px'}),
-                    [
-                      FlextCard(FlextColumn(gap: 8, [
-                        FlextText(c.$1, size: 30),
-                        FlextHeading(c.$2, level: 3),
-                        FlextText(c.$3, color: FlextPalette.muted),
-                      ])),
-                    ],
-                  ),
+                  FlextCard(FlextColumn(gap: 8, [
+                    FlextText(c.$1, size: 30),
+                    FlextHeading(c.$2, level: 3),
+                    FlextText(c.$3, color: FlextPalette.muted),
+                  ])),
               ],
             ),
           ]),
@@ -80,15 +70,14 @@ class AboutPage extends StatelessComponent {
                 weight: 700),
             const FlextHeading('Embute qualquer site ou vídeo',
                 align: FlextTextAlign.center),
-            const FlextText('É só passar a URL — o Flext carrega num iframe responsivo.',
-                align: FlextTextAlign.center, color: FlextPalette.muted),
-            div(
-              styles: Styles(raw: {'max-width': '760px', 'width': '100%', 'margin-top': '20px'}),
-              const [
-                IframeEmbed('https://www.youtube.com/embed/dQw4w9WgXcQ',
-                    title: 'Vídeo de exemplo', ratio: '16 / 9'),
-              ],
-            ),
+            const FlextText(
+                'É só passar a URL — o Flext carrega num iframe responsivo.',
+                align: FlextTextAlign.center,
+                color: FlextPalette.muted),
+            const FlextColumn(maxWidthPx: 760, cross: FlextAlign.stretch, [
+              IframeEmbed('https://www.youtube.com/embed/dQw4w9WgXcQ',
+                  title: 'Vídeo de exemplo', ratio: '16 / 9'),
+            ]),
           ]),
         ),
         FlextCta(
