@@ -45,6 +45,8 @@ export 'site/features_section.dart';
 export 'site/lead_repository.dart';
 export 'site/site_styles.dart';
 export 'site/blog_styles.dart';
+export 'site/components/flext_blog_layout.dart';
+export 'site/components/flext_not_found.dart';
 export 'site/components/iframe_embed.dart';
 export 'site/components/lead_form.dart';
 export 'site/components/whatsapp_button.dart';
