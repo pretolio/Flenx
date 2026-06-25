@@ -65,6 +65,7 @@ class FlextApp {
     required List<FlextRoute> routes,
     required Component notFound,
     String? blog,
+    Blog? blogInstance,
     BlogLayoutBuilder? blogLayout,
     List<IRouteSource> extraSources = const [],
     List<ApiEndpoint> apis = const [],
@@ -73,7 +74,7 @@ class FlextApp {
     TokenVerifier? tokenVerifier,
     List<StyleRule> globalStyles = const [],
     String lang = 'pt-BR',
-    int port = 8080,
+    int? port,
   }) async {
     Jaspr.initializeApp(options: options);
 
@@ -83,9 +84,11 @@ class FlextApp {
       StaticRouteSource([for (final r in routes) r.meta]),
       ...extraSources,
     ];
-    Blog? loaded;
-    if (blog != null) {
+    Blog? loaded = blogInstance;
+    if (loaded == null && blog != null) {
       loaded = await Blog.load(blog);
+    }
+    if (loaded != null) {
       sources.add(loaded.routeSource);
     }
     final registry = RouteRegistry(sources);

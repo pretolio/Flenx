@@ -56,8 +56,11 @@ class FlextServer {
   final String lang;
   final String flutterBootstrap;
 
-  /// Sobe o servidor na [port].
-  Future<HttpServer> start({int port = 8080}) async {
+  /// Sobe o servidor. Se [port] for nulo, usa a variável de ambiente `PORT`
+  /// (definida pelo `jaspr serve`/`jaspr build`) ou 8080.
+  Future<HttpServer> start({int? port}) async {
+    final resolvedPort =
+        port ?? int.tryParse(Platform.environment['PORT'] ?? '') ?? 8080;
     final meta = MetaTagsBuilder(seo);
     final router = Router();
 
@@ -113,7 +116,7 @@ class FlextServer {
     // Controle de hot-reload do jaspr: fecha o servidor anterior ao recarregar.
     final reloadLock = _activeReloadLock = Object();
     final server =
-        await serve(handler, InternetAddress.anyIPv4, port, shared: true);
+        await serve(handler, InternetAddress.anyIPv4, resolvedPort, shared: true);
     if (reloadLock != _activeReloadLock) {
       await server.close();
       return server;
