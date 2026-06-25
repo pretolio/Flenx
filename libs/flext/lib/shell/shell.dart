@@ -9,6 +9,7 @@ export 'models/dashboard_stat.dart';
 export 'models/activity_item.dart';
 export 'utils/shell_breakpoints.dart';
 export 'flext_admin_theme.dart';
+export 'flext_admin_app.dart';
 export 'components/app_shell.dart';
 export 'components/sidebar.dart';
 export 'components/top_bar.dart';
