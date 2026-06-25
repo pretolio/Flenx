@@ -6,10 +6,12 @@
 # Conventional directory for build output.
 /build/
 
-# Entrypoints exigidos pelo jaspr — gerados por `dart run flext:bootstrap`.
-# Você só mantém o lib/main.dart; estes são recriados a partir dele.
+# Entrypoints e wiring gerados por `dart run flext:bootstrap`.
+# Você só mantém o conteúdo (main.dart, config/, views/, admin_app.dart);
+# estes são recriados a partir dele.
 lib/main.server.dart
 lib/main.client.dart
+lib/views/admin/admin_page.dart
 
 # Arquivos GERADOS pelo jaspr_builder (regeneram com `dart run build_runner build`).
 # Ficam fora do controle de versão para não poluir o projeto.

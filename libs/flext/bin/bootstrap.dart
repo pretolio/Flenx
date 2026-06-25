@@ -37,5 +37,41 @@ void main() => runFlextClient(defaultClientOptions);
   File('lib/main.server.dart').writeAsStringSync(server);
   File('lib/main.client.dart').writeAsStringSync(client);
   stdout.writeln('Entrypoints gerados: lib/main.server.dart, lib/main.client.dart');
-  stdout.writeln('Pronto. Rode `jaspr serve`. (Edite só o lib/main.dart.)');
+
+  // Admin (opcional): se existir a config em lib/views/admin/admin_app.dart
+  // (uma classe Flutter `AdminApp` usando FlextAdminApp), gera o wiring
+  // `admin_page.dart` por você — é sempre igual, então fica no .gitignore.
+  final adminApp = File('lib/views/admin/admin_app.dart');
+  if (adminApp.existsSync()) {
+    const adminPage = '''
+// GERADO por `dart run flext:bootstrap` — NÃO edite (está no .gitignore).
+// Embute o admin (Flutter) como ilha. Sua config fica em admin_app.dart.
+import 'package:flext/embed.dart';
+import 'package:flext/flext.dart';
+import 'package:jaspr/jaspr.dart';
+
+@Import.onWeb('admin_app.dart', show: [#AdminApp])
+import 'admin_page.imports.dart' deferred as admin;
+
+@client
+class AdminPage extends StatelessComponent {
+  const AdminPage({super.key});
+
+  @override
+  Component build(BuildContext context) {
+    return FlextFullscreen(
+      FlutterIsland(
+        loadLibrary: admin.loadLibrary(),
+        builder: () => admin.AdminApp(),
+      ),
+    );
+  }
+}
+''';
+    File('lib/views/admin/admin_page.dart').writeAsStringSync(adminPage);
+    stdout.writeln('Admin gerado: lib/views/admin/admin_page.dart');
+  }
+
+  stdout.writeln('Pronto. Rode `jaspr serve`. (Edite só o conteúdo: main.dart, '
+      'config/, views/, e admin_app.dart.)');
 }
