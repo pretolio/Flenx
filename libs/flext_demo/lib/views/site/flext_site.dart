@@ -2,15 +2,12 @@ import 'package:flext/flext.dart';
 import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
 
-import 'sections/hero_section.dart';
 import 'sections/lead_section.dart';
 import 'sections/site_footer.dart';
-import 'sections/steps_section.dart';
 import 'site_nav.dart';
 
-/// Site institucional real do Flext — landing completa (SSR). Conteúdo e
-/// configuração ([config]) são personalizáveis. [submitted] mostra o
-/// agradecimento após o envio do formulário de leads.
+/// Landing do Flext — montada SÓ com componentes Dart do kit (FlextHero,
+/// FlextTrustBar, FlextSteps, FlextCta...). Nada de HTML/CSS na mão.
 class FlextSite extends StatelessComponent {
   const FlextSite({this.config = const SiteConfig(), this.submitted = false, super.key});
 
@@ -26,9 +23,14 @@ class FlextSite extends StatelessComponent {
     Feature(icon: '🎨', title: 'Shell responsivo', description: 'Sidebar/drawer e top menu prontos, no app e no site.'),
   ];
 
+  static const _code = "@FlextPage('/')\n@Ssr\nclass HomePage extends FlextWidget {\n"
+      "  // SSR + SEO + sitemap: tudo automático\n  Widget build(context) => Hero();\n}";
+
   @override
   Component build(BuildContext context) {
     return div(classes: 'flext-site', [
+      // CSS base do site (header/features/form ainda usam classes). Os blocos do
+      // kit são auto-estilizados (inline), então não dependem disto.
       Component.element(tag: 'style', children: [RawText(flextSiteCss)]),
       const SiteHeader(
         brand: siteBrand,
@@ -36,36 +38,46 @@ class FlextSite extends StatelessComponent {
         loginLabel: 'Entrar',
         loginOptions: siteLoginOptions,
       ),
-      const HeroSection(),
-      _trust(),
+      const FlextHero(
+        eyebrow: 'Framework web em Dart',
+        title: 'Flutter na web como nunca antes',
+        subtitle: 'SSR real, widgets Flutter de verdade e SEO/GEO/AEO '
+            'automáticos — tudo em Dart, com a DX de um framework moderno.',
+        actions: [
+          FlextButton('Começar agora', href: '#contato'),
+          FlextButton('Ver no GitHub',
+              href: 'https://github.com/flext',
+              variant: FlextButtonVariant.ghost,
+              newTab: true),
+        ],
+        aside: FlextCodeCard(_code),
+      ),
+      const FlextTrustBar(
+        label: 'Construído sobre',
+        items: ['jaspr', 'Flutter', 'Dart', 'shelf'],
+      ),
       const FeaturesSection(features: _features),
-      const StepsSection(),
-      _cta(),
+      const FlextSteps(
+        eyebrow: 'Como funciona',
+        title: 'Do código ao SEO em 3 passos',
+        steps: [
+          FlextStep('Escreva uma vez',
+              'Seus widgets Flutter rodam no app e na web — mesmo código.'),
+          FlextStep('Anote a rota',
+              'Com @FlextPage/@Ssr o build gera SSR, sitemap, robots e llms.txt.'),
+          FlextStep('Publique',
+              'Conteúdo indexável por Google e por motores de IA, sem esforço.'),
+        ],
+      ),
+      const FlextCta(
+        title: 'Pronto para subir o patamar da sua web?',
+        subtitle: 'Comece com o Flext hoje — open source e gratuito.',
+        action: FlextButton('Quero começar',
+            href: '#contato', variant: FlextButtonVariant.ghost),
+      ),
       LeadSection(action: config.leadAction, submitted: submitted),
-      SiteFooter(email: config.contactEmail),
+      const SiteFooter(),
       WhatsappButton(url: config.whatsappUrl),
     ]);
   }
-
-  Component _trust() => section(classes: 'section-sm trust', [
-        div(classes: 'container', [
-          div(classes: 'row', [
-            span([.text('Construído sobre')]),
-            span([b([.text('jaspr')])]),
-            span([b([.text('Flutter')])]),
-            span([b([.text('Dart')])]),
-            span([b([.text('shelf')])]),
-          ]),
-        ]),
-      ]);
-
-  Component _cta() => section(classes: 'section', [
-        div(classes: 'container', [
-          div(classes: 'cta', [
-            h2([.text('Pronto para subir o patamar da sua web?')]),
-            p([.text('Comece com o Flext hoje — open source e gratuito.')]),
-            a([.text('Quero começar')], href: '#contato', classes: 'btn btn-ghost'),
-          ]),
-        ]),
-      ]);
 }

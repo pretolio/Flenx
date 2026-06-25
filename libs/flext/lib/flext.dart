@@ -8,6 +8,9 @@ library flext;
 // Paleta central de cores (site + admin)
 export 'flext_palette.dart';
 
+// Kit de UI em Dart estilo Flutter (sem precisar saber HTML/CSS)
+export 'ui/ui.dart';
+
 // API (envelope de retorno padrão + paginação) e banco (models + migration)
 export 'api/api.dart';
 export 'db/db.dart';

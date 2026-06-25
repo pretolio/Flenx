@@ -1,42 +1,28 @@
-import 'package:jaspr/dom.dart';
+import 'package:flext/flext.dart';
 import 'package:jaspr/jaspr.dart';
 
-/// Rodapé do site institucional.
+/// Rodapé do site do demo: usa o genérico [FlextFooter] da lib, só passando o
+/// conteúdo (marca, frase, colunas de links). Nada de HTML/CSS.
 class SiteFooter extends StatelessComponent {
-  const SiteFooter({this.email = 'contato@flext.dev', super.key});
-
-  final String email;
+  const SiteFooter({super.key});
 
   @override
   Component build(BuildContext context) {
-    return Component.element(tag: 'footer', classes: 'foot', children: [
-      div(classes: 'container', [
-        div(classes: 'foot-grid', [
-          div([
-            div(classes: 'brand', [.text('Flext')]),
-            p([.text('Framework Flutter estilo Next.js, em Dart.')]),
-          ]),
-          div([
-            h4([.text('Produto')]),
-            a([.text('Recursos')], href: '#recursos'),
-            a([.text('Blog')], href: '/blog'),
-            a([.text('Admin')], href: '/admin'),
-          ]),
-          div([
-            h4([.text('Empresa')]),
-            a([.text('Sobre')], href: '/about'),
-            a([.text('Contato')], href: '#contato'),
-          ]),
-          div([
-            h4([.text('Recursos')]),
-            a([.text('GitHub')], href: 'https://github.com/flext', target: Target.blank),
-            a([.text(email)], href: 'mailto:$email'),
-          ]),
+    return const FlextFooter(
+      brand: 'Flext',
+      tagline: 'Framework Flutter estilo Next.js, em Dart.',
+      columns: [
+        FlextFooterColumn('Produto', [
+          MenuLink(label: 'Recursos', href: '/#recursos'),
+          MenuLink(label: 'Blog', href: '/blog'),
+          MenuLink(label: 'Admin', href: '/admin'),
         ]),
-        div(classes: 'foot-bottom', [
-          .text('© 2026 Flext. Feito com Dart, jaspr e Flutter.'),
+        FlextFooterColumn('Empresa', [
+          MenuLink(label: 'Sobre', href: '/about'),
+          MenuLink(label: 'Contato', href: '/#contato'),
         ]),
-      ]),
-    ]);
+      ],
+      copyright: '© 2026 Flext. Feito com Dart, jaspr e Flutter.',
+    );
   }
 }
