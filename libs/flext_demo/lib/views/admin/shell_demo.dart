@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flext/shell.dart';
+import 'package:flext/shell.dart'; // AppShell, FlextDashboard, SectionPlaceholder...
 
 import '../../viewmodels/admin_view_model.dart';
-import 'dashboard_content.dart';
-import 'widgets/section_placeholder.dart';
 
 /// View raiz do painel admin (MVVM): observa o [AdminViewModel] e monta o
 /// shell do Flext com tema claro/escuro. Estado e dados ficam no ViewModel.
@@ -42,8 +40,12 @@ class _ShellDemoState extends State<ShellDemo> {
           onToggleTheme: _vm.toggleTheme,
           onLogout: () {},
           pages: {
-            '/': (c) =>
-                DashboardContent(stats: _vm.stats, activity: _vm.activity),
+            '/': (c) => FlextDashboard(
+                  stats: _vm.stats,
+                  activity: _vm.activity,
+                  greeting: 'Olá, Gabriel 👋',
+                  subtitle: 'Aqui está um resumo do seu site hoje.',
+                ),
             '/posts': (c) =>
                 const SectionPlaceholder('Posts', Icons.article_outlined),
             '/cats': (c) =>

@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
 
-import '../../models/activity_item.dart';
-import '../../models/dashboard_stat.dart';
-import 'widgets/card_panel.dart';
-import 'widgets/icon_chip.dart';
-import 'widgets/stat_card.dart';
+import '../models/activity_item.dart';
+import '../models/dashboard_stat.dart';
+import 'card_panel.dart';
+import 'icon_chip.dart';
+import 'stat_card.dart';
 
-/// View do dashboard: boas-vindas, indicadores e atividade recente. Recebe os
-/// dados do [AdminViewModel] (MVVM) — não conhece estado nem regras.
-class DashboardContent extends StatelessWidget {
-  const DashboardContent({
+/// Dashboard pronto do Flext: saudação, indicadores ([stats]) e atividade
+/// recente ([activity]). Genérico — você passa os dados e os textos.
+class FlextDashboard extends StatelessWidget {
+  const FlextDashboard({
     required this.stats,
     required this.activity,
+    this.greeting = 'Olá 👋',
+    this.subtitle = 'Aqui está um resumo de hoje.',
+    this.activityTitle = 'Atividade recente',
     super.key,
   });
 
   final List<DashboardStat> stats;
   final List<ActivityItem> activity;
+  final String greeting;
+  final String subtitle;
+  final String activityTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +32,11 @@ class DashboardContent extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Olá, Gabriel 👋',
+          Text(greeting,
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.w800, color: scheme.onSurface)),
           const SizedBox(height: 4),
-          Text('Aqui está um resumo do seu site hoje.',
-              style: TextStyle(color: scheme.onSurfaceVariant)),
+          Text(subtitle, style: TextStyle(color: scheme.onSurfaceVariant)),
           const SizedBox(height: 24),
           Wrap(
             spacing: 16,
@@ -40,7 +45,7 @@ class DashboardContent extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           CardPanel(
-            title: 'Atividade recente',
+            title: activityTitle,
             child: Column(
               children: [
                 for (final a in activity)

@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flext/shell.dart';
-
-import '../models/activity_item.dart';
-import '../models/dashboard_stat.dart';
+import 'package:flext/shell.dart'; // AppUser, NavItem, DashboardStat, ActivityItem
 
 /// ViewModel do painel admin (MVVM): estado de tema (claro/escuro) + os dados
 /// que a View consome. A View (ShellDemo) escuta via [ChangeNotifier].

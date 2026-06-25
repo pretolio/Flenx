@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../models/dashboard_stat.dart';
+import '../models/dashboard_stat.dart';
 import 'icon_chip.dart';
 
 /// Card de indicador do dashboard.
