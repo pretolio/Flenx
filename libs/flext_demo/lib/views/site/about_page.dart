@@ -56,6 +56,22 @@ class AboutPage extends StatelessComponent {
         ]),
         section(classes: 'section', [
           div(classes: 'container', [
+            p(classes: 'eyebrow center', [.text('Demonstração')]),
+            h2(classes: 'title center', [.text('Embute qualquer site ou vídeo')]),
+            p(classes: 'lead center', [
+              .text('É só passar a URL — o Flext carrega num iframe responsivo.'),
+            ]),
+            div(styles: Styles(raw: {'max-width': '760px', 'margin': '32px auto 0'}), [
+              const IframeEmbed(
+                'https://www.youtube.com/embed/dQw4w9WgXcQ',
+                title: 'Vídeo de exemplo',
+                ratio: '16 / 9',
+              ),
+            ]),
+          ]),
+        ]),
+        section(classes: 'section', [
+          div(classes: 'container', [
             div(classes: 'cta', [
               h2([.text('Quer fazer parte?')]),
               p([.text('O Flext é open source (MIT). Fale com a gente e participe.')]),
