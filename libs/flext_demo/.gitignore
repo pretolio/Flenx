@@ -15,6 +15,7 @@ lib/main.client.dart
 # Ficam fora do controle de versão para não poluir o projeto.
 lib/**/*.options.dart
 lib/**/*.imports.dart
+lib/**/*.sync.dart
 lib/generated/
 web/main.client.dart
 
