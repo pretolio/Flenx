@@ -1,15 +1,42 @@
 # flext_demo
 
-A new Jaspr project
+Site de exemplo **completo** do [Flext](../flext) — a referência de uso. Mostra, ponta a ponta: landing montada só com o **kit de UI em Dart** (sem HTML/CSS), **blog em markdown**, **SEO/sitemap/llms.txt** automáticos, **painel admin** (ilha Flutter) e **APIs declarativas** (Dart + PHP).
 
-## Running the project
+## O que você edita (versionado)
 
-Run your project using `jaspr serve`.
+```
+lib/
+├── main.dart                      # FlextApp.run(...) — liga tudo
+├── config/
+│   ├── site_seo.dart              # SeoConfig global
+│   ├── site_routes.dart           # rotas (RouteMeta + componente)
+│   └── site_api.dart              # APIs declarativas + models
+├── views/
+│   ├── site/                      # landing, sobre, 404, header/nav, seções
+│   ├── blog/                      # moldura do blog
+│   └── admin/admin_app.dart       # config do painel (FlextAdminApp)
+└── content/blog/*.md              # posts
+```
 
-The development server will be available on `http://localhost:8080`.
+## Gerado automaticamente (no `.gitignore`)
 
-## Building the project
+`main.server.dart`, `main.client.dart`, `views/admin/admin_page.dart`, `*.options.dart`, `*.imports.dart`, `lib/generated/`, `web/main.client.dart`, `build/`. São recriados — você não mexe.
 
-Build your project using `jaspr build`.
+## Rodando
 
-The output will be located inside the `build/jaspr/` directory.
+```bash
+dart pub get
+dart run flext:bootstrap          # 1x: gera os entrypoints a partir do main.dart
+dart pub global activate jaspr_cli
+jaspr serve                       # http://localhost:8080  (hot reload)
+```
+
+## Build
+
+```bash
+dart run tool/build.dart          # web/Dart + API PHP (se buildPhp=true no main.dart)
+# ou só o web:
+jaspr build                       # saída em build/jaspr/
+```
+
+Rotas do exemplo: `/` (landing), `/about`, `/blog` (+ categorias/tags/posts), `/admin` (ilha Flutter), `/sitemap.xml`, `/robots.txt`, `/llms.txt`.
