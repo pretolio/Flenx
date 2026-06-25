@@ -5,8 +5,7 @@ import 'package:jaspr/jaspr.dart';
 import 'sections/site_footer.dart';
 import 'site_nav.dart';
 
-/// Página "Sobre" — conteúdo institucional real do projeto, com o mesmo
-/// header, estilo e rodapé do restante do site.
+/// Página "Sobre" — conteúdo institucional, montado só com o kit Dart.
 class AboutPage extends StatelessComponent {
   const AboutPage({super.key});
 
@@ -24,61 +23,80 @@ class AboutPage extends StatelessComponent {
       loginOptions: siteLoginOptions,
       footer: const SiteFooter(),
       child: div([
-        section(classes: 'section', [
-          div(classes: 'container', [
-            p(classes: 'eyebrow', [.text('Sobre o projeto')]),
-            h2(classes: 'title', [.text('Flutter para a web, do jeito certo')]),
-            p(classes: 'lead', [
-              .text('O Flext é um framework web em Dart, no espírito do Next.js: '
-                  'renderiza HTML no servidor (SSR) para SEO real, mas mantém os '
-                  'widgets Flutter do seu app como ilhas interativas.'),
-            ]),
-            p(classes: 'lead', styles: Styles(margin: Margin.only(top: 14.px)), [
-              .text('A ideia é simples: escreva uma vez, rode no app e na web — '
-                  'com sitemap, robots e llms.txt automáticos, sem configuração.'),
-            ]),
+        FlextSection(
+          child: FlextColumn(gap: 14, maxWidthPx: 760, [
+            const FlextText('Sobre o projeto',
+                color: FlextPalette.primary, weight: 700),
+            const FlextHeading('Flutter para a web, do jeito certo', level: 1),
+            const FlextText(
+                'O Flext é um framework web em Dart, no espírito do Next.js: '
+                'renderiza HTML no servidor (SSR) para SEO real, mas mantém os '
+                'widgets Flutter do seu app como ilhas interativas.',
+                color: FlextPalette.muted,
+                lineHeight: 1.6),
+            const FlextText(
+                'A ideia é simples: escreva uma vez, rode no app e na web — '
+                'com sitemap, robots e llms.txt automáticos, sem configuração.',
+                color: FlextPalette.muted,
+                lineHeight: 1.6),
           ]),
-        ]),
-        section(classes: 'section',
-            styles: Styles(backgroundColor: const Color('#f8fafc')), [
-          div(classes: 'container', [
-            p(classes: 'eyebrow center', [.text('Por que existe')]),
-            h2(classes: 'title center', [.text('A web merece a DX do Flutter')]),
-            div(classes: 'grid', styles: Styles(margin: Margin.only(top: 40.px)), [
-              for (final c in _cards)
-                div(classes: 'card', [
-                  div(classes: 'ico', [.text(c.$1)]),
-                  h3([.text(c.$2)]),
-                  p([.text(c.$3)]),
-                ]),
-            ]),
+        ),
+        FlextSection(
+          background: FlextPalette.surface,
+          child: FlextColumn(gap: 28, cross: FlextAlign.stretch, [
+            const FlextText('Por que existe',
+                align: FlextTextAlign.center,
+                color: FlextPalette.primary,
+                weight: 700),
+            const FlextHeading('A web merece a DX do Flutter',
+                align: FlextTextAlign.center),
+            FlextRow(
+              gap: 20,
+              wrap: true,
+              cross: FlextAlign.stretch,
+              main: FlextAlign.center,
+              [
+                for (final c in _cards)
+                  div(
+                    styles: Styles(
+                        raw: {'flex': '1 1 280px', 'max-width': '360px'}),
+                    [
+                      FlextCard(FlextColumn(gap: 8, [
+                        FlextText(c.$1, size: 30),
+                        FlextHeading(c.$2, level: 3),
+                        FlextText(c.$3, color: FlextPalette.muted),
+                      ])),
+                    ],
+                  ),
+              ],
+            ),
           ]),
-        ]),
-        section(classes: 'section', [
-          div(classes: 'container', [
-            p(classes: 'eyebrow center', [.text('Demonstração')]),
-            h2(classes: 'title center', [.text('Embute qualquer site ou vídeo')]),
-            p(classes: 'lead center', [
-              .text('É só passar a URL — o Flext carrega num iframe responsivo.'),
-            ]),
-            div(styles: Styles(raw: {'max-width': '760px', 'margin': '32px auto 0'}), [
-              const IframeEmbed(
-                'https://www.youtube.com/embed/dQw4w9WgXcQ',
-                title: 'Vídeo de exemplo',
-                ratio: '16 / 9',
-              ),
-            ]),
+        ),
+        FlextSection(
+          child: FlextColumn(gap: 12, cross: FlextAlign.center, [
+            const FlextText('Demonstração',
+                align: FlextTextAlign.center,
+                color: FlextPalette.primary,
+                weight: 700),
+            const FlextHeading('Embute qualquer site ou vídeo',
+                align: FlextTextAlign.center),
+            const FlextText('É só passar a URL — o Flext carrega num iframe responsivo.',
+                align: FlextTextAlign.center, color: FlextPalette.muted),
+            div(
+              styles: Styles(raw: {'max-width': '760px', 'width': '100%', 'margin-top': '20px'}),
+              const [
+                IframeEmbed('https://www.youtube.com/embed/dQw4w9WgXcQ',
+                    title: 'Vídeo de exemplo', ratio: '16 / 9'),
+              ],
+            ),
           ]),
-        ]),
-        section(classes: 'section', [
-          div(classes: 'container', [
-            div(classes: 'cta', [
-              h2([.text('Quer fazer parte?')]),
-              p([.text('O Flext é open source (MIT). Fale com a gente e participe.')]),
-              a([.text('Fale com a gente')], href: '/#contato', classes: 'btn btn-ghost'),
-            ]),
-          ]),
-        ]),
+        ),
+        FlextCta(
+          title: 'Quer fazer parte?',
+          subtitle: 'O Flext é open source (MIT). Fale com a gente e participe.',
+          action: const FlextButton('Fale com a gente',
+              href: '/#contato', variant: FlextButtonVariant.ghost),
+        ),
       ]),
     );
   }
