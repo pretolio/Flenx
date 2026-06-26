@@ -1,7 +1,0 @@
-quero criar um framework flutter igual o next, que consigo rodar SSR, proxy, storage automático do que esta rodando em memoria simplicado somente com uma anotação, entre outros modos web, ele pode funcionário como uma lib flutter q resolve problemas, simplificando o máximo para iniciante poder usar, quero poder rodar o flutter igual outras stack como php, next, astro, para ele subir o patamar da web.
-
-
-
-
-
-vc pode buscar e add mais referencias, mais libs, git, pegar projetos que já começaram e criar fork, criar dlls, ou outras coisas em outras linguagens, p poder atingir o objetivo, pode fazer tudo desde que funcione igual ou melhor q os concorrentes.

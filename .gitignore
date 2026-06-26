@@ -27,3 +27,6 @@
 
 # Observação: os .gitignore de cada pacote (ex.: libs/flext_demo/.gitignore)
 # cuidam dos arquivos gerados pelo jaspr (entrypoints, *.options.dart, etc.).
+
+# Notas de estudo (fora do versionamento)
+docs/
