@@ -228,7 +228,7 @@ packages:
   flenx:
     dependency: "direct main"
     description:
-      path: "../flenx"
+      path: "../.."
       relative: true
     source: path
     version: "0.1.0"

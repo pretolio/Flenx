@@ -1,33 +1,50 @@
-# Flenx
+<p align="center">
+  <img src="https://raw.githubusercontent.com/pretolio/Flenx/main/doc/flenx-logo.png" alt="Flenx" width="540">
+</p>
 
-Framework **Flutter/Dart estilo Next.js** para a web. Você escreve **só Dart, no estilo Flutter** — **sem HTML/CSS** — e o Flenx faz **SSR** (com [jaspr](https://jaspr.site)), embute **widgets Flutter reais** como ilhas, e gera **SEO/GEO/AEO + sitemap + robots + llms.txt** automaticamente.
+<p align="center">
+  <strong>Flutter/Dart na web, no estilo Next.js.</strong><br>
+  Você escreve <strong>só Dart</strong> — sem HTML/CSS. O Flenx faz <strong>SSR</strong>, embute
+  <strong>widgets Flutter</strong> como ilhas e gera <strong>SEO/sitemap/llms.txt</strong> automaticamente.
+</p>
 
-Recursos (todos **opcionais**, use conforme precisar): kit de UI em Dart, blog (markdown e/ou banco), painel admin, APIs declarativas (Dart **ou** PHP), banco plugável (Supabase/Firebase/REST), auth (JWT), notificações (Twilio/FCM) e pagamento (Asaas/Mercado Pago).
+<p align="center">
+  <a href="https://pub.dev/packages/flenx"><img src="https://img.shields.io/pub/v/flenx.svg?label=pub.dev&color=0166b3" alt="pub.dev"></a>
+  <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT">
+  <img src="https://img.shields.io/badge/SDK-Dart%20%5E3.10-0a86e0.svg" alt="Dart">
+</p>
 
-> Três exemplos prontos no repositório: **`flenx_demo`** (institucional + admin), **`flenx_shop`** (loja) e **`flenx_news`** (notícias).
+<p align="center">
+  <a href="https://pub.dev/packages/flenx">📦 pub.dev</a> &nbsp;·&nbsp;
+  <a href="https://pretolio.github.io/Flenx/">🌐 Showcase</a> &nbsp;·&nbsp;
+  <a href="https://github.com/pretolio/Flenx/tree/main/example">🧪 Exemplos</a> &nbsp;·&nbsp;
+  <a href="https://github.com/pretolio/Flenx">★ GitHub</a>
+</p>
 
 ---
 
-## Conceito
+O Flenx é um framework para construir **sites e apps web em Dart** com renderização no servidor (via [jaspr](https://jaspr.site)). Tudo é **opcional** — comece com um site SSR + SEO em minutos e ative blog, admin, APIs e banco conforme o projeto cresce.
 
-- **Você só escreve Dart.** Componentes (`FlenxColumn`, `FlenxText`, `FlenxButton`, `FlenxHero`…) recebem parâmetros Dart; a lib gera o HTML/CSS por baixo.
-- **Uma rota = uma definição.** `FlenxRoute(RouteMeta(...), builder)` alimenta render, meta tags, sitemap e llms.txt de uma vez.
-- **Boilerplate é gerado.** Os entrypoints do jaspr são criados por `dart run flenx:bootstrap` e ficam no `.gitignore`. Você mantém só o conteúdo.
+## ✨ Recursos
 
----
+- **UI em Dart** — `FlenxColumn`, `FlenxHero`, `FlenxCard`… geram o HTML/CSS por baixo.
+- **SEO automático** — meta tags, Open Graph, JSON-LD, `sitemap.xml`, `robots.txt` e `llms.txt` a partir de uma única definição de rota.
+- **Blog** — posts em Markdown **e/ou** banco, com editor estilo G1, categorias, tags, busca e paginação.
+- **Painel admin** — ilha Flutter pronta: CRUD genérico, permissões por papel e edição da home.
+- **APIs + banco** — endpoints declarativos (Dart **ou** PHP) e banco plugável: Supabase, Firebase, REST ou JSONL.
+- **Ilhas Flutter** — widgets Flutter reais hidratados no cliente, dentro das páginas SSR.
 
-## Como começar (4 passos)
+## 🚀 Começar
 
-### 1. Instale (projeto jaspr em modo servidor)
+**1. Instale** (projeto jaspr em modo servidor):
 
 ```bash
 dart pub add flenx jaspr
 dart pub add dev:build_runner dev:build_web_compilers dev:jaspr_builder
 ```
 
-`pubspec.yaml` (SDK `^3.10.0` para dot-shorthands):
-
 ```yaml
+# pubspec.yaml
 environment:
   sdk: ^3.10.0
 dependencies:
@@ -37,7 +54,7 @@ jaspr:
   mode: server
 ```
 
-### 2. Crie o `lib/main.dart`
+**2. Crie o `lib/main.dart`:**
 
 ```dart
 import 'package:flenx/app.dart';
@@ -66,61 +83,66 @@ Future<void> runSite(ServerOptions options) => FlenxApp.run(
     );
 ```
 
-### 3. Gere os entrypoints (único comando obrigatório)
+**3. Gere os entrypoints** (único comando obrigatório) **e rode:**
 
 ```bash
 dart run flenx:bootstrap
-```
-
-### 4. Rode
-
-```bash
 dart pub global activate jaspr_cli
 jaspr serve            # http://localhost:8080 (hot reload)
 ```
 
-Pronto — site SSR com SEO/sitemap/robots/llms.txt automáticos. **Blog, admin, banco etc. são opcionais** (abaixo).
+Pronto — site SSR com SEO/sitemap/robots/llms.txt automáticos.
 
-### Estrutura do projeto
+## 🏗️ Build e deploy
 
+O Flenx suporta diferentes alvos de build. Escolha conforme onde vai hospedar:
+
+| Alvo | Comando | `jaspr.mode` | Onde hospedar |
+|---|---|---|---|
+| **Dev (hot reload)** | `jaspr serve` | `server` | local (`localhost:8080`) |
+| **Servidor SSR** (recomendado) | `jaspr build` | `server` | qualquer host Dart: Render, Fly.io, Cloud Run, VPS, Docker |
+| **Site estático** | `jaspr build` | `static` | GitHub Pages, Netlify, Vercel, S3 |
+| **API em PHP** (opcional) | `dart run tool/build.dart` | — | hospedagem PHP/MySQL |
+
+**Servidor SSR** (mantém admin, APIs, banco, formulários):
+
+```bash
+jaspr build                          # gera build/jaspr/ com um executável self-contained
+./build/jaspr/app                    # roda o servidor (porta via env PORT)
+# alvos: jaspr build --target exe|aot-snapshot|kernel  --target-os linux|macos|windows
 ```
-meu_site/
-├── lib/
-│   ├── main.dart                 # ⭐ seu código (FlenxApp.run)
-│   ├── config/                   # (opcional) seo, rotas, apis separados
-│   ├── views/                    # suas telas (kit Dart)
-│   ├── main.server.dart          # gerado por flenx:bootstrap — gitignored
-│   ├── main.client.dart          # gerado — gitignored
-│   └── generated/, *.options.dart, *.imports.dart   # gerados — gitignored
-└── pubspec.yaml
+
+**Site estático** (somente conteúdo pré-renderizado):
+
+```bash
+# defina  jaspr: mode: static  no pubspec, então:
+jaspr build                          # gera build/jaspr/ com HTML + assets estáticos
 ```
 
-`.gitignore` recomendado: `lib/main.server.dart`, `lib/main.client.dart`, `lib/**/*.options.dart`, `lib/**/*.imports.dart`, `lib/generated/`, `web/main.client.dart`.
+> ⚠️ **Estático tem limites:** recursos que dependem de servidor — APIs, banco, painel admin, carrinho, formulários — **não funcionam** em modo `static`. Para apps com admin/loja, use `mode: server` e um host com Dart.
 
----
+**API em PHP** (para hospedagem sem Dart): com `buildPhp = true` no `main.dart`, `dart run tool/build.dart` gera `build/php/` (PDO + `migrations.sql`).
 
-## Opções (use só o que precisar)
+## 🧩 Opções (use só o que precisar)
 
-### Rotas + SEO (fonte única)
+<details>
+<summary><strong>Rotas + SEO (fonte única)</strong></summary>
 
-Cada `FlenxRoute` junta o SEO (`RouteMeta`) e o componente:
+Cada `FlenxRoute` junta o SEO (`RouteMeta`) e o componente. Disso saem sozinhos: meta tags, Open Graph/Twitter, JSON-LD, `/sitemap.xml`, `/robots.txt`, `/llms.txt`. Rotas dinâmicas: `extraSources: [DynamicRouteSource<T>(...)]`.
 
 ```dart
 FlenxRoute(
   const RouteMeta(
-    path: '/sobre',
-    title: 'Sobre',
-    description: 'Quem somos.',
-    priority: 0.6,
-    faqs: [FaqItem(question: 'O que é?', answer: '...')],  // vira JSON-LD FAQPage
+    path: '/sobre', title: 'Sobre', description: 'Quem somos.',
+    faqs: [FaqItem(question: 'O que é?', answer: '...')], // vira JSON-LD FAQPage
   ),
   (ctx) => const AboutPage(),
 ),
 ```
+</details>
 
-Disso saem sozinhos: meta tags, Open Graph/Twitter, JSON-LD, `/sitemap.xml`, `/robots.txt`, `/llms.txt`, `/llms-full.txt`. Rotas dinâmicas: `extraSources: [DynamicRouteSource<T>(...)]`.
-
-### Kit de UI em Dart (sem HTML/CSS)
+<details>
+<summary><strong>Kit de UI em Dart (sem HTML/CSS)</strong></summary>
 
 Primitivas: `FlenxPage`, `FlenxSection`, `FlenxColumn`, `FlenxRow`, `FlenxGrid`, `FlenxText`, `FlenxHeading`, `FlenxButton`, `FlenxCard`, `FlenxImage`.
 Blocos: `FlenxHero`, `FlenxTrustBar`, `FlenxSteps`, `FlenxCta`, `FlenxFooter`, `FeaturesSection`, `IframeEmbed`.
@@ -130,100 +152,89 @@ FlenxPage([
   SiteHeader(brand: brand, links: links),
   FlenxHero(title: '...', subtitle: '...', actions: [FlenxButton('Começar', href: '#x')]),
   FlenxGrid([for (final f in itens) FlenxCard(...)]),
-  WhatsappButton(url: '...'),
 ]);
 ```
 
-> `:hover`/foco (que o navegador só faz com CSS) viram **parâmetro** — ex.: `FlenxButton(hover: true)`. Embutir outro site: `IframeEmbed('https://...', ratio: '16 / 9')`.
+`:hover`/foco viram **parâmetro** (ex.: `FlenxButton(hover: true)`).
+</details>
 
-### Blog (opcional — markdown e/ou banco)
-
-Só se o site tiver blog. Crie a pasta com um post de boas-vindas:
+<details>
+<summary><strong>Blog (Markdown e/ou banco)</strong></summary>
 
 ```bash
 dart run flenx:blog_init               # cria lib/content/blog/ + 1 post
 dart run flenx:new_post "Meu post"     # novos posts
 ```
 
-E ative no `FlenxApp.run`:
-
 ```dart
 FlenxApp.run(
   ...,
-  blog: 'lib/content/blog',   // posts em markdown
-  blogFromDb: true,           // (opcional) + posts salvos no banco (tabela blog_posts)
-  blogLayout: (page) => MeuLayoutDeBlog(child: page),
+  blog: 'lib/content/blog',   // posts em Markdown
+  blogFromDb: true,           // (opcional) + posts no banco (tabela blog_posts)
 );
 ```
 
-Índice, post, categorias, tags, busca (`?q=`) e paginação são automáticos. **Sem blog, não rode `blog_init` — só não passe `blog:`.**
+Índice, post, categorias, tags, busca (`?q=`) e paginação são automáticos.
+</details>
 
-### Painel admin (opcional)
+<details>
+<summary><strong>Painel admin</strong></summary>
 
-Preencha as opções de `FlenxAdminApp` (como o `AppShell`), num arquivo Flutter `admin_app.dart`:
+Preencha as opções de `FlenxAdminApp` num arquivo Flutter `admin_app.dart`; `dart run flenx:bootstrap` gera o wiring. Adicione `jaspr_flutter_embed` e `jaspr: flutter: embedded` no pubspec.
 
 ```dart
-class AdminApp extends StatelessWidget {
-  Widget build(c) => FlenxAdminApp(
-    title: 'Admin',
-    user: const AppUser(name: 'Ana', role: 'Administrador'),
-    navItems: const [NavItem(label: 'Dashboard', icon: Icons.dashboard, route: '/')],
-    pages: {'/': (c) => const FlenxDashboard(stats: [...], activity: [...])},
-  );
-}
+FlenxAdminApp(
+  title: 'Admin',
+  user: const AppUser(name: 'Ana', role: 'Administrador'),
+  navItems: const [NavItem(label: 'Dashboard', icon: Icons.dashboard, route: '/')],
+  pages: {'/': (c) => const FlenxDashboard(stats: [...], activity: [...])},
+);
 ```
+</details>
 
-`dart run flenx:bootstrap` gera o wiring (`admin_page.dart`). Adicione `jaspr_flutter_embed` e `jaspr: flutter: embedded` no pubspec.
-
-### APIs declarativas (Dart ou PHP)
+<details>
+<summary><strong>APIs declarativas + banco plugável</strong></summary>
 
 ```dart
 const apis = [
   ApiEndpoint(path: '/api/leads', method: HttpMethod.post, fields: [...],
     actions: [InsertInto(leadsModel), SendEmail(to: '...'), Redirect('/?ok')]),
-  ApiEndpoint(path: '/api/leads/list', method: HttpMethod.get, actions: [ListPaginated(leadsModel)]),
 ];
-// FlenxApp.run(..., apis: apis, db: ...);
+// FlenxApp.run(..., apis: apis, db: DbRegistry.fromEnv(Platform.environment));
 ```
 
-Envelope padrão `{success, data, error, meta}` + paginação. `requiresAuth: true` exige `Bearer`. Geram PHP com `dart run tool/build.dart` (flag `buildPhp` no main).
-
-### Banco plugável (onde os dados são salvos)
-
-Escolha por `DB_PROVIDER` no `.env` e adicione as credenciais:
-
-```dart
-db: DbRegistry.fromEnv(Platform.environment),   // no FlenxApp.run
-```
+Banco por `DB_PROVIDER` no `.env`:
 
 | `DB_PROVIDER` | Backend | Credenciais |
 |---|---|---|
 | `supabase` | Supabase (PostgREST) | `SUPABASE_URL`, `SUPABASE_KEY` |
-| `firebase` | Firebase Firestore | `FIREBASE_PROJECT_ID`, `FIREBASE_TOKEN` |
-| `rest` / `api` | API Flenx (PHP **ou** Dart) | `API_BASE_URL`, `API_TOKEN` |
+| `firebase` | Firestore | `FIREBASE_PROJECT_ID`, `FIREBASE_TOKEN` |
+| `rest` / `api` | API Flenx (PHP/Dart) | `API_BASE_URL`, `API_TOKEN` |
 | `jsonl` / `memory` | arquivo / memória (dev) | `DB_DIR` |
+</details>
 
-Backend novo: `DbRegistry.register('mongo', (env, c) => MeuExecutor(...))`.
+<details>
+<summary><strong>Auth, notificações e pagamento</strong></summary>
 
-### Auth, Notificações e Pagamento (opcionais)
-
-- **Auth**: `JwtService` (HS256, segredo via `.env`) + `TokenVerifier` (gancho p/ Firebase). Gate por `requiresAuth: true`.
-- **Notificações**: `NotificationCenter.notifyAll()` → todos os canais ativos (`TwilioSmsChannel`, `TwilioWhatsappChannel`, `FcmPushChannel`).
-- **Pagamento**: `PaymentService.fromEnv(env)` por `PAYMENT_PROVIDER` (`asaas`|`mercadopago`); novos via `PaymentRegistry.register(...)`.
+- **Auth:** `JwtService` (HS256) + `TokenVerifier`. Proteja endpoints com `requiresAuth: true`.
+- **Notificações:** `NotificationCenter.notifyAll()` → `TwilioSmsChannel`, `TwilioWhatsappChannel`, `FcmPushChannel`.
+- **Pagamento:** `PaymentService.fromEnv(env)` (`asaas` | `mercadopago`).
 
 > `.env` é **só lado servidor** — nunca exposto ao cliente.
+</details>
 
----
+## 🧪 Exemplos
 
-## Build de produção
+Três sites SSR completos, feitos 100% em Dart, na pasta [`example/`](https://github.com/pretolio/Flenx/tree/main/example):
 
-```bash
-jaspr build                 # web/Dart → build/jaspr/
-dart run tool/build.dart    # (opcional) também gera a API PHP se buildPhp=true
-```
+| Exemplo | O que mostra | Código |
+|---|---|---|
+| **Demo institucional** | landing + blog (Markdown e banco) + admin + APIs | [example/demo](https://github.com/pretolio/Flenx/tree/main/example/demo) |
+| **Loja (e-commerce)** | catálogo, carrinho (ilha Flutter), pedidos, permissões | [example/shop](https://github.com/pretolio/Flenx/tree/main/example/shop) |
+| **Portal de notícias** | manchete, categorias, autor/data, editor G1, edição da home | [example/news](https://github.com/pretolio/Flenx/tree/main/example/news) |
 
-## Exemplos
+Para rodar um exemplo: `cd example/demo && dart run flenx:bootstrap && jaspr serve`.
 
-- **flenx_demo** — institucional + blog + painel admin + APIs.
-- **flenx_shop** — loja: catálogo, rota por produto (SEO), comprar via WhatsApp.
-- **flenx_news** — portal de notícias em Markdown (manchete, categorias, busca).
+## 📄 Licença
+
+MIT © Potenza RH. Veja [LICENSE](LICENSE).

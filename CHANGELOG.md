@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.1
+
+- README reformulado: logo, badges, links (pub.dev, showcase, exemplos) e
+  seção de **build e deploy** (servidor SSR, site estático e API PHP).
+- Sem mudanças de código.
+
 ## 0.1.0
 
 - Primeira versão pública do **Flenx**.
