@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flenx — Flutter/Dart SSR para a web</title>
+<meta name="description" content="Framework Flutter/Dart estilo Next.js: SSR, SEO automático, blog, admin e APIs — com 3 exemplos prontos (institucional, loja e portal de notícias).">
+<style>
+  :root{
+    --navy:#02406f; --blue:#0166b3; --sky:#0a86e0; --ice:#9bdcff;
+    --ink:#0e1b2a; --muted:#5b6b7d; --line:#e6edf4; --bg:#f6f9fc; --card:#fff;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6}
+  a{color:inherit}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  /* HERO */
+  header.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 55%,var(--sky) 100%);color:#fff;position:relative;overflow:hidden}
+  header.hero::after{content:"";position:absolute;right:-120px;top:-160px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.12),transparent 70%)}
+  .hero-inner{padding:64px 24px 72px;text-align:center;position:relative;z-index:1}
+  .logo{width:min(560px,92%);height:auto;border-radius:24px;box-shadow:0 24px 60px rgba(0,0,0,.28);margin-bottom:28px}
+  .hero h1{font-size:clamp(28px,5vw,46px);font-weight:900;letter-spacing:-1px;margin-bottom:14px}
+  .hero p{font-size:clamp(16px,2.4vw,20px);color:#dcecfb;max-width:660px;margin:0 auto 28px}
+  .cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:12px;font-weight:700;text-decoration:none;font-size:15px;transition:.15s}
+  .btn-primary{background:#fff;color:var(--blue)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(0,0,0,.25)}
+  .btn-ghost{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.4)}
+  .btn-ghost:hover{background:rgba(255,255,255,.2)}
+  /* SECTIONS */
+  section{padding:64px 0}
+  .eyebrow{color:var(--blue);font-weight:800;text-transform:uppercase;letter-spacing:2px;font-size:13px;text-align:center}
+  h2{font-size:clamp(24px,3.4vw,34px);font-weight:900;letter-spacing:-.5px;text-align:center;margin:8px 0 8px}
+  .lead{color:var(--muted);text-align:center;max-width:620px;margin:0 auto 40px}
+  /* FEATURES */
+  .feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+  .feat .item{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+  .feat .ic{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:22px;background:#e8f3fe;margin-bottom:12px}
+  .feat h3{font-size:17px;margin-bottom:6px}
+  .feat p{color:var(--muted);font-size:14.5px}
+  /* EXAMPLES */
+  .ex{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;transition:.18s}
+  .card:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(2,32,71,.12)}
+  .thumb{height:150px;display:grid;place-items:center;font-size:64px;color:#fff}
+  .t-demo{background:linear-gradient(135deg,#0166b3,#0a86e0)}
+  .t-shop{background:linear-gradient(135deg,#0a7c5a,#16b67e)}
+  .t-news{background:linear-gradient(135deg,#9a3412,#ea7a3c)}
+  .card .body{padding:22px;display:flex;flex-direction:column;gap:10px;flex:1}
+  .card h3{font-size:20px}
+  .card p{color:var(--muted);font-size:14.5px;flex:1}
+  .tags{display:flex;flex-wrap:wrap;gap:6px}
+  .tag{font-size:12px;font-weight:600;background:#eef4fa;color:#33627f;padding:3px 10px;border-radius:999px}
+  .card a.src{margin-top:6px;font-weight:700;color:var(--blue);text-decoration:none;font-size:14.5px}
+  .card a.src:hover{text-decoration:underline}
+  /* INSTALL */
+  .install{background:#0e1b2a;color:#e6eef7;border-radius:18px;padding:28px;max-width:760px;margin:0 auto}
+  .install h3{color:#fff;margin-bottom:14px;font-size:18px}
+  pre{background:#0a1320;border:1px solid #1c2c3f;border-radius:12px;padding:16px 18px;overflow-x:auto;font-size:13.5px;line-height:1.7;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#cfe3f5}
+  .note{text-align:center;color:var(--muted);font-size:14px;margin-top:18px}
+  /* FOOTER */
+  footer{background:#04263f;color:#aac4dc;text-align:center;padding:38px 24px}
+  footer a{color:#9bdcff;text-decoration:none}
+  footer .small{font-size:13px;color:#6f8aa3;margin-top:10px}
+</style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <img class="logo" src="./flenx-logo.png" alt="Flenx">
+      <h1>Flutter/Dart na web, estilo Next.js</h1>
+      <p>Você escreve só Dart — sem HTML/CSS. O Flenx faz SSR, embute widgets Flutter como ilhas e gera SEO/sitemap/llms.txt automaticamente.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="https://pub.dev/packages/flenx">📦 Ver no pub.dev</a>
+        <a class="btn btn-ghost" href="https://github.com/pretolio/Flenx">★ GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <div class="wrap">
+      <div class="eyebrow">Recursos</div>
+      <h2>Tudo opcional, use o que precisar</h2>
+      <p class="lead">Comece com um site SSR + SEO em minutos. Ative blog, admin, APIs e banco conforme o projeto cresce.</p>
+      <div class="feat">
+        <div class="item"><div class="ic">🧩</div><h3>UI em Dart</h3><p>Componentes <code>FlenxColumn</code>, <code>FlenxHero</code>, <code>FlenxCard</code>… geram o HTML/CSS por baixo.</p></div>
+        <div class="item"><div class="ic">🔎</div><h3>SEO automático</h3><p>Meta tags, Open Graph, JSON-LD, sitemap, robots e llms.txt a partir de uma única definição de rota.</p></div>
+        <div class="item"><div class="ic">📝</div><h3>Blog</h3><p>Posts em Markdown e/ou banco, com editor estilo G1, categorias, tags, busca e paginação.</p></div>
+        <div class="item"><div class="ic">🛠️</div><h3>Painel admin</h3><p>Ilha Flutter pronta: CRUD genérico, permissões por papel e edição da home.</p></div>
+        <div class="item"><div class="ic">🔌</div><h3>APIs + banco</h3><p>Endpoints declarativos (Dart ou PHP) e banco plugável: Supabase, Firebase, REST ou JSONL.</p></div>
+        <div class="item"><div class="ic">⚡</div><h3>Ilhas Flutter</h3><p>Widgets Flutter reais hidratados no cliente, dentro das páginas SSR.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background:#eef4fa">
+    <div class="wrap">
+      <div class="eyebrow">Exemplos</div>
+      <h2>Três projetos prontos</h2>
+      <p class="lead">Cada um é um site SSR completo, feito 100% em Dart. Código-fonte no repositório (pasta <code>example/</code>).</p>
+      <div class="ex">
+        <div class="card">
+          <div class="thumb t-demo">🏛️</div>
+          <div class="body">
+            <h3>Demo institucional</h3>
+            <p>Landing + blog (Markdown e banco) + painel admin com editor de posts e APIs declarativas.</p>
+            <div class="tags"><span class="tag">SSR</span><span class="tag">Blog</span><span class="tag">Admin</span><span class="tag">APIs</span></div>
+            <a class="src" href="https://github.com/pretolio/Flenx/tree/main/example/demo">Ver código →</a>
+          </div>
+        </div>
+        <div class="card">
+          <div class="thumb t-shop">🛒</div>
+          <div class="body">
+            <h3>Loja (e-commerce)</h3>
+            <p>Catálogo do banco, carrinho de compras (ilha Flutter), checkout que gera pedidos e admin de produtos/pedidos/usuários.</p>
+            <div class="tags"><span class="tag">Carrinho</span><span class="tag">Pedidos</span><span class="tag">Permissões</span></div>
+            <a class="src" href="https://github.com/pretolio/Flenx/tree/main/example/shop">Ver código →</a>
+          </div>
+        </div>
+        <div class="card">
+          <div class="thumb t-news">📰</div>
+          <div class="body">
+            <h3>Portal de notícias</h3>
+            <p>Manchete, categorias, autor e data, editor de notícias estilo G1 e edição da tela inicial pelo admin.</p>
+            <div class="tags"><span class="tag">Notícias</span><span class="tag">Categorias</span><span class="tag">Editor G1</span></div>
+            <a class="src" href="https://github.com/pretolio/Flenx/tree/main/example/news">Ver código →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="eyebrow">Começar</div>
+      <h2>Instale e rode em 4 passos</h2>
+      <p class="lead"></p>
+      <div class="install">
+        <h3>1 · Instalar &nbsp;•&nbsp; 2 · Gerar entrypoints &nbsp;•&nbsp; 3 · Rodar</h3>
+<pre>dart pub add flenx jaspr
+dart pub add dev:build_runner dev:build_web_compilers dev:jaspr_builder
+
+dart run flenx:bootstrap          # gera os entrypoints do jaspr
+dart pub global activate jaspr_cli
+jaspr serve                       # http://localhost:8080 (hot reload)</pre>
+      </div>
+      <p class="note">Os exemplos são SSR — rode localmente com <code>jaspr serve</code> na pasta de cada um.</p>
+    </div>
+  </section>
+
+  <footer>
+    <div><strong>Flenx</strong> — Flutter/Dart SSR para a web.</div>
+    <div style="margin-top:8px"><a href="https://pub.dev/packages/flenx">pub.dev</a> &nbsp;·&nbsp; <a href="https://github.com/pretolio/Flenx">GitHub</a> &nbsp;·&nbsp; <a href="https://github.com/pretolio/Flenx/tree/main/example">Exemplos</a></div>
+    <div class="small">Feito com Dart, jaspr e Flutter. © 2026 Potenza RH · MIT.</div>
+  </footer>
+</body>
+</html>
