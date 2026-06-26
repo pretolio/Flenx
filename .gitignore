@@ -6,6 +6,9 @@
 .flutter-plugins-dependencies
 **/doc/api/
 
+# ===== Variáveis de ambiente =====
+.env*
+
 # ===== Repos de referência (estudo) — 96MB de terceiros, fora do versionamento =====
 /refs/
 
