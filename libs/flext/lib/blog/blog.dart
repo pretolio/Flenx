@@ -1,6 +1,5 @@
 import 'package:jaspr/jaspr.dart';
 
-import 'blog_repository.dart';
 import 'blog_route_source.dart';
 import 'markdown_renderer.dart';
 import 'models/blog_post.dart';
@@ -9,6 +8,9 @@ import 'pages/archive_page.dart';
 import 'pages/blog_index_page.dart';
 import 'pages/blog_post_page.dart';
 import 'pages/taxonomy_index_page.dart';
+import 'sources/blog_source.dart';
+import 'sources/composite_blog_source.dart';
+import 'sources/markdown_blog_source.dart';
 import 'taxonomy_builder.dart';
 
 /// Facade do blog — ponto único de uso. Carrega os `.md`, monta a taxonomia,
@@ -22,11 +24,20 @@ class Blog {
   final MarkdownRenderer _md = const MarkdownRenderer();
 
   /// Carrega o blog de uma pasta de arquivos markdown (no servidor).
-  static Future<Blog> load(String directory) async {
-    final posts = await const BlogRepository().loadAll(directory);
+  static Future<Blog> load(String directory) =>
+      fromSource(MarkdownBlogSource(directory));
+
+  /// Carrega o blog de UMA fonte qualquer (Markdown, banco, composta...).
+  static Future<Blog> fromSource(BlogSource source) async {
+    final posts = await source.loadAll();
     final taxonomy = const TaxonomyBuilder().build(posts);
     return Blog._(posts, taxonomy);
   }
+
+  /// Carrega o blog de VÁRIAS fontes ao mesmo tempo (ex.: `.md` + banco).
+  /// A ordem define a prioridade quando há `slug` repetido (a primeira vence).
+  static Future<Blog> fromSources(List<BlogSource> sources) =>
+      fromSource(CompositeBlogSource(sources));
 
   /// Fonte de rotas para registrar no RouteRegistry (sitemap/llms/SEO).
   BlogRouteSource get routeSource =>

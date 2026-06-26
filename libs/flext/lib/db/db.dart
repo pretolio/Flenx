@@ -8,3 +8,10 @@ export 'db_model.dart';
 export 'db_relation.dart';
 export 'sql_migration_generator.dart';
 export 'sql_type.dart';
+
+// Backends de banco plugáveis (mesma interface DbExecutor): Supabase, Firebase
+// (Firestore), API REST (PHP ou Dart) e JSONL/memória — escolha por DB_PROVIDER.
+export 'executors/db_registry.dart';
+export 'executors/supabase_db_executor.dart';
+export 'executors/firestore_db_executor.dart';
+export 'executors/rest_api_db_executor.dart';

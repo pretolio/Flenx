@@ -28,11 +28,17 @@ class BlogPostPage extends StatelessComponent {
       ]),
       header([
         h1([.text(post.title)]),
+        if (post.subtitle != null && post.subtitle!.trim().isNotEmpty)
+          p(classes: 'subtitle', [.text(post.subtitle!)]),
         div(classes: 'meta', [
           if (post.author != null) span([.text(post.author!)]),
           span([.text(DateFormatBr.short(post.date))]),
         ]),
       ]),
+      if (post.image != null && post.image!.trim().isNotEmpty)
+        figure(classes: 'cover', [
+          img(src: post.image!, alt: post.title),
+        ]),
       // Corpo markdown renderizado no servidor.
       div(classes: 'content', [RawText(htmlBody)]),
       if (post.tags.isNotEmpty)

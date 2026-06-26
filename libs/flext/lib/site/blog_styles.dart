@@ -36,7 +36,16 @@ const String blogCss = '''
 .breadcrumb a{color:var(--primary);text-decoration:none}
 .breadcrumb a:hover{text-decoration:underline}
 .blog-post>header h1{font-size:2.4rem;line-height:1.12;letter-spacing:-.02em;margin:0 0 12px}
+.blog-post>header .subtitle{font-size:1.25rem;line-height:1.4;color:#475569;margin:0 0 16px;font-weight:400}
 .blog-post>header .meta{display:flex;gap:14px;color:var(--muted);font-size:.9rem;margin-bottom:28px}
+.blog-post figure.cover{margin:0 0 28px}
+.blog-post figure.cover img{width:100%;height:auto;border-radius:14px;display:block}
+.content figure{margin:24px 0}
+.content figure img{width:100%;height:auto;border-radius:12px;display:block}
+.content figure figcaption{font-size:.86rem;color:var(--muted);margin-top:8px;line-height:1.5}
+.content figure figcaption .credit{color:#94a3b8;font-style:italic}
+.content .embed{margin:24px 0}
+.content .embed iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:12px}
 .content{font-size:1.08rem;line-height:1.8;color:#1f2937}
 .content h2{font-size:1.5rem;margin:34px 0 12px;letter-spacing:-.01em}
 .content h3{font-size:1.2rem;margin:24px 0 8px}

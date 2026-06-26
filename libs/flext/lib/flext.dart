@@ -25,17 +25,35 @@ export 'pay/pay.dart';
 // SEO/GEO/AEO + sitemap + robots + llms
 export 'seo/seo.dart';
 
-// Blog em markdown (engine + páginas + paginação + scaffold de post)
+// Blog (engine + páginas + paginação + scaffold de post)
+// Fontes de posts: Markdown (.md) E/OU banco de dados — combináveis.
 export 'blog/blog.dart';
 export 'blog/blog_scaffold.dart';
 export 'blog/blog_repository.dart';
 export 'blog/blog_route_source.dart';
+export 'blog/blog_posts_model.dart';
 export 'blog/markdown_renderer.dart';
 export 'blog/taxonomy_builder.dart';
 export 'blog/models/blog_post.dart';
 export 'blog/models/category.dart';
 export 'blog/models/tag.dart';
 export 'blog/models/taxonomy.dart';
+export 'blog/mappers/blog_post_mapper.dart';
+export 'blog/sources/blog_source.dart';
+export 'blog/sources/markdown_blog_source.dart';
+export 'blog/sources/database_blog_source.dart';
+export 'blog/sources/composite_blog_source.dart';
+// Post rico estilo G1 (blocos: título, imagem c/ legenda, citação, embed...)
+export 'blog/document/post_document.dart';
+export 'blog/document/post_block.dart';
+export 'blog/document/post_block_factory.dart';
+export 'blog/document/blocks/paragraph_block.dart';
+export 'blog/document/blocks/heading_block.dart';
+export 'blog/document/blocks/image_block.dart';
+export 'blog/document/blocks/quote_block.dart';
+export 'blog/document/blocks/list_block.dart';
+export 'blog/document/blocks/embed_block.dart';
+export 'blog/document/blocks/divider_block.dart';
 
 // Shell de navegação (app Flutter): exposto em `package:flext/shell.dart`
 // separadamente, pois depende de Flutter e só deve ser importado no lado web

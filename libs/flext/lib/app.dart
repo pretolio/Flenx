@@ -13,6 +13,10 @@ import 'package:jaspr/server.dart';
 import 'api/api.dart';
 import 'auth/token_verifier.dart';
 import 'blog/blog.dart';
+import 'blog/sources/blog_source.dart';
+import 'blog/sources/database_blog_source.dart';
+import 'blog/sources/dynamic_blog_route_source.dart';
+import 'blog/sources/markdown_blog_source.dart';
 import 'seo/seo.dart';
 import 'site_server.dart';
 
@@ -66,6 +70,9 @@ class FlextApp {
     required Component notFound,
     String? blog,
     Blog? blogInstance,
+    List<BlogSource> blogSources = const [],
+    bool blogFromDb = false,
+    String blogTable = 'blog_posts',
     BlogLayoutBuilder? blogLayout,
     List<IRouteSource> extraSources = const [],
     List<ApiEndpoint> apis = const [],
@@ -84,14 +91,37 @@ class FlextApp {
       StaticRouteSource([for (final r in routes) r.meta]),
       ...extraSources,
     ];
+    // Monta as fontes de posts (Markdown e/ou banco). Quando há fonte de banco,
+    // o blog é DINÂMICO: recarrega a cada request, então posts criados pelo
+    // admin em runtime aparecem sem reiniciar o servidor.
+    final blogSrcs = <BlogSource>[
+      if (blog != null) MarkdownBlogSource(blog),
+      ...blogSources,
+      if (blogFromDb && db != null) DatabaseBlogSource(db, table: blogTable),
+    ];
+    final dynamicBlog =
+        blogInstance == null && blogSrcs.any((s) => s is DatabaseBlogSource);
+
     Blog? loaded = blogInstance;
-    if (loaded == null && blog != null) {
-      loaded = await Blog.load(blog);
+    if (loaded == null && blogSrcs.isNotEmpty && !dynamicBlog) {
+      loaded = await Blog.fromSources(blogSrcs);
     }
     if (loaded != null) {
       sources.add(loaded.routeSource);
+    } else if (dynamicBlog) {
+      sources.add(DynamicBlogRouteSource(blogSrcs));
     }
     final registry = RouteRegistry(sources);
+
+    bool handlesBlog(String path) =>
+        path == '/blog' || path.startsWith('/blog/');
+
+    Future<Blog?> blogFor(String path) async {
+      if (!handlesBlog(path)) return null;
+      if (loaded != null) return loaded;
+      if (dynamicBlog) return Blog.fromSources(blogSrcs);
+      return null;
+    }
 
     await FlextServer(
       seo: seo,
@@ -103,9 +133,10 @@ class FlextApp {
       notFound: notFound,
       globalStyles: globalStyles,
       lang: lang,
-      resolvePage: (path, query) {
-        if (loaded != null && loaded.handles(path)) {
-          final page = loaded.pageFor(
+      resolvePage: (path, query) async {
+        final blogNow = await blogFor(path);
+        if (blogNow != null && blogNow.handles(path)) {
+          final page = blogNow.pageFor(
             path,
             query: query['q'],
             page: int.tryParse(query['page'] ?? '') ?? 1,

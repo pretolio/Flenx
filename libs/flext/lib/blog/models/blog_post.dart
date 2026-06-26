@@ -9,6 +9,7 @@ class BlogPost {
     required this.description,
     required this.date,
     required this.bodyMarkdown,
+    this.subtitle,
     this.author,
     this.image,
     this.category,
@@ -20,6 +21,9 @@ class BlogPost {
   /// Identificador na URL (geralmente o nome do arquivo sem `.md`).
   final String slug;
   final String title;
+
+  /// Linha-fina / subtítulo (estilo G1) exibida sob o título. Opcional.
+  final String? subtitle;
   final String description;
   final DateTime date;
 

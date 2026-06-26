@@ -13,6 +13,7 @@ class PostFactory {
     return BlogPost(
       slug: (d['slug'] as String?) ?? slug,
       title: (d['title'] as String?) ?? slug,
+      subtitle: d['subtitle'] as String?,
       description: (d['description'] as String?) ?? '',
       date: _date(d['date']),
       bodyMarkdown: content.body,
