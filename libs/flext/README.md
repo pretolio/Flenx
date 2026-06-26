@@ -18,28 +18,28 @@ Inclui: **kit de UI em Dart** (estilo Flutter), **blog** (markdown e/ou banco), 
 
 ## Começando
 
-### 1. Dependências (`pubspec.yaml`)
+### 1. Instale (projeto jaspr em modo servidor)
+
+```bash
+dart pub add flext jaspr jaspr_flutter_embed
+dart pub add dev:build_runner dev:build_web_compilers dev:jaspr_builder
+```
+
+Seu `pubspec.yaml` deve ficar assim (SDK `^3.10.0` para dot-shorthands; o
+`jaspr_flutter_embed` só é preciso se você usar uma ilha Flutter, como o admin):
 
 ```yaml
 environment:
-  sdk: ^3.10.0            # dot-shorthands (.text())
+  sdk: ^3.10.0
 
 dependencies:
-  flext:
-    path: ../flext        # ou git/hosted quando publicado
-  flutter:
-    sdk: flutter
+  flext: ^0.1.0
   jaspr: ^0.23.1
-  jaspr_flutter_embed: ^0.4.11   # só se usar ilha Flutter (admin)
-
-dev_dependencies:
-  build_runner: ^2.10.0
-  build_web_compilers: ^4.8.0
-  jaspr_builder: ^0.23.1
+  jaspr_flutter_embed: ^0.4.11
 
 jaspr:
   mode: server
-  flutter: embedded
+  flutter: embedded   # só se usar ilha Flutter
 ```
 
 ### 2. Conteúdo inicial

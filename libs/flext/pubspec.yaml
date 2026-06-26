@@ -1,7 +1,17 @@
 name: flext
-description: Framework Flutter/Dart estilo Next.js — SSR, blog, SEO/GEO/AEO, shell e site institucional. Importe e monte seu site.
+description: >-
+  SSR Flutter/Dart estilo Next.js: kit de UI em Dart (sem HTML/CSS), blog,
+  SEO/sitemap/llms.txt automáticos, admin, APIs (Dart ou PHP) e banco plugável
+  (Supabase/Firebase).
 version: 0.1.0
 publish_to: none
+
+topics:
+  - jaspr
+  - ssr
+  - seo
+  - flutter
+  - framework
 
 environment:
   sdk: ^3.10.0
