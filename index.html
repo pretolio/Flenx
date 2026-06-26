@@ -52,7 +52,10 @@
   .card p{color:var(--muted);font-size:14.5px;flex:1}
   .tags{display:flex;flex-wrap:wrap;gap:6px}
   .tag{font-size:12px;font-weight:600;background:#eef4fa;color:#33627f;padding:3px 10px;border-radius:999px}
-  .card a.src{margin-top:6px;font-weight:700;color:var(--blue);text-decoration:none;font-size:14.5px}
+  .card .links{display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap}
+  .card a.demo{font-weight:700;background:var(--blue);color:#fff;text-decoration:none;font-size:14px;padding:9px 16px;border-radius:10px}
+  .card a.demo:hover{background:#02406f}
+  .card a.src{font-weight:700;color:var(--blue);text-decoration:none;font-size:14px}
   .card a.src:hover{text-decoration:underline}
   /* INSTALL */
   .install{background:#0e1b2a;color:#e6eef7;border-radius:18px;padding:28px;max-width:760px;margin:0 auto}
@@ -98,7 +101,7 @@
     <div class="wrap">
       <div class="eyebrow">Exemplos</div>
       <h2>Três projetos prontos</h2>
-      <p class="lead">Cada um é um site SSR completo, feito 100% em Dart. Código-fonte no repositório (pasta <code>example/</code>).</p>
+      <p class="lead">Cada um é um site SSR completo, feito 100% em Dart. Os botões "Ver site" abrem um <strong>preview estático das páginas públicas</strong> — admin/carrinho/APIs precisam de servidor (PHP ou Dart). Código no repositório.</p>
       <div class="ex">
         <div class="card">
           <div class="thumb t-demo">🏛️</div>
@@ -106,7 +109,10 @@
             <h3>Demo institucional</h3>
             <p>Landing + blog (Markdown e banco) + painel admin com editor de posts e APIs declarativas.</p>
             <div class="tags"><span class="tag">SSR</span><span class="tag">Blog</span><span class="tag">Admin</span><span class="tag">APIs</span></div>
-            <a class="src" href="https://github.com/pretolio/Flenx/tree/main/example/demo">Ver código →</a>
+            <div class="links">
+              <a class="demo" href="./demo/">Ver site ▸</a>
+              <a class="src" href="https://github.com/pretolio/Flenx/tree/main/example/demo">código →</a>
+            </div>
           </div>
         </div>
         <div class="card">
@@ -115,7 +121,10 @@
             <h3>Loja (e-commerce)</h3>
             <p>Catálogo do banco, carrinho de compras (ilha Flutter), checkout que gera pedidos e admin de produtos/pedidos/usuários.</p>
             <div class="tags"><span class="tag">Carrinho</span><span class="tag">Pedidos</span><span class="tag">Permissões</span></div>
-            <a class="src" href="https://github.com/pretolio/Flenx/tree/main/example/shop">Ver código →</a>
+            <div class="links">
+              <a class="demo" href="./shop/">Ver site ▸</a>
+              <a class="src" href="https://github.com/pretolio/Flenx/tree/main/example/shop">código →</a>
+            </div>
           </div>
         </div>
         <div class="card">
@@ -124,7 +133,10 @@
             <h3>Portal de notícias</h3>
             <p>Manchete, categorias, autor e data, editor de notícias estilo G1 e edição da tela inicial pelo admin.</p>
             <div class="tags"><span class="tag">Notícias</span><span class="tag">Categorias</span><span class="tag">Editor G1</span></div>
-            <a class="src" href="https://github.com/pretolio/Flenx/tree/main/example/news">Ver código →</a>
+            <div class="links">
+              <a class="demo" href="./news/">Ver site ▸</a>
+              <a class="src" href="https://github.com/pretolio/Flenx/tree/main/example/news">código →</a>
+            </div>
           </div>
         </div>
       </div>
