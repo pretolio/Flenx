@@ -4,8 +4,12 @@ import 'package:flutter/material.dart';
 /// autor, categoria, tags e imagem de capa. Guarda os controllers e os expõe
 /// para a página montar o payload.
 class PostMetaForm extends StatelessWidget {
-  const PostMetaForm({required this.c, required this.onDraftChanged,
-      required this.draft, super.key});
+  const PostMetaForm({
+    required this.c,
+    required this.onDraftChanged,
+    required this.draft,
+    super.key,
+  });
 
   final PostMetaControllers c;
   final bool draft;
@@ -71,8 +75,15 @@ class PostMetaControllers {
   final image = TextEditingController();
 
   void dispose() {
-    for (final c in [title, subtitle, description, author, category, tags,
-        image]) {
+    for (final c in [
+      title,
+      subtitle,
+      description,
+      author,
+      category,
+      tags,
+      image
+    ]) {
       c.dispose();
     }
   }

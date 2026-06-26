@@ -9,6 +9,11 @@ export 'db_relation.dart';
 export 'sql_migration_generator.dart';
 export 'sql_type.dart';
 
+// Models e helpers prontos para o admin (usuários, configurações/home).
+export 'users_model.dart';
+export 'settings_model.dart';
+export 'site_settings.dart';
+
 // Backends de banco plugáveis (mesma interface DbExecutor): Supabase, Firebase
 // (Firestore), API REST (PHP ou Dart) e JSONL/memória — escolha por DB_PROVIDER.
 export 'executors/db_registry.dart';

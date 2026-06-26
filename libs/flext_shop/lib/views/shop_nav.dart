@@ -7,6 +7,7 @@ const shopBrand = SiteBrand(label: 'Flext Store', homeHref: '/');
 const shopLinks = [
   MenuLink(label: 'Início', href: '/'),
   MenuLink(label: 'Produtos', href: '/produtos'),
+  MenuLink(label: 'Carrinho', href: '/carrinho'),
   MenuLink(label: 'Contato', href: '/#contato'),
 ];
 

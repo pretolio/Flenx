@@ -1,14 +1,16 @@
 import 'package:flext/flext.dart';
 import 'package:jaspr/jaspr.dart';
 
+import '../config/news_ads.dart';
 import 'news_nav.dart';
 
 /// Home do portal: manchete principal + grade das últimas notícias.
-/// Recebe os posts (markdown) carregados no main.dart.
+/// Recebe os posts (markdown + banco) e a config da home (editável no admin).
 class HomePage extends StatelessComponent {
-  const HomePage({required this.posts, super.key});
+  const HomePage({required this.posts, required this.settings, super.key});
 
   final List<BlogPost> posts;
+  final SiteSettings settings;
 
   Component _card(BlogPost p) => FlextCard(
         FlextColumn(gap: 8, [
@@ -30,12 +32,12 @@ class HomePage extends StatelessComponent {
 
     return FlextPage([
       const SiteHeader(brand: newsBrand, links: newsLinks),
-      const FlextHero(
+      FlextHero(
         eyebrow: 'Portal de notícias',
-        title: 'Flext News',
-        subtitle: 'Tecnologia, economia e esportes — exemplo de portal feito '
-            'só em Dart com o Flext.',
-        actions: [FlextButton('Ver todas', href: '/blog')],
+        title: settings.get('hero_title', 'Flext News'),
+        subtitle: settings.get('hero_subtitle',
+            'Tecnologia, economia e esportes — em tempo real.'),
+        actions: const [FlextButton('Ver todas', href: '/blog')],
       ),
       if (destaque != null)
         FlextSection(
@@ -51,6 +53,7 @@ class HomePage extends StatelessComponent {
         ),
       FlextSection(
         child: FlextColumn(gap: 24, cross: FlextAlign.stretch, [
+          const FlextAds(newsAds, path: '/'), // anúncio configurado para a home
           const FlextHeading('Últimas notícias'),
           FlextGrid(
             minItemWidth: 300,

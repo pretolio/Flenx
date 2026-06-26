@@ -22,6 +22,10 @@ export 'notify/notify.dart';
 // Pagamento (escolha Asaas ou Mercado Pago e adicione as credenciais)
 export 'pay/pay.dart';
 
+// Anúncios (AdSense/custom) configuráveis por página e categoria
+export 'ads/ads_config.dart';
+export 'ads/ad_slot.dart';
+
 // SEO/GEO/AEO + sitemap + robots + llms
 export 'seo/seo.dart';
 

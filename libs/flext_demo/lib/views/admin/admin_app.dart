@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flext/shell.dart';
 
-import 'editor/post_editor_page.dart';
-
 /// Admin do demo — só preenche as opções do [FlextAdminApp] da lib.
 /// Para criar o seu, copie isto e troque usuário, menu, páginas e dados.
 class AdminApp extends StatelessWidget {
@@ -60,7 +58,7 @@ class AdminApp extends StatelessWidget {
               greeting: 'Olá, Gabriel 👋',
               subtitle: 'Aqui está um resumo do seu site hoje.',
             ),
-        '/posts': (c) => const PostEditorPage(),
+        '/posts': (c) => const BlogAdminPage(title: 'Posts'),
         '/cats': (c) => const SectionPlaceholder('Categorias', Icons.label_outline),
         '/tags': (c) => const SectionPlaceholder('Tags', Icons.tag),
         '/leads': (c) => const SectionPlaceholder('Leads', Icons.mail_outline),

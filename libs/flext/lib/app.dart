@@ -7,9 +7,10 @@ library;
 
 import 'dart:async';
 
-import 'package:jaspr/dom.dart' show StyleRule;
+import 'package:jaspr/dom.dart' show StyleRule, script;
 import 'package:jaspr/server.dart';
 
+import 'ads/ads_config.dart';
 import 'api/api.dart';
 import 'auth/token_verifier.dart';
 import 'blog/blog.dart';
@@ -80,6 +81,7 @@ class FlextApp {
     EmailSender? onEmail,
     TokenVerifier? tokenVerifier,
     List<StyleRule> globalStyles = const [],
+    AdsConfig? ads,
     String lang = 'pt-BR',
     int? port,
   }) async {
@@ -132,6 +134,14 @@ class FlextApp {
       tokenVerifier: tokenVerifier,
       notFound: notFound,
       globalStyles: globalStyles,
+      headExtra: [
+        if (ads != null && ads.enabled)
+          script(
+            src: ads.loaderUrl,
+            async: true,
+            attributes: const {'crossorigin': 'anonymous'},
+          ),
+      ],
       lang: lang,
       resolvePage: (path, query) async {
         final blogNow = await blogFor(path);

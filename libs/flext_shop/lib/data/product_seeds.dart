@@ -1,28 +1,8 @@
-/// Produto da loja. Numa app real viria do banco (DbModel) — aqui é uma lista
-/// fixa só para o exemplo. O `slug` vira a URL `/produto/<slug>`.
-class Product {
-  const Product({
-    required this.slug,
-    required this.name,
-    required this.price,
-    required this.emoji,
-    required this.summary,
-    required this.description,
-    this.tag,
-  });
+import 'product.dart';
 
-  final String slug;
-  final String name;
-  final double price;
-  final String emoji;
-  final String summary;
-  final String description;
-  final String? tag;
-
-  String get priceLabel => 'R\$ ${price.toStringAsFixed(2).replaceAll('.', ',')}';
-}
-
-const products = <Product>[
+/// Catálogo inicial (semeia o banco na primeira execução). Depois, os produtos
+/// são gerenciados pelo admin (criar/editar/excluir). Ver [ProductRepository].
+const productSeeds = <Product>[
   Product(
     slug: 'fone-bluetooth',
     name: 'Fone Bluetooth Pro',

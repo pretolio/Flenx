@@ -4,8 +4,7 @@ import 'block_type.dart';
 import 'editable_block.dart';
 
 /// Card de edição de UM bloco do post. Mostra os campos conforme o tipo e os
-/// controles de mover/remover. Sem estado próprio — edita o [block] e avisa
-/// via [onChanged] para o pai persistir/rebuildar.
+/// controles de mover/remover. Edita o [block] e avisa via [onChanged].
 class BlockCard extends StatelessWidget {
   const BlockCard({
     required this.block,

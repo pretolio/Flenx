@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'admin/app_permission.dart';
 import 'components/app_shell.dart';
 import 'flext_admin_theme.dart';
 import 'models/app_notification.dart';
@@ -19,6 +20,7 @@ class FlextAdminApp extends StatefulWidget {
     this.notifications = const [],
     this.initialRoute = '/',
     this.onLogout,
+    this.role,
     super.key,
   });
 
@@ -33,6 +35,10 @@ class FlextAdminApp extends StatefulWidget {
   final String initialRoute;
   final VoidCallback? onLogout;
 
+  /// Papel do usuário logado. Se informado, itens de menu com `permission` que
+  /// o papel não possui são escondidos (controle de acesso por papel).
+  final AppRole? role;
+
   @override
   State<FlextAdminApp> createState() => _FlextAdminAppState();
 }
@@ -42,6 +48,25 @@ class _FlextAdminAppState extends State<FlextAdminApp> {
 
   void _toggle() => setState(
       () => _mode = _mode == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark);
+
+  /// Filtra os itens (e subitens) que o papel atual pode acessar.
+  List<NavItem> get _visibleNav {
+    final role = widget.role;
+    if (role == null) return widget.navItems;
+    final out = <NavItem>[];
+    for (final item in widget.navItems) {
+      if (!role.can(item.permission)) continue;
+      if (item.isExpandable) {
+        final kids =
+            item.children.where((c) => role.can(c.permission)).toList();
+        if (kids.isEmpty && item.route == null) continue;
+        out.add(item.withChildren(kids));
+      } else {
+        out.add(item);
+      }
+    }
+    return out;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +79,7 @@ class _FlextAdminAppState extends State<FlextAdminApp> {
         title: widget.title,
         user: widget.user,
         notifications: widget.notifications,
-        navItems: widget.navItems,
+        navItems: _visibleNav,
         initialRoute: widget.initialRoute,
         isDark: _mode == ThemeMode.dark,
         onToggleTheme: _toggle,

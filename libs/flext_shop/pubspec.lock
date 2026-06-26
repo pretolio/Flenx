@@ -238,7 +238,7 @@ packages:
     source: hosted
     version: "0.15.6"
   http:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: http
       sha256: "87721a4a50b19c7f1d49001e51409bddc46303966ce89a65af4f4e6004896412"
@@ -294,7 +294,7 @@ packages:
     source: hosted
     version: "0.23.1"
   jaspr_flutter_embed:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: jaspr_flutter_embed
       sha256: "5e89158623c8cc94050889daeab34a3f9384f71470f624f95d387306b1eaca93"
@@ -587,7 +587,7 @@ packages:
     source: hosted
     version: "1.2.1"
   web:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: web
       sha256: "868d88a33d8a87b18ffc05f9f030ba328ffefba92d6c127917a2ba740f9cfe4a"

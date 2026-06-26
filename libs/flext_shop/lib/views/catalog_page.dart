@@ -1,13 +1,15 @@
 import 'package:flext/flext.dart';
 import 'package:jaspr/jaspr.dart';
 
-import '../data/products.dart';
+import '../data/product.dart';
 import 'product_card.dart';
 import 'shop_nav.dart';
 
-/// Catálogo: todos os produtos numa grade responsiva.
+/// Catálogo: todos os produtos (do banco) numa grade responsiva.
 class CatalogPage extends StatelessComponent {
-  const CatalogPage({super.key});
+  const CatalogPage({required this.products, super.key});
+
+  final List<Product> products;
 
   @override
   Component build(BuildContext context) {

@@ -1,7 +1,7 @@
 import 'package:flext/flext.dart';
 import 'package:jaspr/jaspr.dart';
 
-import '../data/products.dart';
+import '../data/product.dart';
 import 'shop_nav.dart';
 
 /// Página de um produto (`/produto/<slug>`). Detalhe + comprar via WhatsApp.
@@ -40,7 +40,12 @@ class ProductPage extends StatelessComponent {
               FlextText(product.description,
                   color: FlextPalette.muted, lineHeight: 1.6),
               FlextRow(gap: 12, wrap: true, [
-                FlextButton('Comprar no WhatsApp', href: wa, newTab: true),
+                FlextButton('Adicionar ao carrinho',
+                    href: '/carrinho?add=${product.slug}'),
+                FlextButton('Comprar no WhatsApp',
+                    href: wa,
+                    newTab: true,
+                    variant: FlextButtonVariant.ghost),
                 FlextButton('Voltar ao catálogo',
                     href: '/produtos', variant: FlextButtonVariant.ghost),
               ]),

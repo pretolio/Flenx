@@ -12,6 +12,11 @@ dependencies:
   flutter:
     sdk: flutter
   jaspr: ^0.23.1
+  # Admin e carrinho são ilhas Flutter embutidas.
+  jaspr_flutter_embed: ^0.4.11
+  # Cliente HTTP (admin/carrinho) e acesso ao localStorage do carrinho.
+  http: ^1.2.0
+  web: ^1.1.0
 
 dev_dependencies:
   build_runner: ^2.10.0
@@ -21,3 +26,7 @@ dev_dependencies:
 
 jaspr:
   mode: server
+  flutter: embedded
+
+flutter:
+  uses-material-design: true

@@ -10,6 +10,7 @@ class NavItem {
     this.onTap,
     this.children = const [],
     this.badge,
+    this.permission,
   });
 
   final String label;
@@ -27,5 +28,20 @@ class NavItem {
   /// Contador opcional exibido como badge (ex.: itens não lidos).
   final int? badge;
 
+  /// Permissão exigida para ver o item (nula = sempre visível). Combina com o
+  /// papel do usuário (ver `AppRole`/`FlextAdminApp.role`).
+  final String? permission;
+
   bool get isExpandable => children.isNotEmpty;
+
+  /// Cópia com novos [children] (usado ao filtrar submenus por permissão).
+  NavItem withChildren(List<NavItem> items) => NavItem(
+        label: label,
+        icon: icon,
+        route: route,
+        onTap: onTap,
+        children: items,
+        badge: badge,
+        permission: permission,
+      );
 }

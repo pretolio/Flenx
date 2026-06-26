@@ -1,13 +1,16 @@
 import 'package:flext/flext.dart';
 import 'package:jaspr/jaspr.dart';
 
-import '../data/products.dart';
+import '../data/product.dart';
 import 'product_card.dart';
 import 'shop_nav.dart';
 
-/// Home da loja: hero + produtos em destaque + CTA. Só componentes Dart.
+/// Home da loja: hero (editável pelo admin via configurações) + destaques + CTA.
 class HomePage extends StatelessComponent {
-  const HomePage({super.key});
+  const HomePage({required this.products, required this.settings, super.key});
+
+  final List<Product> products;
+  final SiteSettings settings;
 
   @override
   Component build(BuildContext context) {
@@ -19,12 +22,15 @@ class HomePage extends StatelessComponent {
         loginLabel: 'Minha conta',
         loginOptions: shopLogin,
       ),
-      const FlextHero(
+      FlextHero(
         eyebrow: 'Tecnologia que rende',
-        title: 'Os melhores periféricos, num clique',
-        subtitle: 'Loja de exemplo feita 100% em Dart com o Flext — SSR, SEO '
-            'e catálogo prontos.',
-        actions: [FlextButton('Ver produtos', href: '/produtos')],
+        title: settings.get('hero_title', 'Os melhores periféricos, num clique'),
+        subtitle: settings.get('hero_subtitle',
+            'Loja de exemplo feita 100% em Dart com o Flext — SSR, SEO e catálogo prontos.'),
+        actions: [
+          FlextButton(settings.get('hero_cta', 'Ver produtos'),
+              href: '/produtos'),
+        ],
       ),
       FlextSection(
         child: FlextColumn(gap: 24, cross: FlextAlign.stretch, [

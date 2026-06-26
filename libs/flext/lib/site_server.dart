@@ -35,6 +35,7 @@ class FlextServer {
     this.onEmail,
     this.tokenVerifier,
     this.globalStyles = const [],
+    this.headExtra = const [],
     this.lang = 'pt-BR',
     this.flutterBootstrap = 'flutter_bootstrap.js?cb=1',
   });
@@ -53,6 +54,10 @@ class FlextServer {
 
   /// Estilos globais extra (somados ao reset padrão).
   final List<StyleRule> globalStyles;
+
+  /// Tags extra para o `<head>` de toda página (ex.: loader de anúncios,
+  /// scripts de analytics).
+  final List<Component> headExtra;
   final String lang;
   final String flutterBootstrap;
 
@@ -97,6 +102,7 @@ class FlextServer {
         styles: [..._resetStyles, ...globalStyles],
         head: [
           ...meta.build(routeMeta),
+          ...headExtra,
           if (result?.island ?? false)
             script(src: flutterBootstrap, defer: true),
         ],
