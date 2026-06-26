@@ -2,9 +2,9 @@
 
 Framework **Flutter/Dart estilo Next.js** para a web. Você escreve **só Dart, no estilo Flutter** — **sem HTML/CSS** — e o Flext faz **SSR** (com [jaspr](https://jaspr.site)), embute **widgets Flutter reais** como ilhas, e gera **SEO/GEO/AEO + sitemap + robots + llms.txt** automaticamente.
 
-Inclui: **kit de UI em Dart** (estilo Flutter), **blog em markdown** (estilo Astro), **painel admin** pronto, **APIs declarativas** (rodam em Dart **ou** geram PHP), **auth (JWT)**, **notificações** (Twilio/FCM) e **pagamento** (Asaas/Mercado Pago).
+Inclui: **kit de UI em Dart** (estilo Flutter), **blog** (markdown e/ou banco), **painel admin** pronto, **APIs declarativas** (rodam em Dart **ou** geram PHP), **banco plugável** (Supabase, Firebase, API REST), **auth (JWT)**, **notificações** (Twilio/FCM) e **pagamento** (Asaas/Mercado Pago).
 
-> Projeto de exemplo completo e funcional: **`libs/flext_demo`** — a referência de uso.
+> Três exemplos prontos: **`libs/flext_demo`** (institucional + admin), **`libs/flext_shop`** (loja) e **`libs/flext_news`** (notícias).
 
 ---
 
@@ -233,6 +233,36 @@ const buildPhp = true;  // dart run tool/build.dart gera build/php + roda jaspr 
 
 Resposta padrão com envelope `{success, data, error, meta}` e paginação automática. Endpoints com `requiresAuth: true` exigem `Authorization: Bearer <token>`.
 
+### Onde os dados são salvos (banco plugável)
+
+A persistência usa a interface `DbExecutor`. Você **escolhe o backend** por `DB_PROVIDER` no `.env` e adiciona as credenciais — mesma ideia do pagamento:
+
+```dart
+// main.dart — uma linha decide tudo:
+db: DbRegistry.fromEnv(Platform.environment),
+```
+
+| `DB_PROVIDER` | Backend | Credenciais (`.env`) |
+|---|---|---|
+| `supabase` | Supabase (PostgREST) | `SUPABASE_URL`, `SUPABASE_KEY` |
+| `firebase` | Firebase Firestore (REST) | `FIREBASE_PROJECT_ID`, `FIREBASE_TOKEN` |
+| `rest` / `api` | API Flext (PHP **ou** Dart) | `API_BASE_URL`, `API_TOKEN` |
+| `jsonl` / `memory` | arquivo / memória (dev) | `DB_DIR` |
+
+Backend novo: `DbRegistry.register('mongo', (env, client) => MeuExecutor(...))`. Firestore é NoSQL (ids string).
+
+### Blog vindo do banco (além de Markdown)
+
+Posts podem vir de `.md` **e/ou** do banco, combinados:
+
+```dart
+FlextApp.run(
+  blog: 'lib/content/blog',   // arquivos markdown
+  blogFromDb: true,           // + posts salvos no banco (tabela blog_posts)
+  ...
+);
+```
+
 ---
 
 ## Auth, Notificações e Pagamento
@@ -254,4 +284,8 @@ jaspr serve                       # dev (hot reload) em http://localhost:8080
 dart run tool/build.dart          # build de produção (web/Dart + PHP se buildPhp=true)
 ```
 
-Veja **`libs/flext_demo`** para um site completo de ponta a ponta.
+## Projetos de exemplo
+
+- **`libs/flext_demo`** — site institucional + blog + **painel admin** (ilha Flutter) + APIs.
+- **`libs/flext_shop`** — loja: catálogo, rota por produto (SEO), comprar via WhatsApp.
+- **`libs/flext_news`** — portal de notícias em Markdown (manchete, categorias, busca).
