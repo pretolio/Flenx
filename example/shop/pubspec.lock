@@ -185,13 +185,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
-  flext:
+  flenx:
     dependency: "direct main"
     description:
-      path: "../flext"
+      path: "../.."
       relative: true
     source: path
-    version: "0.1.0"
+    version: "0.1.1"
   flutter:
     dependency: "direct main"
     description: flutter
