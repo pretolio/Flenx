@@ -1,0 +1,6 @@
+# Itens do monorepo que NÃO entram no pacote publicado no pub.dev.
+# (O pacote é só lib/ + bin/ + test/ + README/CHANGELOG/LICENSE.)
+example/
+docs/
+refs/
+libs/
