@@ -2,13 +2,13 @@ import 'dart:io';
 
 import 'package:flext/blog/blog_scaffold.dart';
 
-/// Inicializa o conteúdo de um projeto que usa flext.
+/// Cria a pasta do **blog** com um post de boas-vindas publicado. (Opcional —
+/// só rode se o seu site terá blog.)
 ///
 /// Uso (em qualquer projeto que dependa de flext):
-///   dart run flext:init [--dir=lib/content/blog]
+///   dart run flext:blog_init [--dir=lib/content/blog]
 ///
 /// A pasta é, nesta ordem: `--dir=`, env `FLEXT_BLOG_DIR`, ou `content/blog`.
-/// Cria a pasta com um post de boas-vindas publicado.
 void main(List<String> argv) {
   String? dirArg;
   for (final a in argv) {
@@ -23,6 +23,6 @@ void main(List<String> argv) {
     return;
   }
   stdout.writeln('Criado: ${file.path}');
-  stdout.writeln('Rode o servidor e acesse /blog. '
+  stdout.writeln('Adicione `blog: \'$dir\'` no FlextApp.run e acesse /blog. '
       'Novos posts: dart run flext:new_post "Título".');
 }

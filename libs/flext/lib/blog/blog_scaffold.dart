@@ -71,7 +71,7 @@ $body
     return file;
   }
 
-  /// Cria um post de boas-vindas publicado (usado pelo `flext:init`).
+  /// Cria um post de boas-vindas publicado (usado pelo `flext:blog_init`).
   /// Retorna `null` se já existir, sem lançar.
   File? createWelcome() {
     final slug = Slugify.call('Bem-vindo ao Flext');
