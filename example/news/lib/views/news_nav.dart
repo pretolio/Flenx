@@ -1,5 +1,4 @@
 import 'package:flenx/flenx.dart';
-import 'package:jaspr/jaspr.dart';
 
 /// Marca, menu e rodapé do portal de notícias.
 const newsBrand = SiteBrand(label: 'Flenx News', homeHref: '/');

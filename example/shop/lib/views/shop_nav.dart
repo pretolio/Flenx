@@ -1,5 +1,4 @@
 import 'package:flenx/flenx.dart';
-import 'package:jaspr/jaspr.dart';
 
 /// Marca, menu e rodapé compartilhados da loja (fonte única).
 const shopBrand = SiteBrand(label: 'Flenx Store', homeHref: '/');

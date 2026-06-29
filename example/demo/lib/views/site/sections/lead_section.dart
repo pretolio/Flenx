@@ -1,5 +1,4 @@
 import 'package:flenx/flenx.dart';
-import 'package:jaspr/jaspr.dart';
 
 /// Seção de captura de leads: benefícios à esquerda, formulário à direita.
 /// Montada com o kit Dart (sem HTML/CSS na mão).

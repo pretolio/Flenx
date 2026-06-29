@@ -1,5 +1,4 @@
 import 'package:flenx/flenx.dart';
-import 'package:jaspr/jaspr.dart';
 
 /// Rodapé do site do demo: usa o genérico [FlenxFooter] da lib, só passando o
 /// conteúdo (marca, frase, colunas de links). Nada de HTML/CSS.
