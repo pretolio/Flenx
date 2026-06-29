@@ -1,10 +1,11 @@
 import 'package:flenx/flenx.dart';
 
 import '../data/product.dart';
-import 'product_card.dart';
-import 'shop_nav.dart';
+import 'store_data.dart';
 
-/// Home da loja: banner promo + hero (editável no admin) + destaques animados.
+/// Home da loja no layout de marketplace de moda — montada SÓ com componentes
+/// Dart do kit de e-commerce do Flenx (FlenxStoreShell, FlenxHeroBanner,
+/// FlenxProductShelf, FlenxProductCard...). Nenhum HTML/CSS no app.
 class HomePage extends StatelessComponent {
   const HomePage({required this.products, required this.settings, super.key});
 
@@ -13,49 +14,37 @@ class HomePage extends StatelessComponent {
 
   @override
   Component build(BuildContext context) {
-    final destaques = products.take(3).toList();
-    return FlenxPage(
-      primaryColor: '#01589B',
-      primaryDarkColor: '#02406f',
-      secondaryColor: '#0a86e0',
-      [
-        FlenxBanner(
-          message: '🚚 Frete grátis acima de R\$ 299 — em todo o Brasil',
-          action: FlenxButton('Ver produtos', href: '/produtos'),
-        ),
-        const SiteHeader(
-          brand: shopBrand,
-          links: shopLinks,
-          loginLabel: 'Minha conta',
-          loginOptions: shopLogin,
-        ),
-        FlenxHero(
-          eyebrow: 'Tecnologia que rende',
-          title: settings.get('hero_title', 'Os melhores periféricos, num clique'),
+    final cards = [for (final p in products) productCard(p)];
+    return FlenxStoreShell(
+      brand: 'flenx',
+      cep: '01310-100, São Paulo',
+      categories: storeCategories,
+      promo: 'Ganhe 10% OFF na primeira compra com o cupom PRIMEIRA10',
+      accountHref: '/admin',
+      footerColumns: storeFooterColumns,
+      payments: const ['VISA', 'MASTER', 'ELO', 'PIX', 'BOLETO'],
+      copyright:
+          '© 2026 Flenx Store — loja de exemplo feita 100% em Dart com o Flenx (SSR + SEO).',
+      children: [
+        FlenxHeroBanner(
+          eyebrow: 'Coleção tech',
+          title: settings.get('hero_title', 'Setup Lifestyle'),
           subtitle: settings.get('hero_subtitle',
-              'Loja de exemplo feita 100% em Dart com o Flenx — SSR, SEO e catálogo prontos.'),
-          actions: [
-            FlenxButton(settings.get('hero_cta', 'Ver produtos'),
-                href: '/produtos'),
-          ],
+              'Monte sua estação de trabalho com estilo e economia.'),
+          priceFrom: 'a partir de',
+          priceValue: r'R$ 189,90',
+          ctaHref: '/produtos',
         ),
-        FlenxSection(
-          child: FlenxColumn(gap: 24, cross: FlenxAlign.stretch, [
-            const FlenxHeading('Em destaque', align: FlenxTextAlign.center),
-            FlenxGrid(
-              minItemWidth: 280,
-              animation: FlenxAnimation.slideUp,
-              [for (final p in destaques) ProductCard(p)],
-            ),
-          ]),
+        FlenxPricePills(items: storePricePills),
+        FlenxBrandStrip(items: storeBrands),
+        FlenxProductShelf(
+          title: 'Ofertas do dia',
+          countdown: '08:45:12',
+          subtitle: 'Você não pode perder. Aproveite!',
+          products: cards,
         ),
-        const FlenxCta(
-          title: 'Frete grátis acima de R\$ 299',
-          subtitle: 'Aproveite e monte seu setup hoje.',
-          action: FlenxButton('Comprar agora', href: '/produtos'),
-        ),
-        const ShopFooter(),
-        WhatsappButton(url: 'https://wa.me/5511999999999'),
+        FlenxProductGrid(title: 'Mais vendidos', products: cards),
+        FlenxBenefitsBar(items: storeBenefits),
       ],
     );
   }

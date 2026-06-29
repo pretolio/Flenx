@@ -38,3 +38,19 @@ export 'blocks/flenx_alert.dart';
 export 'blocks/flenx_banner.dart';
 export 'blocks/flenx_accordion_item.dart';
 export 'blocks/flenx_accordion.dart';
+
+// Blocos de portal de notícias (estilo G1)
+export 'blocks/news/flenx_news_header.dart';
+export 'blocks/news/flenx_news_highlight.dart';
+export 'blocks/news/flenx_news_card.dart';
+export 'blocks/news/flenx_news_section_title.dart';
+export 'blocks/news/flenx_most_read.dart';
+export 'blocks/news/flenx_sidebar_layout.dart';
+
+// Kit de e-commerce (loja estilo marketplace de moda)
+export 'commerce/commerce_models.dart';
+export 'commerce/flenx_store_shell.dart';
+export 'commerce/flenx_hero_banner.dart';
+export 'commerce/flenx_store_sections.dart';
+export 'commerce/flenx_product_card.dart';
+export 'commerce/flenx_product_shelf.dart';

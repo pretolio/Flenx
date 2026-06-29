@@ -1,6 +1,9 @@
 # Itens do monorepo que NÃO entram no pacote publicado no pub.dev.
-# (O pacote é só lib/ + bin/ + test/ + README/CHANGELOG/LICENSE.)
-example/
+# Mantém example/main.dart + example/README.md (aba "Example" do pub.dev);
+# os apps completos (pesados, com pubspec próprio) ficam de fora.
+example/demo/
+example/shop/
+example/news/
 docs/
 refs/
 libs/

@@ -1,10 +1,9 @@
 import 'package:flenx/flenx.dart';
 
 import '../data/product.dart';
-import 'product_card.dart';
-import 'shop_nav.dart';
+import 'store_data.dart';
 
-/// Catálogo: todos os produtos (do banco) numa grade responsiva.
+/// Catálogo: todos os produtos na grade do kit de e-commerce (só Dart).
 class CatalogPage extends StatelessComponent {
   const CatalogPage({required this.products, super.key});
 
@@ -12,26 +11,21 @@ class CatalogPage extends StatelessComponent {
 
   @override
   Component build(BuildContext context) {
-    return FlenxPage([
-      const SiteHeader(
-        brand: shopBrand,
-        links: shopLinks,
-        loginLabel: 'Minha conta',
-        loginOptions: shopLogin,
-      ),
-      FlenxSection(
-        child: FlenxColumn(gap: 24, cross: FlenxAlign.stretch, [
-          const FlenxText('Catálogo',
-              color: FlenxPalette.primary, weight: 700),
-          const FlenxHeading('Todos os produtos'),
-          FlenxGrid(
-            minItemWidth: 280,
-            [for (final p in products) ProductCard(p)],
-          ),
-        ]),
-      ),
-      const ShopFooter(),
-      WhatsappButton(url: 'https://wa.me/5511999999999'),
-    ]);
+    return FlenxStoreShell(
+      brand: 'flenx',
+      cep: '01310-100, São Paulo',
+      categories: storeCategories,
+      accountHref: '/admin',
+      footerColumns: storeFooterColumns,
+      payments: const ['VISA', 'MASTER', 'ELO', 'PIX', 'BOLETO'],
+      copyright: '© 2026 Flenx Store — feito com Flenx (SSR + SEO).',
+      children: [
+        FlenxProductGrid(
+          title: 'Todos os produtos',
+          products: [for (final p in products) productCard(p)],
+        ),
+        FlenxBenefitsBar(items: storeBenefits),
+      ],
+    );
   }
 }
