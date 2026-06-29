@@ -30,7 +30,9 @@ class LlmsFullGenerator {
         b.writeln('- **Endereço:** ${addr.streetAddress}, ${addr.addressLocality}${addr.addressRegion != null ? " – ${addr.addressRegion}" : ""}, ${addr.postalCode}');
         if (addr.hasGeo) b.writeln('- **Geo:** latitude ${addr.latitude}, longitude ${addr.longitude}');
       }
-      for (final s in config.sameAs) b.writeln('- **Social:** $s');
+      for (final s in config.sameAs) {
+        b.writeln('- **Social:** $s');
+      }
       b.writeln();
     }
 
