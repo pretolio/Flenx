@@ -162,10 +162,10 @@
         <style>
           .site-header{display:block;position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid #e5e7eb;font-family:system-ui,-apple-system,sans-serif}
           .header-inner{max-width:1120px;margin:0 auto;padding:0 20px;height:64px;display:flex;align-items:center;gap:20px}
-          .brand{flex-shrink:0;display:flex;align-items:center;gap:8px;text-decoration:none;color:#01589B;font-weight:800;font-size:1.25rem}
+          .brand{flex-shrink:0;display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--primary);font-weight:800;font-size:1.25rem}
           .brand-img{height:32px}
           .nav-toggle{display:none}
-          .hamburger{display:none;cursor:pointer;font-size:1.6rem;line-height:1;color:#01589B;padding:6px;user-select:none}
+          .hamburger{display:none;cursor:pointer;font-size:1.6rem;line-height:1;color:var(--primary);padding:6px;user-select:none}
           /* Padrão: logo à esquerda, menus à direita */
           .nav-wrap{display:flex;align-items:center;gap:24px;margin-left:auto}
           /* Opção: menus centralizados (logo esq., login dir.) */
@@ -174,15 +174,15 @@
           .nav-list{display:flex;align-items:center;gap:4px;list-style:none;margin:0;padding:0}
           .nav-item{position:relative}
           .nav-link{display:flex;align-items:center;gap:4px;padding:10px 12px;color:#1f2937;text-decoration:none;border-radius:8px;cursor:pointer;font-size:.95rem}
-          .nav-link:hover{background:#f3f4f6;color:#01589B}
+          .nav-link:hover{background:#f3f4f6;color:var(--primary)}
           .caret{font-size:.7rem}
           .dropdown{position:absolute;top:100%;left:0;min-width:210px;background:#fff;border:1px solid #e5e7eb;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.08);list-style:none;margin:6px 0 0;padding:6px;opacity:0;visibility:hidden;transform:translateY(6px);transition:.15s ease}
           .has-dropdown:hover>.dropdown,.has-dropdown:focus-within>.dropdown{opacity:1;visibility:visible;transform:none}
           .dropdown li a{display:block;padding:9px 12px;color:#374151;text-decoration:none;border-radius:6px;font-size:.92rem}
-          .dropdown li a:hover{background:#f3f4f6;color:#01589B}
+          .dropdown li a:hover{background:#f3f4f6;color:var(--primary)}
           .dropdown-right{left:auto;right:0}
-          .login-btn{display:inline-flex;align-items:center;gap:6px;background:#01589B;color:#fff;padding:9px 18px;border-radius:9999px;text-decoration:none;font-weight:600;cursor:pointer;border:none;font-size:.95rem}
-          .login-btn:hover{background:#014478}
+          .login-btn{display:inline-flex;align-items:center;gap:6px;background:var(--primary);color:#fff;padding:9px 18px;border-radius:9999px;text-decoration:none;font-weight:600;cursor:pointer;border:none;font-size:.95rem}
+          .login-btn:hover{background:var(--primary-d)}
           .login-menu{position:relative}
           @media (max-width:860px){
            .hamburger{display:block}
@@ -224,9 +224,9 @@
                 Som imersivo com cancelamento ativo de ruído, conexão multiponto e estojo com carregamento rápido. 30 horas de autonomia.
               </p>
               <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 12.0px; align-items: center; justify-content: flex-start">
-                <span style="display: inline-block"><style>.fbtn-primary:hover{filter:brightness(1.06);transform:translateY(-1px)}</style><a class="fbtn-primary" style="display: inline-block; padding: 12px 22px; border-radius: 10px; font-weight: 700; text-decoration: none; cursor: pointer; transition: filter .15s ease, transform .15s ease; background: #01589B; color: #ffffff" href="../../carrinho?add=fone-bluetooth/index.html">Adicionar ao carrinho</a></span>
-                <span style="display: inline-block"><style>.fbtn-ghost:hover{filter:brightness(1.06);transform:translateY(-1px)}</style><a class="fbtn-ghost" style="display: inline-block; padding: 12px 22px; border-radius: 10px; font-weight: 700; text-decoration: none; cursor: pointer; transition: filter .15s ease, transform .15s ease; background: transparent; color: #01589B; box-shadow: inset 0 0 0 1.5px #01589B" rel="noopener noreferrer" href="https://wa.me/5511999999999?text=Quero%20o%20Fone Bluetooth Pro" target="_blank">Comprar no WhatsApp</a></span>
-                <span style="display: inline-block"><style>.fbtn-ghost:hover{filter:brightness(1.06);transform:translateY(-1px)}</style><a class="fbtn-ghost" style="display: inline-block; padding: 12px 22px; border-radius: 10px; font-weight: 700; text-decoration: none; cursor: pointer; transition: filter .15s ease, transform .15s ease; background: transparent; color: #01589B; box-shadow: inset 0 0 0 1.5px #01589B" href="../../produtos/index.html">Voltar ao catálogo</a></span>
+                <span style="display: inline-block"><style>.fbtn-primary:hover{filter:brightness(1.06);transform:translateY(-1px)}</style><a class="fbtn-primary" style="display: inline-block; padding: 12px 22px; border-radius: 10px; font-weight: 700; text-decoration: none; cursor: pointer; transition: filter .15s ease, transform .15s ease; background: var(--primary, #01589B); color: #ffffff" href="../../carrinho?add=fone-bluetooth/index.html">Adicionar ao carrinho</a></span>
+                <span style="display: inline-block"><style>.fbtn-ghost:hover{filter:brightness(1.06);transform:translateY(-1px)}</style><a class="fbtn-ghost" style="display: inline-block; padding: 12px 22px; border-radius: 10px; font-weight: 700; text-decoration: none; cursor: pointer; transition: filter .15s ease, transform .15s ease; background: transparent; color: var(--primary, #01589B); box-shadow: inset 0 0 0 1.5px var(--primary, #01589B)" rel="noopener noreferrer" href="https://wa.me/5511999999999?text=Quero%20o%20Fone Bluetooth Pro" target="_blank">Comprar no WhatsApp</a></span>
+                <span style="display: inline-block"><style>.fbtn-ghost:hover{filter:brightness(1.06);transform:translateY(-1px)}</style><a class="fbtn-ghost" style="display: inline-block; padding: 12px 22px; border-radius: 10px; font-weight: 700; text-decoration: none; cursor: pointer; transition: filter .15s ease, transform .15s ease; background: transparent; color: var(--primary, #01589B); box-shadow: inset 0 0 0 1.5px var(--primary, #01589B)" href="../../produtos/index.html">Voltar ao catálogo</a></span>
               </div>
             </div>
           </div>

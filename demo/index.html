@@ -33,13 +33,29 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "Organization",
+        "@type": "LocalBusiness",
         "name": "Flenx",
         "url": "https://flenx.exemplo.com",
         "logo": "https://flenx.exemplo.com/images/logo.svg",
+        "telephone": "+55 11 99999-9999",
+        "email": "contato@flenx.dev",
         "sameAs": [
-          "https://github.com/flenx"
-        ]
+          "https://github.com/pretolio/Flenx",
+          "https://pub.dev/packages/flenx"
+        ],
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Av. Paulista, 1000",
+          "addressLocality": "São Paulo",
+          "addressRegion": "SP",
+          "postalCode": "01310-100",
+          "addressCountry": "BR"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": -23.5615,
+          "longitude": -46.6562
+        }
       }
     </script>
     <script type="application/ld+json">
@@ -198,14 +214,21 @@
         }
         
       </style>
+      <style>:root{--primary:#01589B;--primary-d:#02406f;--secondary:#0a86e0;}</style>
+      <div style="background: #01589B; color: #ffffff; padding: 10px 24px; text-align: center">
+        <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 16.0px; align-items: center; justify-content: center">
+          <p style="margin: 0; font-size: 14.0px; font-weight: 600; color: #ffffff">✨ Flenx 0.2.0 — animações, temas, áudio, Lottie/Rive, SVG e mais</p>
+          <span style="display: inline-block"><style>.fbtn-primary:hover{filter:brightness(1.06);transform:translateY(-1px)}</style><a class="fbtn-primary" style="display: inline-block; padding: 12px 22px; border-radius: 10px; font-weight: 700; text-decoration: none; cursor: pointer; transition: filter .15s ease, transform .15s ease; background: var(--primary, #01589B); color: #ffffff" href="#novidades">Ver novidades</a></span>
+        </div>
+      </div>
       <header class="site-header">
         <style>
           .site-header{display:block;position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid #e5e7eb;font-family:system-ui,-apple-system,sans-serif}
           .header-inner{max-width:1120px;margin:0 auto;padding:0 20px;height:64px;display:flex;align-items:center;gap:20px}
-          .brand{flex-shrink:0;display:flex;align-items:center;gap:8px;text-decoration:none;color:#01589B;font-weight:800;font-size:1.25rem}
+          .brand{flex-shrink:0;display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--primary);font-weight:800;font-size:1.25rem}
           .brand-img{height:32px}
           .nav-toggle{display:none}
-          .hamburger{display:none;cursor:pointer;font-size:1.6rem;line-height:1;color:#01589B;padding:6px;user-select:none}
+          .hamburger{display:none;cursor:pointer;font-size:1.6rem;line-height:1;color:var(--primary);padding:6px;user-select:none}
           /* Padrão: logo à esquerda, menus à direita */
           .nav-wrap{display:flex;align-items:center;gap:24px;margin-left:auto}
           /* Opção: menus centralizados (logo esq., login dir.) */
@@ -214,15 +237,15 @@
           .nav-list{display:flex;align-items:center;gap:4px;list-style:none;margin:0;padding:0}
           .nav-item{position:relative}
           .nav-link{display:flex;align-items:center;gap:4px;padding:10px 12px;color:#1f2937;text-decoration:none;border-radius:8px;cursor:pointer;font-size:.95rem}
-          .nav-link:hover{background:#f3f4f6;color:#01589B}
+          .nav-link:hover{background:#f3f4f6;color:var(--primary)}
           .caret{font-size:.7rem}
           .dropdown{position:absolute;top:100%;left:0;min-width:210px;background:#fff;border:1px solid #e5e7eb;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.08);list-style:none;margin:6px 0 0;padding:6px;opacity:0;visibility:hidden;transform:translateY(6px);transition:.15s ease}
           .has-dropdown:hover>.dropdown,.has-dropdown:focus-within>.dropdown{opacity:1;visibility:visible;transform:none}
           .dropdown li a{display:block;padding:9px 12px;color:#374151;text-decoration:none;border-radius:6px;font-size:.92rem}
-          .dropdown li a:hover{background:#f3f4f6;color:#01589B}
+          .dropdown li a:hover{background:#f3f4f6;color:var(--primary)}
           .dropdown-right{left:auto;right:0}
-          .login-btn{display:inline-flex;align-items:center;gap:6px;background:#01589B;color:#fff;padding:9px 18px;border-radius:9999px;text-decoration:none;font-weight:600;cursor:pointer;border:none;font-size:.95rem}
-          .login-btn:hover{background:#014478}
+          .login-btn{display:inline-flex;align-items:center;gap:6px;background:var(--primary);color:#fff;padding:9px 18px;border-radius:9999px;text-decoration:none;font-weight:600;cursor:pointer;border:none;font-size:.95rem}
+          .login-btn:hover{background:var(--primary-d)}
           .login-menu{position:relative}
           @media (max-width:860px){
            .hamburger{display:block}
@@ -265,8 +288,8 @@
                 SSR real, widgets Flutter de verdade e SEO/GEO/AEO automáticos — tudo em Dart, com a DX de um framework moderno.
               </p>
               <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 12.0px; align-items: center; justify-content: flex-start">
-                <span style="display: inline-block"><style>.fbtn-primary:hover{filter:brightness(1.06);transform:translateY(-1px)}</style><a class="fbtn-primary" style="display: inline-block; padding: 12px 22px; border-radius: 10px; font-weight: 700; text-decoration: none; cursor: pointer; transition: filter .15s ease, transform .15s ease; background: #01589B; color: #ffffff" href="#contato">Começar agora</a></span>
-                <span style="display: inline-block"><style>.fbtn-ghost:hover{filter:brightness(1.06);transform:translateY(-1px)}</style><a class="fbtn-ghost" style="display: inline-block; padding: 12px 22px; border-radius: 10px; font-weight: 700; text-decoration: none; cursor: pointer; transition: filter .15s ease, transform .15s ease; background: transparent; color: #01589B; box-shadow: inset 0 0 0 1.5px #01589B" rel="noopener noreferrer" href="https://github.com/flenx" target="_blank">Ver no GitHub</a></span>
+                <span style="display: inline-block"><style>.fbtn-primary:hover{filter:brightness(1.06);transform:translateY(-1px)}</style><a class="fbtn-primary" style="display: inline-block; padding: 12px 22px; border-radius: 10px; font-weight: 700; text-decoration: none; cursor: pointer; transition: filter .15s ease, transform .15s ease; background: var(--primary, #01589B); color: #ffffff" href="#contato">Começar agora</a></span>
+                <span style="display: inline-block"><style>.fbtn-ghost:hover{filter:brightness(1.06);transform:translateY(-1px)}</style><a class="fbtn-ghost" style="display: inline-block; padding: 12px 22px; border-radius: 10px; font-weight: 700; text-decoration: none; cursor: pointer; transition: filter .15s ease, transform .15s ease; background: transparent; color: var(--primary, #01589B); box-shadow: inset 0 0 0 1.5px var(--primary, #01589B)" rel="noopener noreferrer" href="https://github.com/pretolio/Flenx" target="_blank">Ver no GitHub</a></span>
               </div>
             </div>
             <div style="background: #0B1220; border-radius: 14px; padding: 16px; box-shadow: 0 20px 50px rgba(0,0,0,.35); max-width: 460px; width: 100%">
@@ -296,104 +319,538 @@ class HomePage extends FlenxWidget {
           </div>
         </div>
       </section>
-      <section id="recursos" style="padding: 72.0px 24px">
+      <section id="servicos" style="padding: 72.0px 24px">
         <div style="max-width: 1120.0px; margin: 0 auto">
           <div style="display: flex; flex-direction: column; gap: 14.0px; align-items: stretch; justify-content: flex-start">
-            <p style="margin: 0; font-size: 16.0px; font-weight: 700; color: #01589B; text-align: center">Recursos</p>
-            <h2 style="margin: 0; font-size: 32.0px; font-weight: 800; line-height: 1.15; text-align: center">Tudo que um site moderno precisa</h2>
-            <p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B; text-align: center">Pré-configurado e pronto para produção — e 100% personalizável.</p>
+            <span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+.fa-reveal.fa-visible{opacity:1;transform:none!important}
+.fa-up{transform:translateY(36px)}
+.fa-down{transform:translateY(-36px)}
+.fa-left{transform:translateX(36px)}
+.fa-right{transform:translateX(-36px)}
+.fa-zoom{transform:scale(.92)}
+</style><script>(function(){
+if(window.__faObs)return;
+var o=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
+new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
+window.__faObs=o;
+})();
+</script><div class="fa-reveal fa-up" style="transition-duration: 600ms"><p style="margin: 0; font-size: 16.0px; font-weight: 700; color: var(--primary, #01589B); text-align: center">Recursos</p></div></span>
+            <span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+.fa-reveal.fa-visible{opacity:1;transform:none!important}
+.fa-up{transform:translateY(36px)}
+.fa-down{transform:translateY(-36px)}
+.fa-left{transform:translateX(36px)}
+.fa-right{transform:translateX(-36px)}
+.fa-zoom{transform:scale(.92)}
+</style><script>(function(){
+if(window.__faObs)return;
+var o=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
+new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
+window.__faObs=o;
+})();
+</script><div class="fa-reveal fa-up" style="transition-duration: 600ms; transition-delay: 100ms"><h2 style="margin: 0; font-size: 32.0px; font-weight: 800; line-height: 1.15; text-align: center">Tudo que um site moderno precisa</h2></div></span>
+            <span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+.fa-reveal.fa-visible{opacity:1;transform:none!important}
+.fa-up{transform:translateY(36px)}
+.fa-down{transform:translateY(-36px)}
+.fa-left{transform:translateX(36px)}
+.fa-right{transform:translateX(-36px)}
+.fa-zoom{transform:scale(.92)}
+</style><script>(function(){
+if(window.__faObs)return;
+var o=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
+new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
+window.__faObs=o;
+})();
+</script><div class="fa-reveal" style="transition-duration: 600ms; transition-delay: 200ms"><p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B; text-align: center">Pré-configurado e pronto para produção — e 100% personalizável.</p></div></span>
             <div style="display: flex; flex-wrap: wrap; gap: 20.0px; justify-content: center; align-items: stretch">
               <div style="flex: 1 1 300.0px; max-width: 100%">
-                <div style="background: #ffffff; padding: 20.0px; border-radius: 16.0px; border: 1px solid #E2E8F0">
-                  <div style="display: flex; flex-direction: column; gap: 10.0px; align-items: flex-start; justify-content: flex-start">
-                    <div style="width: 46px; height: 46px; border-radius: 12px; background: rgba(1,88,155,.10); display: flex; align-items: center; justify-content: center; font-size: 22px">⚡</div>
-                    <h3 style="margin: 0; font-size: 20.0px; font-weight: 800; line-height: 1.15">SSR real</h3>
-                    <p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B">HTML renderizado no servidor — performance e SEO de verdade.</p>
-                  </div>
-                </div>
+                <span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+.fa-reveal.fa-visible{opacity:1;transform:none!important}
+.fa-up{transform:translateY(36px)}
+.fa-down{transform:translateY(-36px)}
+.fa-left{transform:translateX(36px)}
+.fa-right{transform:translateX(-36px)}
+.fa-zoom{transform:scale(.92)}
+</style><script>(function(){
+if(window.__faObs)return;
+var o=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
+new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
+window.__faObs=o;
+})();
+</script><div class="fa-reveal fa-up" style="transition-duration: 600ms; transition-delay: 100ms"><div style="background: #ffffff; padding: 20.0px; border-radius: 16.0px; border: 1px solid #E2E8F0"><div style="display: flex; flex-direction: column; gap: 10.0px; align-items: flex-start; justify-content: flex-start"><div style="width: 46px; height: 46px; border-radius: 12px; background: rgba(1,88,155,.10); display: flex; align-items: center; justify-content: center; font-size: 22px">⚡</div><h3 style="margin: 0; font-size: 20.0px; font-weight: 800; line-height: 1.15">SSR real</h3><p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B">HTML renderizado no servidor — performance e SEO de verdade.</p></div></div></div></span>
               </div>
               <div style="flex: 1 1 300.0px; max-width: 100%">
-                <div style="background: #ffffff; padding: 20.0px; border-radius: 16.0px; border: 1px solid #E2E8F0">
-                  <div style="display: flex; flex-direction: column; gap: 10.0px; align-items: flex-start; justify-content: flex-start">
-                    <div style="width: 46px; height: 46px; border-radius: 12px; background: rgba(1,88,155,.10); display: flex; align-items: center; justify-content: center; font-size: 22px">🧩</div>
-                    <h3 style="margin: 0; font-size: 20.0px; font-weight: 800; line-height: 1.15">Widgets Flutter</h3>
-                    <p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B">O mesmo código roda no app mobile e na web, como ilhas.</p>
-                  </div>
-                </div>
+                <span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+.fa-reveal.fa-visible{opacity:1;transform:none!important}
+.fa-up{transform:translateY(36px)}
+.fa-down{transform:translateY(-36px)}
+.fa-left{transform:translateX(36px)}
+.fa-right{transform:translateX(-36px)}
+.fa-zoom{transform:scale(.92)}
+</style><script>(function(){
+if(window.__faObs)return;
+var o=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
+new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
+window.__faObs=o;
+})();
+</script><div class="fa-reveal fa-up" style="transition-duration: 600ms; transition-delay: 180ms"><div style="background: #ffffff; padding: 20.0px; border-radius: 16.0px; border: 1px solid #E2E8F0"><div style="display: flex; flex-direction: column; gap: 10.0px; align-items: flex-start; justify-content: flex-start"><div style="width: 46px; height: 46px; border-radius: 12px; background: rgba(1,88,155,.10); display: flex; align-items: center; justify-content: center; font-size: 22px">🧩</div><h3 style="margin: 0; font-size: 20.0px; font-weight: 800; line-height: 1.15">Widgets Flutter</h3><p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B">O mesmo código roda no app mobile e na web, como ilhas.</p></div></div></div></span>
               </div>
               <div style="flex: 1 1 300.0px; max-width: 100%">
-                <div style="background: #ffffff; padding: 20.0px; border-radius: 16.0px; border: 1px solid #E2E8F0">
-                  <div style="display: flex; flex-direction: column; gap: 10.0px; align-items: flex-start; justify-content: flex-start">
-                    <div style="width: 46px; height: 46px; border-radius: 12px; background: rgba(1,88,155,.10); display: flex; align-items: center; justify-content: center; font-size: 22px">🔍</div>
-                    <h3 style="margin: 0; font-size: 20.0px; font-weight: 800; line-height: 1.15">SEO automático</h3>
-                    <p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B">Meta tags, Open Graph, JSON-LD, sitemap e robots gerados sozinhos.</p>
-                  </div>
-                </div>
+                <span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+.fa-reveal.fa-visible{opacity:1;transform:none!important}
+.fa-up{transform:translateY(36px)}
+.fa-down{transform:translateY(-36px)}
+.fa-left{transform:translateX(36px)}
+.fa-right{transform:translateX(-36px)}
+.fa-zoom{transform:scale(.92)}
+</style><script>(function(){
+if(window.__faObs)return;
+var o=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
+new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
+window.__faObs=o;
+})();
+</script><div class="fa-reveal fa-up" style="transition-duration: 600ms; transition-delay: 260ms"><div style="background: #ffffff; padding: 20.0px; border-radius: 16.0px; border: 1px solid #E2E8F0"><div style="display: flex; flex-direction: column; gap: 10.0px; align-items: flex-start; justify-content: flex-start"><div style="width: 46px; height: 46px; border-radius: 12px; background: rgba(1,88,155,.10); display: flex; align-items: center; justify-content: center; font-size: 22px">🔍</div><h3 style="margin: 0; font-size: 20.0px; font-weight: 800; line-height: 1.15">SEO automático</h3><p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B">Meta tags, Open Graph, JSON-LD, sitemap e robots gerados sozinhos.</p></div></div></div></span>
               </div>
               <div style="flex: 1 1 300.0px; max-width: 100%">
-                <div style="background: #ffffff; padding: 20.0px; border-radius: 16.0px; border: 1px solid #E2E8F0">
-                  <div style="display: flex; flex-direction: column; gap: 10.0px; align-items: flex-start; justify-content: flex-start">
-                    <div style="width: 46px; height: 46px; border-radius: 12px; background: rgba(1,88,155,.10); display: flex; align-items: center; justify-content: center; font-size: 22px">🤖</div>
-                    <h3 style="margin: 0; font-size: 20.0px; font-weight: 800; line-height: 1.15">Pronto para IA</h3>
-                    <p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B">llms.txt e llms-full.txt + boas práticas de GEO/AEO embutidas.</p>
-                  </div>
-                </div>
+                <span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+.fa-reveal.fa-visible{opacity:1;transform:none!important}
+.fa-up{transform:translateY(36px)}
+.fa-down{transform:translateY(-36px)}
+.fa-left{transform:translateX(36px)}
+.fa-right{transform:translateX(-36px)}
+.fa-zoom{transform:scale(.92)}
+</style><script>(function(){
+if(window.__faObs)return;
+var o=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
+new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
+window.__faObs=o;
+})();
+</script><div class="fa-reveal fa-up" style="transition-duration: 600ms; transition-delay: 340ms"><div style="background: #ffffff; padding: 20.0px; border-radius: 16.0px; border: 1px solid #E2E8F0"><div style="display: flex; flex-direction: column; gap: 10.0px; align-items: flex-start; justify-content: flex-start"><div style="width: 46px; height: 46px; border-radius: 12px; background: rgba(1,88,155,.10); display: flex; align-items: center; justify-content: center; font-size: 22px">🤖</div><h3 style="margin: 0; font-size: 20.0px; font-weight: 800; line-height: 1.15">Pronto para IA</h3><p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B">llms.txt e llms-full.txt + boas práticas de GEO/AEO embutidas.</p></div></div></div></span>
               </div>
               <div style="flex: 1 1 300.0px; max-width: 100%">
-                <div style="background: #ffffff; padding: 20.0px; border-radius: 16.0px; border: 1px solid #E2E8F0">
-                  <div style="display: flex; flex-direction: column; gap: 10.0px; align-items: flex-start; justify-content: flex-start">
-                    <div style="width: 46px; height: 46px; border-radius: 12px; background: rgba(1,88,155,.10); display: flex; align-items: center; justify-content: center; font-size: 22px">📝</div>
-                    <h3 style="margin: 0; font-size: 20.0px; font-weight: 800; line-height: 1.15">Blog em markdown</h3>
-                    <p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B">Content collections com categorias e tags, estilo Astro.</p>
-                  </div>
-                </div>
+                <span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+.fa-reveal.fa-visible{opacity:1;transform:none!important}
+.fa-up{transform:translateY(36px)}
+.fa-down{transform:translateY(-36px)}
+.fa-left{transform:translateX(36px)}
+.fa-right{transform:translateX(-36px)}
+.fa-zoom{transform:scale(.92)}
+</style><script>(function(){
+if(window.__faObs)return;
+var o=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
+new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
+window.__faObs=o;
+})();
+</script><div class="fa-reveal fa-up" style="transition-duration: 600ms; transition-delay: 420ms"><div style="background: #ffffff; padding: 20.0px; border-radius: 16.0px; border: 1px solid #E2E8F0"><div style="display: flex; flex-direction: column; gap: 10.0px; align-items: flex-start; justify-content: flex-start"><div style="width: 46px; height: 46px; border-radius: 12px; background: rgba(1,88,155,.10); display: flex; align-items: center; justify-content: center; font-size: 22px">📝</div><h3 style="margin: 0; font-size: 20.0px; font-weight: 800; line-height: 1.15">Blog em markdown</h3><p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B">Content collections com categorias e tags, estilo Astro.</p></div></div></div></span>
               </div>
               <div style="flex: 1 1 300.0px; max-width: 100%">
-                <div style="background: #ffffff; padding: 20.0px; border-radius: 16.0px; border: 1px solid #E2E8F0">
-                  <div style="display: flex; flex-direction: column; gap: 10.0px; align-items: flex-start; justify-content: flex-start">
-                    <div style="width: 46px; height: 46px; border-radius: 12px; background: rgba(1,88,155,.10); display: flex; align-items: center; justify-content: center; font-size: 22px">🎨</div>
-                    <h3 style="margin: 0; font-size: 20.0px; font-weight: 800; line-height: 1.15">Shell responsivo</h3>
-                    <p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B">Sidebar/drawer e top menu prontos, no app e no site.</p>
-                  </div>
-                </div>
+                <span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+.fa-reveal.fa-visible{opacity:1;transform:none!important}
+.fa-up{transform:translateY(36px)}
+.fa-down{transform:translateY(-36px)}
+.fa-left{transform:translateX(36px)}
+.fa-right{transform:translateX(-36px)}
+.fa-zoom{transform:scale(.92)}
+</style><script>(function(){
+if(window.__faObs)return;
+var o=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
+new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
+window.__faObs=o;
+})();
+</script><div class="fa-reveal fa-up" style="transition-duration: 600ms; transition-delay: 500ms"><div style="background: #ffffff; padding: 20.0px; border-radius: 16.0px; border: 1px solid #E2E8F0"><div style="display: flex; flex-direction: column; gap: 10.0px; align-items: flex-start; justify-content: flex-start"><div style="width: 46px; height: 46px; border-radius: 12px; background: rgba(1,88,155,.10); display: flex; align-items: center; justify-content: center; font-size: 22px">🎨</div><h3 style="margin: 0; font-size: 20.0px; font-weight: 800; line-height: 1.15">Shell responsivo</h3><p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B">Sidebar/drawer e top menu prontos, no app e no site.</p></div></div></div></span>
               </div>
             </div>
           </div>
         </div>
       </section>
+      <section id="novidades" style="padding: 72.0px 24px; background: #f6f9fc">
+        <div style="max-width: 1120.0px; margin: 0 auto">
+          <span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+.fa-reveal.fa-visible{opacity:1;transform:none!important}
+.fa-up{transform:translateY(36px)}
+.fa-down{transform:translateY(-36px)}
+.fa-left{transform:translateX(36px)}
+.fa-right{transform:translateX(-36px)}
+.fa-zoom{transform:scale(.92)}
+</style><script>(function(){
+if(window.__faObs)return;
+var o=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
+new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
+window.__faObs=o;
+})();
+</script><div class="fa-reveal" style="transition-duration: 600ms"><div style="display: flex; flex-direction: column; gap: 22.0px; align-items: stretch; justify-content: flex-start"><p style="margin: 0; font-size: 16.0px; font-weight: 700; color: #01589B; text-align: center">Novidades · 0.2.0</p><h2 style="margin: 0; font-size: 32.0px; font-weight: 800; line-height: 1.15; text-align: center">Mais poder — e sempre só em Dart</h2><div style="display: flex; flex-wrap: wrap; gap: 20.0px; justify-content: center; align-items: stretch"><div style="flex: 1 1 250.0px; max-width: 100%"><span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+.fa-reveal.fa-visible{opacity:1;transform:none!important}
+.fa-up{transform:translateY(36px)}
+.fa-down{transform:translateY(-36px)}
+.fa-left{transform:translateX(36px)}
+.fa-right{transform:translateX(-36px)}
+.fa-zoom{transform:scale(.92)}
+</style><script>(function(){
+if(window.__faObs)return;
+var o=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
+new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
+window.__faObs=o;
+})();
+</script><div class="fa-reveal fa-up" style="transition-duration: 600ms"><div style="background: #ffffff; padding: 20.0px; border-radius: 16.0px; border: 1px solid #E2E8F0"><div style="display: flex; flex-direction: column; gap: 8.0px; align-items: flex-start; justify-content: flex-start"><p style="margin: 0; font-size: 40.0px; font-weight: 400">🎬</p><h3 style="margin: 0; font-size: 20.0px; font-weight: 800; line-height: 1.15">Animações</h3><p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B">Scroll-reveal (fadeIn, slideUp, zoomIn…) em qualquer componente.</p></div></div></div></span></div><div style="flex: 1 1 250.0px; max-width: 100%"><span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+.fa-reveal.fa-visible{opacity:1;transform:none!important}
+.fa-up{transform:translateY(36px)}
+.fa-down{transform:translateY(-36px)}
+.fa-left{transform:translateX(36px)}
+.fa-right{transform:translateX(-36px)}
+.fa-zoom{transform:scale(.92)}
+</style><script>(function(){
+if(window.__faObs)return;
+var o=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
+new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
+window.__faObs=o;
+})();
+</script><div class="fa-reveal fa-up" style="transition-duration: 600ms; transition-delay: 80ms"><div style="background: #ffffff; padding: 20.0px; border-radius: 16.0px; border: 1px solid #E2E8F0"><div style="display: flex; flex-direction: column; gap: 8.0px; align-items: flex-start; justify-content: flex-start"><p style="margin: 0; font-size: 40.0px; font-weight: 400">🎨</p><h3 style="margin: 0; font-size: 20.0px; font-weight: 800; line-height: 1.15">Temas</h3><p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B">Defina a cor da marca no FlenxPage e todo o site acompanha.</p></div></div></div></span></div><div style="flex: 1 1 250.0px; max-width: 100%"><span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+.fa-reveal.fa-visible{opacity:1;transform:none!important}
+.fa-up{transform:translateY(36px)}
+.fa-down{transform:translateY(-36px)}
+.fa-left{transform:translateX(36px)}
+.fa-right{transform:translateX(-36px)}
+.fa-zoom{transform:scale(.92)}
+</style><script>(function(){
+if(window.__faObs)return;
+var o=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
+new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
+window.__faObs=o;
+})();
+</script><div class="fa-reveal fa-up" style="transition-duration: 600ms; transition-delay: 160ms"><div style="background: #ffffff; padding: 20.0px; border-radius: 16.0px; border: 1px solid #E2E8F0"><div style="display: flex; flex-direction: column; gap: 8.0px; align-items: flex-start; justify-content: flex-start"><p style="margin: 0; font-size: 40.0px; font-weight: 400">📻</p><h3 style="margin: 0; font-size: 20.0px; font-weight: 800; line-height: 1.15">Áudio &amp; rádio</h3><p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B">FlenxAudioPlayer toca faixas ou streams ao vivo, sem libs.</p></div></div></div></span></div><div style="flex: 1 1 250.0px; max-width: 100%"><span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+.fa-reveal.fa-visible{opacity:1;transform:none!important}
+.fa-up{transform:translateY(36px)}
+.fa-down{transform:translateY(-36px)}
+.fa-left{transform:translateX(36px)}
+.fa-right{transform:translateX(-36px)}
+.fa-zoom{transform:scale(.92)}
+</style><script>(function(){
+if(window.__faObs)return;
+var o=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
+new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
+window.__faObs=o;
+})();
+</script><div class="fa-reveal fa-up" style="transition-duration: 600ms; transition-delay: 240ms"><div style="background: #ffffff; padding: 20.0px; border-radius: 16.0px; border: 1px solid #E2E8F0"><div style="display: flex; flex-direction: column; gap: 8.0px; align-items: flex-start; justify-content: flex-start"><p style="margin: 0; font-size: 40.0px; font-weight: 400">✨</p><h3 style="margin: 0; font-size: 20.0px; font-weight: 800; line-height: 1.15">Lottie &amp; Rive</h3><p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B">Animações vetoriais via CDN, declaradas em Dart.</p></div></div></div></span></div><div style="flex: 1 1 250.0px; max-width: 100%"><span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+.fa-reveal.fa-visible{opacity:1;transform:none!important}
+.fa-up{transform:translateY(36px)}
+.fa-down{transform:translateY(-36px)}
+.fa-left{transform:translateX(36px)}
+.fa-right{transform:translateX(-36px)}
+.fa-zoom{transform:scale(.92)}
+</style><script>(function(){
+if(window.__faObs)return;
+var o=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
+new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
+window.__faObs=o;
+})();
+</script><div class="fa-reveal fa-up" style="transition-duration: 600ms; transition-delay: 320ms"><div style="background: #ffffff; padding: 20.0px; border-radius: 16.0px; border: 1px solid #E2E8F0"><div style="display: flex; flex-direction: column; gap: 8.0px; align-items: flex-start; justify-content: flex-start"><p style="margin: 0; font-size: 40.0px; font-weight: 400">🖼️</p><h3 style="margin: 0; font-size: 20.0px; font-weight: 800; line-height: 1.15">SVG</h3><p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B">FlenxSvg externo ou inline, estilizável por CSS.</p></div></div></div></span></div><div style="flex: 1 1 250.0px; max-width: 100%"><span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+.fa-reveal.fa-visible{opacity:1;transform:none!important}
+.fa-up{transform:translateY(36px)}
+.fa-down{transform:translateY(-36px)}
+.fa-left{transform:translateX(36px)}
+.fa-right{transform:translateX(-36px)}
+.fa-zoom{transform:scale(.92)}
+</style><script>(function(){
+if(window.__faObs)return;
+var o=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
+new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
+window.__faObs=o;
+})();
+</script><div class="fa-reveal fa-up" style="transition-duration: 600ms; transition-delay: 400ms"><div style="background: #ffffff; padding: 20.0px; border-radius: 16.0px; border: 1px solid #E2E8F0"><div style="display: flex; flex-direction: column; gap: 8.0px; align-items: flex-start; justify-content: flex-start"><p style="margin: 0; font-size: 40.0px; font-weight: 400">🧱</p><h3 style="margin: 0; font-size: 20.0px; font-weight: 800; line-height: 1.15">Hero split</h3><p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B">Hero em duas colunas; no mobile a imagem vira fundo.</p></div></div></div></span></div><div style="flex: 1 1 250.0px; max-width: 100%"><span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+.fa-reveal.fa-visible{opacity:1;transform:none!important}
+.fa-up{transform:translateY(36px)}
+.fa-down{transform:translateY(-36px)}
+.fa-left{transform:translateX(36px)}
+.fa-right{transform:translateX(-36px)}
+.fa-zoom{transform:scale(.92)}
+</style><script>(function(){
+if(window.__faObs)return;
+var o=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
+new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
+window.__faObs=o;
+})();
+</script><div class="fa-reveal fa-up" style="transition-duration: 600ms; transition-delay: 480ms"><div style="background: #ffffff; padding: 20.0px; border-radius: 16.0px; border: 1px solid #E2E8F0"><div style="display: flex; flex-direction: column; gap: 8.0px; align-items: flex-start; justify-content: flex-start"><p style="margin: 0; font-size: 40.0px; font-weight: 400">🔔</p><h3 style="margin: 0; font-size: 20.0px; font-weight: 800; line-height: 1.15">Banner &amp; alertas</h3><p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B">Avisos no topo e caixas de alerta (info/sucesso/erro).</p></div></div></div></span></div><div style="flex: 1 1 250.0px; max-width: 100%"><span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+.fa-reveal.fa-visible{opacity:1;transform:none!important}
+.fa-up{transform:translateY(36px)}
+.fa-down{transform:translateY(-36px)}
+.fa-left{transform:translateX(36px)}
+.fa-right{transform:translateX(-36px)}
+.fa-zoom{transform:scale(.92)}
+</style><script>(function(){
+if(window.__faObs)return;
+var o=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
+new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
+window.__faObs=o;
+})();
+</script><div class="fa-reveal fa-up" style="transition-duration: 600ms; transition-delay: 560ms"><div style="background: #ffffff; padding: 20.0px; border-radius: 16.0px; border: 1px solid #E2E8F0"><div style="display: flex; flex-direction: column; gap: 8.0px; align-items: flex-start; justify-content: flex-start"><p style="margin: 0; font-size: 40.0px; font-weight: 400">📍</p><h3 style="margin: 0; font-size: 20.0px; font-weight: 800; line-height: 1.15">SEO local</h3><p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B">LocalBusiness com endereço, telefone e geo no JSON-LD.</p></div></div></div></span></div></div><div style="height: 6.0px; flex-shrink: 0"></div><div style="display: flex; gap: 12px; align-items: flex-start; background: #F0FDF4; border: 1px solid #BBF7D0; border-left: 4px solid #15803D; border-radius: 8px; padding: 14px 16px"><p style="margin: 0; font-size: 18.0px; font-weight: 400">✅</p><div style="display: flex; flex-direction: column; gap: 4.0px; align-items: flex-start; justify-content: flex-start"><p style="margin: 0; font-size: 16.0px; font-weight: 700; color: #15803D">Tudo em Dart</p><p style="margin: 0; font-size: 14.0px; font-weight: 400; color: #15803D">Todos os componentes acima funcionam no SSR e como ilhas Flutter — sem escrever HTML ou CSS.</p></div></div></div></div></span>
+        </div>
+      </section>
+      <span style="display: contents"><style>.fhs-fhs38887cda{display:flex;align-items:center;gap:56px}
+.fhs-text-fhs38887cda{flex:1;min-width:0}
+.fhs-iw-fhs38887cda{flex:0 0 44%;max-width:480px}
+.fhs-img-fhs38887cda{width:100%;display:block;object-fit:cover;border-radius:20.0px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.fhs-bg-fhs38887cda{display:none;position:absolute;inset:-40px;background-image:url('https://picsum.photos/seed/flenx-web/720/460');background-size:cover;background-position:center;filter:blur(14.0px);opacity:0.2;pointer-events:none}
+@media(max-width:768px){
+  .fhs-fhs38887cda{flex-direction:column;gap:0}
+  .fhs-iw-fhs38887cda{display:none}
+  .fhs-bg-fhs38887cda{display:block}
+  .fhs-text-fhs38887cda{position:relative;z-index:1;width:100%}
+}
+</style><section style="position: relative; overflow: hidden; padding: 80.0px 24px; background: #ffffff"><div class="fhs-bg-fhs38887cda"></div><div style="max-width: 1120.0px; margin: 0 auto; position: relative; z-index: 1"><div class="fhs-fhs38887cda"><div class="fhs-text-fhs38887cda"><div style="display: flex; flex-direction: column; gap: 14.0px; align-items: flex-start; justify-content: flex-start"><p style="margin: 0; font-size: 16.0px; font-weight: 700; color: #01589B">Um código, dois mundos</p><h2 style="margin: 0; font-size: 32.0px; font-weight: 800; line-height: 1.15">Do app mobile à web, sem reescrever</h2><p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B; line-height: 1.6">Seus widgets Flutter viram ilhas interativas dentro das páginas SSR. A vitrine é indexável; a interação é Flutter de verdade.</p><span style="display: inline-block"><style>.fbtn-ghost:hover{filter:brightness(1.06);transform:translateY(-1px)}</style><a class="fbtn-ghost" style="display: inline-block; padding: 12px 22px; border-radius: 10px; font-weight: 700; text-decoration: none; cursor: pointer; transition: filter .15s ease, transform .15s ease; background: transparent; color: var(--primary, #01589B); box-shadow: inset 0 0 0 1.5px var(--primary, #01589B)" href="#novidades">Conhecer os exemplos</a></span></div></div><div class="fhs-iw-fhs38887cda"><img class="fhs-img-fhs38887cda" loading="lazy" alt="Mesmo código no app e na web" src="https://picsum.photos/seed/flenx-web/720/460"/></div></div></div></section></span>
       <section style="padding: 72.0px 24px">
         <div style="max-width: 1120.0px; margin: 0 auto">
           <div style="display: flex; flex-direction: column; gap: 36.0px; align-items: stretch; justify-content: flex-start">
-            <p style="margin: 0; font-size: 16.0px; font-weight: 700; color: #01589B; text-align: center">Como funciona</p>
-            <h2 style="margin: 0; font-size: 32.0px; font-weight: 800; line-height: 1.15; text-align: center">Do código ao SEO em 3 passos</h2>
+            <span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+.fa-reveal.fa-visible{opacity:1;transform:none!important}
+.fa-up{transform:translateY(36px)}
+.fa-down{transform:translateY(-36px)}
+.fa-left{transform:translateX(36px)}
+.fa-right{transform:translateX(-36px)}
+.fa-zoom{transform:scale(.92)}
+</style><script>(function(){
+if(window.__faObs)return;
+var o=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
+new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
+window.__faObs=o;
+})();
+</script><div class="fa-reveal fa-up" style="transition-duration: 600ms"><p style="margin: 0; font-size: 16.0px; font-weight: 700; color: var(--primary, #01589B); text-align: center">Como funciona</p></div></span>
+            <span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+.fa-reveal.fa-visible{opacity:1;transform:none!important}
+.fa-up{transform:translateY(36px)}
+.fa-down{transform:translateY(-36px)}
+.fa-left{transform:translateX(36px)}
+.fa-right{transform:translateX(-36px)}
+.fa-zoom{transform:scale(.92)}
+</style><script>(function(){
+if(window.__faObs)return;
+var o=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
+new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
+window.__faObs=o;
+})();
+</script><div class="fa-reveal fa-up" style="transition-duration: 600ms; transition-delay: 100ms"><h2 style="margin: 0; font-size: 32.0px; font-weight: 800; line-height: 1.15; text-align: center">Do código ao SEO em 3 passos</h2></div></span>
             <div style="display: flex; flex-wrap: wrap; gap: 20.0px; justify-content: center; align-items: stretch">
               <div style="flex: 1 1 260.0px; max-width: 100%">
-                <div style="background: #F8FAFC; padding: 20.0px; border-radius: 16.0px; border: 1px solid #E2E8F0">
-                  <div style="display: flex; flex-direction: column; gap: 10.0px; align-items: flex-start; justify-content: flex-start">
-                    <div style="width: 38px; height: 38px; border-radius: 10px; background: #01589B; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800">1</div>
-                    <h3 style="margin: 0; font-size: 20.0px; font-weight: 800; line-height: 1.15">Escreva uma vez</h3>
-                    <p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B">Seus widgets Flutter rodam no app e na web — mesmo código.</p>
-                  </div>
-                </div>
+                <span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+.fa-reveal.fa-visible{opacity:1;transform:none!important}
+.fa-up{transform:translateY(36px)}
+.fa-down{transform:translateY(-36px)}
+.fa-left{transform:translateX(36px)}
+.fa-right{transform:translateX(-36px)}
+.fa-zoom{transform:scale(.92)}
+</style><script>(function(){
+if(window.__faObs)return;
+var o=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
+new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
+window.__faObs=o;
+})();
+</script><div class="fa-reveal fa-up" style="transition-duration: 600ms; transition-delay: 100ms"><div style="background: #F8FAFC; padding: 20.0px; border-radius: 16.0px; border: 1px solid #E2E8F0"><div style="display: flex; flex-direction: column; gap: 10.0px; align-items: flex-start; justify-content: flex-start"><div style="width: 38px; height: 38px; border-radius: 10px; background: #01589B; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800">1</div><h3 style="margin: 0; font-size: 20.0px; font-weight: 800; line-height: 1.15">Escreva uma vez</h3><p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B">Seus widgets Flutter rodam no app e na web — mesmo código.</p></div></div></div></span>
               </div>
               <div style="flex: 1 1 260.0px; max-width: 100%">
-                <div style="background: #F8FAFC; padding: 20.0px; border-radius: 16.0px; border: 1px solid #E2E8F0">
-                  <div style="display: flex; flex-direction: column; gap: 10.0px; align-items: flex-start; justify-content: flex-start">
-                    <div style="width: 38px; height: 38px; border-radius: 10px; background: #01589B; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800">2</div>
-                    <h3 style="margin: 0; font-size: 20.0px; font-weight: 800; line-height: 1.15">Anote a rota</h3>
-                    <p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B">Com @FlenxPage/@Ssr o build gera SSR, sitemap, robots e llms.txt.</p>
-                  </div>
-                </div>
+                <span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+.fa-reveal.fa-visible{opacity:1;transform:none!important}
+.fa-up{transform:translateY(36px)}
+.fa-down{transform:translateY(-36px)}
+.fa-left{transform:translateX(36px)}
+.fa-right{transform:translateX(-36px)}
+.fa-zoom{transform:scale(.92)}
+</style><script>(function(){
+if(window.__faObs)return;
+var o=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
+new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
+window.__faObs=o;
+})();
+</script><div class="fa-reveal fa-up" style="transition-duration: 600ms; transition-delay: 220ms"><div style="background: #F8FAFC; padding: 20.0px; border-radius: 16.0px; border: 1px solid #E2E8F0"><div style="display: flex; flex-direction: column; gap: 10.0px; align-items: flex-start; justify-content: flex-start"><div style="width: 38px; height: 38px; border-radius: 10px; background: #01589B; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800">2</div><h3 style="margin: 0; font-size: 20.0px; font-weight: 800; line-height: 1.15">Anote a rota</h3><p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B">Com @FlenxPage/@Ssr o build gera SSR, sitemap, robots e llms.txt.</p></div></div></div></span>
               </div>
               <div style="flex: 1 1 260.0px; max-width: 100%">
-                <div style="background: #F8FAFC; padding: 20.0px; border-radius: 16.0px; border: 1px solid #E2E8F0">
-                  <div style="display: flex; flex-direction: column; gap: 10.0px; align-items: flex-start; justify-content: flex-start">
-                    <div style="width: 38px; height: 38px; border-radius: 10px; background: #01589B; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800">3</div>
-                    <h3 style="margin: 0; font-size: 20.0px; font-weight: 800; line-height: 1.15">Publique</h3>
-                    <p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B">Conteúdo indexável por Google e por motores de IA, sem esforço.</p>
+                <span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+.fa-reveal.fa-visible{opacity:1;transform:none!important}
+.fa-up{transform:translateY(36px)}
+.fa-down{transform:translateY(-36px)}
+.fa-left{transform:translateX(36px)}
+.fa-right{transform:translateX(-36px)}
+.fa-zoom{transform:scale(.92)}
+</style><script>(function(){
+if(window.__faObs)return;
+var o=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
+new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
+window.__faObs=o;
+})();
+</script><div class="fa-reveal fa-up" style="transition-duration: 600ms; transition-delay: 340ms"><div style="background: #F8FAFC; padding: 20.0px; border-radius: 16.0px; border: 1px solid #E2E8F0"><div style="display: flex; flex-direction: column; gap: 10.0px; align-items: flex-start; justify-content: flex-start"><div style="width: 38px; height: 38px; border-radius: 10px; background: #01589B; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800">3</div><h3 style="margin: 0; font-size: 20.0px; font-weight: 800; line-height: 1.15">Publique</h3><p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B">Conteúdo indexável por Google e por motores de IA, sem esforço.</p></div></div></div></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="faq" style="padding: 72.0px 24px">
+        <div style="max-width: 1120.0px; margin: 0 auto">
+          <div style="display: flex; flex-direction: column; gap: 16.0px; align-items: stretch; justify-content: flex-start; max-width: 760.0px">
+            <p style="margin: 0; font-size: 16.0px; font-weight: 700; color: #01589B; text-align: center">FAQ</p>
+            <span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+.fa-reveal.fa-visible{opacity:1;transform:none!important}
+.fa-up{transform:translateY(36px)}
+.fa-down{transform:translateY(-36px)}
+.fa-left{transform:translateX(36px)}
+.fa-right{transform:translateX(-36px)}
+.fa-zoom{transform:scale(.92)}
+</style><script>(function(){
+if(window.__faObs)return;
+var o=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
+new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
+window.__faObs=o;
+})();
+</script><div class="fa-reveal" style="transition-duration: 600ms"><h2 style="margin: 0; font-size: 32.0px; font-weight: 800; line-height: 1.15; text-align: center">Perguntas frequentes</h2></div></span>
+            <div class="facc">
+              <style>
+                .facc details{border-bottom:1px solid #e2e8f0}
+                .facc details:first-child{border-top:1px solid #e2e8f0}
+                .facc summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 4px;cursor:pointer;font-weight:600;font-size:16px;color:#0f172a;user-select:none}
+                .facc summary::-webkit-details-marker{display:none}
+                .facc summary::after{content:'+';font-size:22px;font-weight:400;color:#94a3b8;transition:transform .25s ease,color .25s ease;flex-shrink:0}
+                .facc details[open] summary::after{transform:rotate(45deg)}
+                .facc .facc-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease}
+                .facc details[open] .facc-body{grid-template-rows:1fr}
+                .facc .facc-inner{overflow:hidden}
+                .facc .facc-text{padding:0 4px 18px;color:#64748b;line-height:1.65;font-size:15px}
+                .facc details[open] summary{color:#01589B}.facc details[open] summary::after{color:#01589B}
+              </style>
+              <details open>
+                <summary>Preciso saber HTML ou CSS?</summary>
+                <div class="facc-body">
+                  <div class="facc-inner">
+                    <div class="facc-text">
+                      Não. Você compõe tudo com componentes Dart (FlenxHero, FlenxCard, FlenxGrid…) e o Flenx gera o HTML/CSS por baixo.
+                    </div>
                   </div>
                 </div>
-              </div>
+              </details>
+              <details>
+                <summary>Roda em qualquer hospedagem?</summary>
+                <div class="facc-body">
+                  <div class="facc-inner">
+                    <div class="facc-text">
+                      Sim. Gera PHP/MySQL para hospedagem compartilhada (Hostinger, cPanel) ou roda como servidor Dart (Render, Fly.io, Cloud Run, VPS).
+                    </div>
+                  </div>
+                </div>
+              </details>
+              <details>
+                <summary>Funciona com Flutter?</summary>
+                <div class="facc-body">
+                  <div class="facc-inner">
+                    <div class="facc-text">
+                      Sim — widgets Flutter reais entram como ilhas interativas dentro das páginas renderizadas no servidor.
+                    </div>
+                  </div>
+                </div>
+              </details>
+              <details>
+                <summary>E o SEO?</summary>
+                <div class="facc-body">
+                  <div class="facc-inner">
+                    <div class="facc-text">
+                      Meta tags, Open Graph, JSON-LD, sitemap.xml, robots.txt e llms.txt são gerados automaticamente a partir das rotas.
+                    </div>
+                  </div>
+                </div>
+              </details>
             </div>
           </div>
         </div>
@@ -404,7 +861,7 @@ class HomePage extends FlenxWidget {
             <div style="display: flex; flex-direction: column; gap: 14.0px; align-items: center; justify-content: center">
               <h2 style="margin: 0; font-size: 32.0px; font-weight: 800; line-height: 1.15; text-align: center">Pronto para subir o patamar da sua web?</h2>
               <p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B; text-align: center">Comece com o Flenx hoje — open source e gratuito.</p>
-              <span style="display: inline-block"><style>.fbtn-ghost:hover{filter:brightness(1.06);transform:translateY(-1px)}</style><a class="fbtn-ghost" style="display: inline-block; padding: 12px 22px; border-radius: 10px; font-weight: 700; text-decoration: none; cursor: pointer; transition: filter .15s ease, transform .15s ease; background: transparent; color: #01589B; box-shadow: inset 0 0 0 1.5px #01589B" href="#contato">Quero começar</a></span>
+              <span style="display: inline-block"><style>.fbtn-ghost:hover{filter:brightness(1.06);transform:translateY(-1px)}</style><a class="fbtn-ghost" style="display: inline-block; padding: 12px 22px; border-radius: 10px; font-weight: 700; text-decoration: none; cursor: pointer; transition: filter .15s ease, transform .15s ease; background: transparent; color: var(--primary, #01589B); box-shadow: inset 0 0 0 1.5px var(--primary, #01589B)" href="#contato">Quero começar</a></span>
             </div>
           </div>
         </div>
@@ -477,7 +934,7 @@ class HomePage extends FlenxWidget {
           <div style="margin-top: 32px; padding-top: 20px; border-top: 1px solid #243245; color: #94a3b8; font-size: 14px">© 2026 Flenx. Feito com Dart, jaspr e Flutter.</div>
         </div>
       </footer>
-      <a style="position: fixed; right: 20px; bottom: 20px; z-index: 50; display: inline-flex; align-items: center; gap: 8px; background: #25D366; color: #ffffff; padding: 12px 18px; border-radius: 999px; text-decoration: none; font-weight: 700; box-shadow: 0 8px 24px rgba(0,0,0,.18)" rel="noopener noreferrer" aria-label="Fale no WhatsApp" href="https://wa.me/5511999999999?text=Ol%C3%A1!%20Vim%20pelo%20site%20do%20Flenx%20e%20quero%20saber%20mais." target="_blank"><span style="font-size: 18px">💬</span><span>Fale no WhatsApp</span></a>
+      <a style="position: fixed; right: 20px; bottom: 20px; z-index: 50; display: inline-flex; align-items: center; gap: 8px; background: #25D366; color: #ffffff; padding: 12px 18px; border-radius: 999px; text-decoration: none; font-weight: 700; box-shadow: 0 8px 24px rgba(0,0,0,.18)" rel="noopener noreferrer" aria-label="Fale no WhatsApp" href="https://wa.me/5511999999999?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20saber%20mais." target="_blank"><span style="font-size: 18px">💬</span><span>Fale no WhatsApp</span></a>
     </div>
   </body>
 </html>
