@@ -3,7 +3,6 @@ import 'package:jaspr/jaspr.dart';
 
 import '../flenx_palette.dart';
 import 'flenx_animated.dart';
-import 'flenx_animation.dart';
 import 'flenx_ui_enums.dart';
 
 /// Botão/link — como um `ElevatedButton`/`TextButton`. Aponta para [href].

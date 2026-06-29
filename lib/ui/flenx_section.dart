@@ -2,7 +2,6 @@ import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
 
 import 'flenx_animated.dart';
-import 'flenx_animation.dart';
 
 /// Seção da página — uma faixa com espaçamento vertical e um contêiner central
 /// de largura máxima (como um bloco de tela). Estilo por parâmetros; sem CSS.

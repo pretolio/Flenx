@@ -61,7 +61,8 @@ class FlenxSvg extends StatelessComponent {
 
   @override
   Component build(BuildContext context) {
-    if (_inline && _svgContent != null) {
+    final svgContent = _svgContent;
+    if (_inline && svgContent != null) {
       return span(
         styles: Styles(raw: {
           'display': 'inline-flex',
@@ -70,7 +71,7 @@ class FlenxSvg extends StatelessComponent {
           if (_w != null) 'width': '${_w}px',
           if (_h != null) 'height': '${_h}px',
         }),
-        [RawText(_svgContent!)],
+        [RawText(svgContent)],
       );
     }
 

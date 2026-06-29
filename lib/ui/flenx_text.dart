@@ -2,7 +2,6 @@ import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
 
 import 'flenx_animated.dart';
-import 'flenx_animation.dart';
 import 'flenx_ui_enums.dart';
 
 /// Texto — como o `Text` do Flutter, com estilo por parâmetros (nada de CSS).
