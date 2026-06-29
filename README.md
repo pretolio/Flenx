@@ -23,7 +23,28 @@
 
 ---
 
+> ### 🤖 Lendo isto como IA / agente de código?
+> O Flenx foi feito para você gerar **só Dart** — nunca escreva HTML/CSS no app. Antes de codar:
+> 1. **Regra de ouro:** uma classe `StatelessComponent` por arquivo; a raiz de toda página é `FlenxPage([...])`; nunca use tags HTML cruas (`div`, `a`, `iframe`) — use os componentes Flenx desta referência.
+> 2. **Como criar UI nova:** componha os componentes do kit (ver [Referência de UI](#-referência-completa-de-ui)). Para criar um componente próprio, estenda `StatelessComponent` e combine peças do kit — ver [Criando seus próprios componentes](#-criando-seus-próprios-componentes).
+> 3. **Aprenda pelos exemplos:** os três projetos em [`example/`](https://github.com/pretolio/Flenx/tree/main/example) (institucional, loja, notícias) são feitos 100% assim — copie os padrões deles.
+> 4. **Toda a API pública está catalogada abaixo** com assinatura real e exemplo. Se um parâmetro não está aqui, ele não existe.
+
+---
+
 O Flenx é um framework para construir **sites e apps web em Dart** com renderização no servidor (via [jaspr](https://jaspr.site)). Tudo é **opcional** — comece com um site SSR + SEO em minutos e ative blog, admin, APIs e banco conforme o projeto cresce.
+
+## 📑 Índice
+
+- [Recursos](#-recursos)
+- [Começar](#-começar)
+- [Build e deploy](#️-build-e-deploy)
+- [Regras de ouro (escreva só Dart)](#-regras-de-ouro-escreva-só-dart)
+- [Criando seus próprios componentes](#-criando-seus-próprios-componentes)
+- [**Referência completa de UI**](#-referência-completa-de-ui) — primitivas, blocos, notícias, e-commerce, modelos, enums, paleta
+- [**Referência do framework**](#-referência-do-framework) — rotas+SEO, blog, admin, APIs, banco, auth, notificações, pagamento, ilhas Flutter
+- [Exemplos](#-exemplos)
+- [Licença](#-licença)
 
 ## ✨ Recursos
 
@@ -48,7 +69,7 @@ dart pub add dev:build_runner dev:build_web_compilers dev:jaspr_builder
 environment:
   sdk: ^3.10.0
 dependencies:
-  flenx: ^0.1.0
+  flenx: ^0.2.0
   jaspr: ^0.23.1
 jaspr:
   mode: server
@@ -123,47 +144,447 @@ jaspr build                          # gera build/jaspr/ com HTML + assets está
 
 **API em PHP** (para hospedagem sem Dart): com `buildPhp = true` no `main.dart`, `dart run tool/build.dart` gera `build/php/` (PDO + `migrations.sql`).
 
-## 🧩 Opções (use só o que precisar)
+## 📐 Regras de ouro (escreva só Dart)
 
-<details>
-<summary><strong>Rotas + SEO (fonte única)</strong></summary>
+Estas regras valem para **todo** código Flenx — siga-as sempre:
 
-Cada `FlenxRoute` junta o SEO (`RouteMeta`) e o componente. Disso saem sozinhos: meta tags, Open Graph/Twitter, JSON-LD, `/sitemap.xml`, `/robots.txt`, `/llms.txt`. Rotas dinâmicas: `extraSources: [DynamicRouteSource<T>(...)]`.
+- **Uma classe por arquivo** — nunca duas classes no mesmo `.dart`.
+- **Nunca crie funções que retornam `Component`** — crie sempre uma classe `StatelessComponent`.
+- **Nunca use tags HTML cruas** (`div()`, `a()`, `iframe()`, `p()`, `section()`) nas páginas — use apenas componentes Flenx. (Tags cruas são detalhe interno da lib.)
+- **`FlenxPage([...])` é a raiz de toda página** — coloque os blocos como filhos diretos; **não** envolva em `FlenxColumn` (quebra a largura 100%).
+- **Importe tudo via** `package:flenx/flenx.dart` (UI) ou `package:flenx/app.dart` (rotas/SEO/run) — não importe jaspr direto nas páginas.
 
 ```dart
-FlenxRoute(
-  const RouteMeta(
-    path: '/sobre', title: 'Sobre', description: 'Quem somos.',
-    faqs: [FaqItem(question: 'O que é?', answer: '...')], // vira JSON-LD FAQPage
-  ),
-  (ctx) => const AboutPage(),
-),
+import 'package:flenx/flenx.dart';
+
+class HomePage extends StatelessComponent {
+  const HomePage({super.key});
+
+  @override
+  Component build(BuildContext context) {
+    return FlenxPage([
+      const MeuHeader(),                       // seu componente (compõe SiteHeader)
+      FlenxHero(title: 'Bem-vindo', subtitle: 'Feito em Dart.'),
+      FeaturesSection(features: const [
+        Feature(icon: '⚡', title: 'Rápido', description: 'SSR + SEO.'),
+      ]),
+      const MeuFooter(),                       // seu componente (compõe FlenxFooter)
+    ]);
+  }
+}
+```
+
+## 🧱 Criando seus próprios componentes
+
+Você estende o kit do Flenx criando **classes `StatelessComponent`** que compõem os componentes existentes — **sem escrever HTML/CSS**. Há dois caminhos:
+
+**1. Componente de composição (padrão, SSR, ótimo p/ SEO)** — combine peças do kit:
+
+```dart
+import 'package:flenx/flenx.dart';
+
+class ProductTeaser extends StatelessComponent {
+  const ProductTeaser({required this.title, required this.price, super.key});
+  final String title;
+  final String price;
+
+  @override
+  Component build(BuildContext context) {
+    return FlenxCard(
+      FlenxColumn(gap: 8, cross: FlenxAlign.start, [
+        FlenxHeading(title, level: 3),
+        FlenxText(price, color: FlenxPalette.primary, weight: 700),
+        FlenxButton('Comprar', href: '/checkout', variant: FlenxButtonVariant.primary),
+      ]),
+      padding: 20, radius: 16, bordered: true, hover: FlenxCardHover.lift,
+    );
+  }
+}
+```
+
+Use-o como qualquer componente: `ProductTeaser(title: 'Fone', price: r'R$ 199')`.
+
+**2. Ilha Flutter (interatividade real)** — quando precisa de estado/gestos/animação Flutter, embuta um app Flutter com `FlutterIsland` (ver [Ilhas Flutter](#ilhas-flutter)). Você escreve `Widget` Flutter normal; o Flenx cuida do viewport/hidratação dentro da página SSR.
+
+Em ambos os casos: **só Dart, zero HTML/CSS.**
+
+---
+
+# 📚 Referência completa de UI
+
+> Importe tudo com `import 'package:flenx/flenx.dart';`. Todos os parâmetros abaixo são reais (extraídos do código). Cores aceitam hex (`'#01589B'`) ou qualquer CSS (`'linear-gradient(...)'`).
+
+<details open>
+<summary><strong>Primitivas de layout e conteúdo</strong></summary>
+
+### `FlenxPage` — raiz da página
+```dart
+FlenxPage(List<Component> children, {String? primaryColor, String? primaryDarkColor, String? secondaryColor})
+```
+Raiz de toda página; injeta o CSS base e as CSS vars de tema herdadas pelos filhos.
+
+### `FlenxSection` — faixa de seção
+```dart
+FlenxSection({required Component child, String? background, String? backgroundImage,
+  double backgroundImageOpacity = 0.3, double paddingY = 72, double maxWidthPx = 1120,
+  String? id, FlenxAnimation? animation, int animationDelay = 0, int animationDuration = 600})
+```
+Faixa com padding vertical, container central, cor/imagem de fundo e scroll-reveal opcional.
+
+### `FlenxColumn` — coluna (como `Column`)
+```dart
+FlenxColumn(List<Component> children, {double gap = 0, FlenxAlign cross = FlenxAlign.start,
+  FlenxAlign main = FlenxAlign.start, double? maxWidthPx, FlenxAnimation? animation,
+  int animationDelay = 0, int animationDuration = 600, int animationStagger = 80})
+```
+
+### `FlenxRow` — linha (como `Row`)
+```dart
+FlenxRow(List<Component> children, {double gap = 0, FlenxAlign cross = FlenxAlign.center,
+  FlenxAlign main = FlenxAlign.start, bool wrap = false})
+```
+`wrap: true` quebra linha no mobile.
+
+### `FlenxGrid` — grade responsiva
+```dart
+FlenxGrid(List<Component> children, {double minItemWidth = 280, double gap = 20,
+  FlenxAlign main = FlenxAlign.center, FlenxAnimation? animation, int animationDelay = 0,
+  int animationDuration = 600, int animationStagger = 80})
+```
+Quebra de linha automática; cada item entra com stagger se `animation` definido.
+
+### `FlenxHeading` — título (h1–h6)
+```dart
+FlenxHeading(String data, {int level = 2, double? size, String? color, FlenxTextAlign? align,
+  int weight = 800, FlenxAnimation? animation, int animationDelay = 0, int animationDuration = 600})
+```
+
+### `FlenxText` — parágrafo
+```dart
+FlenxText(String data, {double size = 16, int weight = 400, String? color, FlenxTextAlign? align,
+  double? maxWidthPx, double? lineHeight, FlenxAnimation? animation, int animationDelay = 0,
+  int animationDuration = 600})
+```
+
+### `FlenxButton` — botão/link
+```dart
+FlenxButton(String label, {required String href, FlenxButtonVariant variant = FlenxButtonVariant.primary,
+  String? color, bool newTab = false, bool hover = true, FlenxAnimation? animation,
+  int animationDelay = 0, int animationDuration = 600})
+```
+`hover: true` aplica brilho + leve subida automaticamente (sem CSS).
+
+### `FlenxCard` — cartão
+```dart
+FlenxCard(Component child, {double padding = 20, double radius = 16, String background = '#ffffff',
+  String? backgroundImage, double backgroundImageOpacity = 0.3, String borderColor = FlenxPalette.border,
+  bool bordered = true, FlenxCardHover? hover, String glowColor = FlenxPalette.primary,
+  FlenxAnimation? animation, int animationDelay = 0, int animationDuration = 600})
+```
+`hover`: `lift` | `glow` | `scale`.
+
+### `FlenxImage` / `FlenxSvg` / `FlenxLottie` / `FlenxRive` — mídia
+```dart
+FlenxImage(String src, {String alt = '', double? widthPx, double? heightPx, double radius = 0})
+FlenxSvg(String src, {double? width, double? height, double? size, String alt = '', String fit = 'contain'})
+FlenxSvg.inline(String svgContent, {double? width, double? height, double? size, String alt = '', String fit = 'contain'})
+FlenxLottie(String src, {double? width, double? height, double? size, bool loop = true, bool autoplay = true, String renderer = 'svg'})
+FlenxRive(String src, {double? width, double? height, double? size, String? artboard, String? stateMachine, bool autoplay = true})
+```
+`size` é atalho para largura = altura.
+
+### `FlenxSpacer` / `FlenxAnimated` / `FlenxFullscreen`
+```dart
+FlenxSpacer(double height)                                  // espaço vertical fixo (px)
+FlenxAnimated(Component child, {required FlenxAnimation animation, int delay = 0, int duration = 600})
+FlenxFullscreen(Component child)                            // 100% × 100vh (ilhas Flutter em tela cheia)
+```
+
+### `FlenxAudioPlayer` / `FlenxAudioPlayerFloat` — áudio/rádio
+```dart
+FlenxAudioPlayer(String src, {String? title, String? subtitle, bool autoplay = false, bool loop = false,
+  bool isRadio = false, String accentColor = FlenxPalette.primary, String background = '#ffffff'})
+FlenxAudioPlayerFloat(String src, {/* idem + */ bool initiallyVisible = true})
 ```
 </details>
 
 <details>
-<summary><strong>Kit de UI em Dart (sem HTML/CSS)</strong></summary>
+<summary><strong>Blocos de seção prontos</strong></summary>
 
-Primitivas: `FlenxPage`, `FlenxSection`, `FlenxColumn`, `FlenxRow`, `FlenxGrid`, `FlenxText`, `FlenxHeading`, `FlenxButton`, `FlenxCard`, `FlenxImage`.
-Blocos: `FlenxHero`, `FlenxTrustBar`, `FlenxSteps`, `FlenxCta`, `FlenxFooter`, `FeaturesSection`, `IframeEmbed`.
-
+### `FlenxHero`
 ```dart
-FlenxPage([
-  SiteHeader(brand: brand, links: links),
-  FlenxHero(title: '...', subtitle: '...', actions: [FlenxButton('Começar', href: '#x')]),
-  FlenxGrid([for (final f in itens) FlenxCard(...)]),
-]);
+FlenxHero({required String title, String? eyebrow, String? subtitle, List<FlenxButton> actions = const [],
+  Component? aside, String background = 'linear-gradient(135deg, #01406F 0%, #01589B 100%)'})
 ```
 
-`:hover`/foco viram **parâmetro** (ex.: `FlenxButton(hover: true)`).
+### `FlenxHeroSplit`
+```dart
+FlenxHeroSplit({required Component child, required String imageSrc, String imageAlt = '',
+  double imageRadius = 20, String? background, double paddingY = 80, double maxWidthPx = 1120,
+  double mobileBlurPx = 14, double mobileImageOpacity = 0.20, String? id})
+```
+Texto à esquerda, imagem à direita; no mobile a imagem vira fundo desfocado.
+
+### `FlenxCodeCard`
+```dart
+FlenxCodeCard(String code)        // cartão "janela de editor" com o código
+```
+
+### `FlenxTrustBar`
+```dart
+FlenxTrustBar({required List<String> items, String? label, String background = FlenxPalette.surface})
+```
+
+### `FeaturesSection` — grade de recursos
+```dart
+FeaturesSection({required List<Feature> features, String eyebrow = 'Recursos',
+  String title = 'Tudo que um site moderno precisa', String subtitle = '...', String id = 'servicos',
+  FlenxCardHover? cardHover, String cardGlowColor = FlenxPalette.primary, bool animate = false})
+```
+
+### `FlenxSteps` — passos numerados
+```dart
+FlenxSteps({required List<FlenxStep> steps, String? eyebrow, String? title, String? background,
+  String badgeColor = FlenxPalette.primary, bool animate = false, String? id})
+```
+
+### `FlenxCta`
+```dart
+FlenxCta({required String title, String? subtitle, FlenxButton? action})
+```
+
+### `FlenxFooter`
+```dart
+FlenxFooter({required String brand, String? tagline, List<FlenxFooterColumn> columns = const [],
+  String? copyright, String background = FlenxPalette.darkBg, String? id})
+```
+
+### `FlenxAlert` / `FlenxBanner` / `FlenxAccordion`
+```dart
+FlenxAlert(String message, {String? title, FlenxAlertVariant variant = FlenxAlertVariant.info})
+FlenxBanner({required String message, FlenxButton? action, String background = FlenxPalette.primary, String textColor = '#ffffff'})
+FlenxAccordion({required List<FlenxAccordionItem> items, String accentColor = FlenxPalette.primary})
+```
+
+### `SiteHeader` — cabeçalho institucional
+```dart
+SiteHeader({required SiteBrand brand, required List<MenuLink> links, String loginLabel = 'Entrar',
+  String? loginHref, List<LoginOption> loginOptions = const [], NavAlign align = NavAlign.right})
+```
+Responsivo (vira hambúrguer no mobile), sem JS, indexável.
+
+### `IframeEmbed` — embute outro site/vídeo/mapa
+```dart
+IframeEmbed(String url, {String title = 'Conteúdo incorporado', String? ratio, double height = 480,
+  String? cssHeight, bool rounded = true, bool lazy = true, bool allowFullscreen = true,
+  String? allow, String? sandbox, String? classes})
+```
+Use `ratio: '16 / 9'` para responsivo, ou `cssHeight: 'calc(100vh - 72px)'` para portais.
+
+### `WhatsappButton` — botão flutuante
+```dart
+WhatsappButton({required String url, String label = 'Fale no WhatsApp'})
+```
+
+### `FlenxNotFound` — página 404 pronta
+```dart
+FlenxNotFound({required SiteBrand brand, List<MenuLink> links = const [], List<LoginOption> loginOptions = const [],
+  Component? footer, SiteConfig config = const SiteConfig(), String code = '404',
+  String title = 'Página não encontrada', String message = '...',
+  List<MenuLink> actions = const [MenuLink(label: 'Voltar ao início', href: '/')]})
+```
+</details>
+
+<details>
+<summary><strong>Blocos de portal de notícias (estilo G1)</strong></summary>
+
+```dart
+FlenxNewsHeader({required String brandPrimary, required List<MenuLink> links, String? brandSecondary,
+  String liveLabel = 'AO VIVO', String homeHref = '/'})
+
+FlenxNewsHighlight({required String title, required String imageUrl, required String href,
+  String? hat, String? subtitle, String? meta})            // manchete principal (meta = autor · data)
+
+FlenxNewsCard({required String title, required String imageUrl, required String href,
+  String? hat, String? description})                       // cartão de notícia
+
+FlenxNewsSectionTitle(String label)                        // título de editoria (barra vertical)
+
+FlenxMostRead(List<MenuLink> items, {String title = 'Mais lidas'})   // bloco numerado
+
+FlenxSidebarLayout({required Component main, required Component aside})  // 2 colunas (empilha no mobile)
+```
+</details>
+
+<details>
+<summary><strong>Kit de e-commerce (loja estilo marketplace)</strong></summary>
+
+### `FlenxStoreShell` — raiz da loja
+```dart
+FlenxStoreShell({required String brand, required List<MenuLink> categories, List<Component> children = const [],
+  String searchPlaceholder = 'O que você procura hoje?', String searchAction = '/produtos', String? cep,
+  String accountHref = '/conta', String accountLabel = 'Entrar', String wishlistHref = '/produtos',
+  String cartHref = '/carrinho', int cartCount = 0, String? promo, List<FlenxFooterColumn> footerColumns = const [],
+  List<String> payments = const [], String? copyright})
+```
+Header (logo, CEP, busca, conta/desejos/carrinho) + nav de categorias + promo + rodapé.
+
+### `FlenxHeroCarousel` / `FlenxHeroBanner` — destaque
+```dart
+FlenxHeroCarousel({required List<FlenxHeroSlide> slides, int intervalMs = 5000})   // fade automático + dots
+FlenxHeroBanner({required String title, required String ctaHref, String? eyebrow, String? subtitle,
+  String? priceFrom, String? priceValue, String ctaLabel = 'aproveite'})           // banner único
+```
+
+### `FlenxProductCard` / `FlenxProductShelf` / `FlenxProductGrid` / `FlenxProductDetail`
+```dart
+FlenxProductCard({required String name, required String price, required String href, String? emoji,
+  String? imageUrl, String? brand, String? oldPrice, String? installment, String? badge,
+  String? buyHref, String buyLabel = 'Comprar'})
+
+FlenxProductShelf({required String title, required List<Component> products, String? subtitle, String? countdown})
+// countdown: 'HH:MM:SS' — conta regressiva ao vivo + carrossel horizontal com auto-avanço
+
+FlenxProductGrid({required List<Component> products, String? title})   // catálogo
+
+FlenxProductDetail({required String name, required String price, required String buyHref, String? emoji,
+  String? imageUrl, String? brand, String? oldPrice, String? installment, String? badge, String? description,
+  String buyLabel = 'Adicionar ao carrinho', String? secondaryHref, String? secondaryLabel,
+  List<MenuLink> breadcrumb = const []})
+```
+
+### `FlenxPricePills` / `FlenxBrandStrip` / `FlenxBenefitsBar`
+```dart
+FlenxPricePills({required List<FlenxPricePill> items})
+FlenxBrandStrip({required List<FlenxBrandItem> items, String action = 'Confira'})
+FlenxBenefitsBar({required List<FlenxBenefit> items})
+```
+</details>
+
+<details>
+<summary><strong>Modelos de dados</strong></summary>
+
+```dart
+SiteBrand({required String label, String homeHref = '/', String? logoSrc})
+MenuLink({required String label, String? href, List<MenuLink> children = const [], bool external = false})
+LoginOption({required String label, required String href})
+Feature({required String icon, required String title, required String description})
+FlenxStep(String title, String description)
+FlenxFooterColumn(String title, List<MenuLink> links)
+FlenxAccordionItem(String title, String body, {bool open = false})
+
+// E-commerce:
+FlenxHeroSlide({required String title, required String ctaHref, String? eyebrow, String? subtitle,
+  String? priceFrom, String? priceValue, String ctaLabel = 'aproveite', String? backgroundImage})
+FlenxPricePill({required String value, required String href, String label = 'A PARTIR DE'})
+FlenxBrandItem({required String icon, required String label, required String href})
+FlenxBenefit({required String icon, required String title, required String subtitle})
+```
+</details>
+
+<details>
+<summary><strong>Enums</strong></summary>
+
+```dart
+FlenxAlign        // start, center, end, spaceBetween, spaceAround, stretch
+FlenxTextAlign    // left, center, right, justify
+FlenxButtonVariant// primary (fundo cheio), ghost (borda), soft (fundo claro)
+FlenxAlertVariant // info, success, warning, error
+FlenxCardHover    // lift, glow, scale
+NavAlign          // right, center
+FlenxAnimation    // fadeIn, slideUp, slideDown, slideLeft, slideRight, zoomIn, pulse, bounce, float, spin
+```
+</details>
+
+<details>
+<summary><strong>Paleta — <code>FlenxPalette</code></strong></summary>
+
+```dart
+FlenxPalette.primary      // #01589B      FlenxPalette.darkBg       // #0B1220
+FlenxPalette.primaryDark  // #01406F      FlenxPalette.darkSurface  // #111A2B
+FlenxPalette.accent       // #06B6D4      FlenxPalette.darkBorder   // #243245
+FlenxPalette.ink          // #0F172A      FlenxPalette.darkInk      // #E2E8F0
+FlenxPalette.muted        // #64748B
+FlenxPalette.surface      // #F8FAFC
+FlenxPalette.border       // #E2E8F0
+```
+</details>
+
+---
+
+# ⚙️ Referência do framework
+
+> Importe com `import 'package:flenx/app.dart';`. Tudo é opcional — ative só o que precisar.
+
+<details open>
+<summary><strong>Rotas + SEO (fonte única) — <code>FlenxApp.run</code></strong></summary>
+
+`FlenxApp.run` é o ponto de entrada. Cada `FlenxRoute` junta o SEO (`RouteMeta`) e o componente; disso saem sozinhos: meta tags, Open Graph/Twitter, JSON-LD, `/sitemap.xml`, `/robots.txt`, `/llms.txt`.
+
+```dart
+Future<void> FlenxApp.run({
+  required ServerOptions options,
+  required SeoConfig seo,
+  required List<FlenxRoute> routes,
+  required Component notFound,
+  String? blog,                       // pasta de Markdown
+  bool blogFromDb = false,            // + posts do banco
+  String blogTable = 'blog_posts',
+  List<BlogSource> blogSources = const [],
+  List<IRouteSource> extraSources = const [],   // rotas dinâmicas (sitemap)
+  List<ApiEndpoint> apis = const [],
+  DbExecutor? db,
+  EmailSender? onEmail,
+  TokenVerifier? tokenVerifier,
+  List<StyleRule> globalStyles = const [],
+  AdsConfig? ads,
+  String lang = 'pt-BR',
+  int? port,
+})
+
+// Rota: SEO + componente (posicional)
+FlenxRoute(RouteMeta meta, Component Function(RouteContext ctx) builder, {bool island = false})
+FlenxRoute.island(RouteMeta meta, builder)    // injeta o bootstrap Flutter (páginas interativas)
+```
+
+**`SeoConfig`** (global):
+```dart
+SeoConfig({required String baseUrl, required String siteName, required String description,
+  String defaultLocale = 'pt_BR', String? twitterHandle, String? logoUrl, String? organizationName,
+  List<String> sameAs = const [], String? searchUrlTemplate, String? themeColor, String? telephone,
+  String? email, SeoAddress? address, String? about, List<String> globalDisallow = const [],
+  List<CrawlerRule>? crawlerRules})
+```
+> Por padrão, libera buscadores e IAs (Googlebot, Bingbot, GPTBot, ClaudeBot, PerplexityBot, OAI-SearchBot…) e bloqueia scrapers abusivos (Bytespider, CCBot).
+
+**`RouteMeta`** (por página):
+```dart
+RouteMeta({required String path, required String title, required String description,
+  PageKind kind = PageKind.website, String? image, ChangeFreq? changeFreq, double? priority,
+  DateTime? lastmod, List<String> keywords = const [], bool noindex = false, String? section,
+  String? summary, String? markdown, List<FaqItem> faqs = const [], List<Breadcrumb> breadcrumbs = const [],
+  String? author, DateTime? datePublished, Map<String, String> alternates = const {}})
+
+FaqItem({required String question, required String answer})              // → JSON-LD FAQPage
+PageKind   // website, article, blogPost, faq, product, collection, profile
+ChangeFreq // always, hourly, daily, weekly, monthly, yearly, never
+```
+
+**Rotas dinâmicas** (ex.: 1 rota por item do banco, com SEO):
+```dart
+DynamicRouteSource<Post>(
+  provider: () => repo.all(),
+  build: (p) => RouteMeta(path: '/blog/${p.slug}', title: p.title, description: p.excerpt, kind: PageKind.blogPost),
+)  // passe em extraSources: [...]
+```
 </details>
 
 <details>
 <summary><strong>Blog (Markdown e/ou banco)</strong></summary>
 
 ```bash
-dart run flenx:blog_init               # cria lib/content/blog/ + 1 post
-dart run flenx:new_post "Meu post"     # novos posts
+dart run flenx:blog_init                         # cria a pasta + 1 post de boas-vindas
+dart run flenx:new_post "Título" Categoria tag1,tag2   # novo post (frontmatter pronto, draft)
 ```
 
 ```dart
@@ -173,65 +594,167 @@ FlenxApp.run(
   blogFromDb: true,           // (opcional) + posts no banco (tabela blog_posts)
 );
 ```
+Índice, post, categorias, tags, busca (`?q=`) e paginação (`?page=N`) são automáticos.
 
-Índice, post, categorias, tags, busca (`?q=`) e paginação são automáticos.
+**`BlogPost`** (modelo): `slug, title, description, date, bodyMarkdown` (obrigatórios) + `subtitle, author, image, category, tags, draft, views`.
+
+**Fontes** (`BlogSource`): `MarkdownBlogSource(dir)`, `DatabaseBlogSource(db, table:)`, `CompositeBlogSource([...])`.
 </details>
 
 <details>
-<summary><strong>Painel admin</strong></summary>
+<summary><strong>Painel admin (ilha Flutter)</strong></summary>
 
-Preencha as opções de `FlenxAdminApp` num arquivo Flutter `admin_app.dart`; `dart run flenx:bootstrap` gera o wiring. Adicione `jaspr_flutter_embed` e `jaspr: flutter: embedded` no pubspec.
+Preencha `FlenxAdminApp` num arquivo Flutter `lib/views/admin/admin_app.dart`; `dart run flenx:bootstrap` gera o wiring. Adicione `jaspr_flutter_embed` e `jaspr: flutter: embedded` no pubspec.
 
 ```dart
-FlenxAdminApp(
-  title: 'Admin',
-  user: const AppUser(name: 'Ana', role: 'Administrador'),
-  navItems: const [NavItem(label: 'Dashboard', icon: Icons.dashboard, route: '/')],
-  pages: {'/': (c) => const FlenxDashboard(stats: [...], activity: [...])},
-);
+FlenxAdminApp({required AppUser user, required List<NavItem> navItems, required Map<String, WidgetBuilder> pages,
+  String title = 'Admin', List<AppNotification> notifications = const [], String initialRoute = '/',
+  VoidCallback? onLogout, AppRole? role})
+
+AppUser({required String name, required String role, String? email, String? avatarUrl})
+NavItem({required String label, required IconData icon, String? route, VoidCallback? onTap,
+  List<NavItem> children = const [], int? badge, String? permission})
+
+FlenxDashboard({required List<DashboardStat> stats, required List<ActivityItem> activity,
+  String greeting = 'Olá 👋', String subtitle = 'Aqui está um resumo de hoje.'})
+DashboardStat({required IconData icon, required String label, required String value, required String trend})
+```
+
+**CRUD declarativo** (lista/cria/edita/exclui ligado às suas APIs):
+```dart
+ResourceConfig({required String title, required List<ResourceField> fields, required String listPath,
+  String? createPath, String? updatePath, String? deletePath, String titleKey = 'title',
+  String? subtitleKey, String singular = 'registro', String idKey = 'id'})
+ResourceField(String key, String label, {FieldKind kind = FieldKind.text, List<String> options = const [],
+  bool inTable = false, bool required = false, String? hint})
+FieldKind   // text, multiline, number, boolean, select, image
+```
+
+**Permissões por papel:**
+```dart
+AppRole(String name, Set<String> permissions)   // can('*') = acesso total
+AdminPermissions.admin / .editor / .viewer      // papéis prontos
+// permissões: content.manage, products.manage, orders.manage, users.manage, home.edit, settings.manage
 ```
 </details>
 
 <details>
-<summary><strong>APIs declarativas + banco plugável</strong></summary>
+<summary><strong>APIs declarativas</strong></summary>
+
+```dart
+ApiEndpoint({required String path, required List<ApiAction> actions, HttpMethod method = HttpMethod.post,
+  List<Field> fields = const [], bool requiresAuth = false})
+
+HttpMethod   // get, post, put, delete
+Field(String name, {bool required = false, bool email = false, bool isInt = false, int? maxLength})
+```
+
+**Ações** (executadas em ordem):
+```dart
+InsertInto(DbModel model)                               // insere
+ListPaginated(DbModel model, {String orderBy = 'id', bool desc = true})
+FindById(DbModel model)                                 // GET por id
+UpdateById(DbModel model) / DeleteById(DbModel model)
+SendEmail({required String to, String subject = 'Novo contato'})
+RespondJson(Map<String, Object?> body)
+Redirect(String location)                               // 303 (Post/Redirect/Get)
+```
 
 ```dart
 const apis = [
-  ApiEndpoint(path: '/api/leads', method: HttpMethod.post, fields: [...],
-    actions: [InsertInto(leadsModel), SendEmail(to: '...'), Redirect('/?ok')]),
+  ApiEndpoint(path: '/api/leads', fields: [Field('email', required: true, email: true)],
+    actions: [InsertInto(leadsModel), SendEmail(to: 'vendas@site.com'), Redirect('/?ok')]),
 ];
-// FlenxApp.run(..., apis: apis, db: DbRegistry.fromEnv(Platform.environment));
+// FlenxApp.run(..., apis: apis, db: DbRegistry.fromEnv(Platform.environment), onEmail: meuSender);
 ```
 
-Banco por `DB_PROVIDER` no `.env`:
+Respostas seguem o envelope `ApiResponse` (`{success, data, error, meta}`); paginação via `PageRequest`/`PageMeta`.
+</details>
 
-| `DB_PROVIDER` | Backend | Credenciais |
+<details>
+<summary><strong>Banco de dados (plugável)</strong></summary>
+
+```dart
+DbRegistry.fromEnv(env)            // escolhe pelo DB_PROVIDER (.env); padrão: jsonl
+```
+
+| `DB_PROVIDER` | Backend | Variáveis |
 |---|---|---|
 | `supabase` | Supabase (PostgREST) | `SUPABASE_URL`, `SUPABASE_KEY` |
-| `firebase` | Firestore | `FIREBASE_PROJECT_ID`, `FIREBASE_TOKEN` |
-| `rest` / `api` | API Flenx (PHP/Dart) | `API_BASE_URL`, `API_TOKEN` |
-| `jsonl` / `memory` | arquivo / memória (dev) | `DB_DIR` |
+| `firebase` | Firestore | `FIREBASE_*` |
+| `rest` / `api` | API REST | `DB_API_URL`, `DB_API_KEY` |
+| `jsonl` | arquivos JSONL (dev) | `DB_DIR` (padrão `content/db`) |
+| `memory` | em memória (testes) | — |
+
+**Definindo uma tabela** (`DbModel`):
+```dart
+const leadsModel = DbModel('leads', [
+  DbColumn.id(),
+  DbColumn('name', SqlType.varchar),
+  DbColumn('email', SqlType.varchar, unique: true),
+  DbColumn('created_at', SqlType.datetime),
+]);
+// DbColumn(name, type, {nullable, unique, primaryKey, autoIncrement, references, defaultValue})
+// DbColumn.id([name]) | DbColumn.foreign(name, 'tabela.coluna')
+// SqlType: id, integer, bigint, boolean, decimal, text, varchar, datetime, json
+```
+Modelos prontos: `usersModel`, `blogPostsModel`, `categoriesModel`.
 </details>
 
 <details>
 <summary><strong>Auth, notificações e pagamento</strong></summary>
 
-- **Auth:** `JwtService` (HS256) + `TokenVerifier`. Proteja endpoints com `requiresAuth: true`.
-- **Notificações:** `NotificationCenter.notifyAll()` → `TwilioSmsChannel`, `TwilioWhatsappChannel`, `FcmPushChannel`.
-- **Pagamento:** `PaymentService.fromEnv(env)` (`asaas` | `mercadopago`).
+**Auth (JWT HS256):**
+```dart
+final jwt = JwtService(env['JWT_SECRET']!, issuer: 'meusite');
+final token = jwt.sign({'sub': userId}, expiresIn: Duration(days: 7));
+final claims = jwt.verify(token);          // null se inválido/expirado
+// Proteja endpoints com requiresAuth: true e passe tokenVerifier: jwt.verify em FlenxApp.run
+```
+
+**Notificações** (envia por todos os canais ativos):
+```dart
+final center = NotificationCenter([
+  TwilioSmsChannel.fromEnv(),        // TWILIO_SID, TWILIO_TOKEN, TWILIO_FROM
+  TwilioWhatsappChannel.fromEnv(),   // + TWILIO_WHATSAPP_FROM
+  FcmPushChannel.fromEnv(),          // FCM_SERVER_KEY
+]);
+await center.notifyAll(NotificationMessage(title: 'Novo lead', body: '...', phone: '+55...'));
+```
+
+**Pagamento** (`asaas` | `mercadopago`):
+```dart
+final pay = PaymentService.fromEnv(env);   // PAYMENT_PROVIDER + credenciais do gateway
+final res = await pay.checkout(PaymentRequest(amount: 99.9, description: 'Plano', customerEmail: 'a@b.com'));
+// res.checkoutUrl → redirecione o cliente. pay.webhookStatus(payload) normaliza o status.
+// Asaas: ASAAS_API_KEY, ASAAS_ENV | Mercado Pago: MP_ACCESS_TOKEN
+```
 
 > `.env` é **só lado servidor** — nunca exposto ao cliente.
 </details>
 
+<details>
+<summary><strong>Ilhas Flutter</strong></summary>
+
+Embuta um app Flutter real (state, gestos, animações) dentro da página SSR. O `@Import.onWeb` aponta para seu app Flutter deferido e fica **no app** (o jaspr_builder escaneia o pacote raiz).
+
+```dart
+// só no cliente
+FlutterIsland({required Future<void> loadLibrary, required dynamic Function() builder,
+  Duration debounce = const Duration(milliseconds: 200)})
+```
+Use uma rota `FlenxRoute.island(...)` e envolva com `FlenxFullscreen` para tela cheia. Veja `example/shop` (carrinho) para o padrão completo.
+</details>
+
 ## 🧪 Exemplos
 
-Três sites SSR completos, feitos 100% em Dart, na pasta [`example/`](https://github.com/pretolio/Flenx/tree/main/example):
+Três sites SSR completos, feitos 100% em Dart, na pasta [`example/`](https://github.com/pretolio/Flenx/tree/main/example). **São a melhor referência de como montar páginas reais** — copie os padrões deles:
 
-| Exemplo | O que mostra | Código |
-|---|---|---|
-| **Demo institucional** | landing + blog (Markdown e banco) + admin + APIs | [example/demo](https://github.com/pretolio/Flenx/tree/main/example/demo) |
-| **Loja (e-commerce)** | catálogo, carrinho (ilha Flutter), pedidos, permissões | [example/shop](https://github.com/pretolio/Flenx/tree/main/example/shop) |
-| **Portal de notícias** | manchete, categorias, autor/data, editor G1, edição da home | [example/news](https://github.com/pretolio/Flenx/tree/main/example/news) |
+| Exemplo | O que mostra | Código | Online |
+|---|---|---|---|
+| **Demo institucional** | landing + blog (Markdown e banco) + admin + APIs | [example/demo](https://github.com/pretolio/Flenx/tree/main/example/demo) | [▶](https://pretolio.github.io/Flenx/) |
+| **Loja (e-commerce)** | catálogo, hero carrossel, prateleiras, carrinho (ilha Flutter), permissões | [example/shop](https://github.com/pretolio/Flenx/tree/main/example/shop) | [▶](https://pretolio.github.io/Flenx/shop/) |
+| **Portal de notícias** | manchete, categorias, autor/data, editor G1, edição da home | [example/news](https://github.com/pretolio/Flenx/tree/main/example/news) | [▶](https://pretolio.github.io/Flenx/news/) |
 
 Para rodar um exemplo: `cd example/demo && dart run flenx:bootstrap && jaspr serve`.
 
