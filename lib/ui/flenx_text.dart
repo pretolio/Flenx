@@ -1,6 +1,8 @@
 import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
 
+import 'flenx_animated.dart';
+import 'flenx_animation.dart';
 import 'flenx_ui_enums.dart';
 
 /// Texto — como o `Text` do Flutter, com estilo por parâmetros (nada de CSS).
@@ -13,6 +15,9 @@ class FlenxText extends StatelessComponent {
     this.align,
     this.maxWidthPx,
     this.lineHeight,
+    this.animation,
+    this.animationDelay = 0,
+    this.animationDuration = 600,
     super.key,
   });
 
@@ -26,9 +31,14 @@ class FlenxText extends StatelessComponent {
   final double? maxWidthPx;
   final double? lineHeight;
 
+  /// Anima o texto com scroll-reveal. `null` = sem animação.
+  final FlenxAnimation? animation;
+  final int animationDelay;
+  final int animationDuration;
+
   @override
   Component build(BuildContext context) {
-    return p(
+    final elem = p(
       styles: Styles(raw: {
         'margin': '0',
         'font-size': '${size}px',
@@ -40,5 +50,7 @@ class FlenxText extends StatelessComponent {
       }),
       [.text(data)],
     );
+    if (animation == null) return elem;
+    return FlenxAnimated(elem, animation: animation!, delay: animationDelay, duration: animationDuration);
   }
 }

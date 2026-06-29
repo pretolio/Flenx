@@ -14,6 +14,10 @@ class FeaturesSection extends StatelessComponent {
     this.title = 'Tudo que um site moderno precisa',
     this.subtitle =
         'Pré-configurado e pronto para produção — e 100% personalizável.',
+    this.id = 'servicos',
+    this.cardHover,
+    this.cardGlowColor = FlenxPalette.primary,
+    this.animate = false,
     super.key,
   });
 
@@ -21,6 +25,16 @@ class FeaturesSection extends StatelessComponent {
   final String eyebrow;
   final String title;
   final String subtitle;
+  final String id;
+
+  /// Efeito de hover nos cards. `null` = sem hover.
+  final FlenxCardHover? cardHover;
+
+  /// Cor do brilho quando [cardHover] é [FlenxCardHover.glow].
+  final String cardGlowColor;
+
+  /// Ativa scroll-reveal nas entradas do cabeçalho e em cada card.
+  final bool animate;
 
   Component _icon(String emoji) => div(
         styles: Styles(raw: {
@@ -36,31 +50,37 @@ class FeaturesSection extends StatelessComponent {
         [.text(emoji)],
       );
 
+  Component _a(Component child, FlenxAnimation anim, int delay) => animate
+      ? FlenxAnimated(child, animation: anim, delay: delay)
+      : child;
+
   @override
   Component build(BuildContext context) {
     return FlenxSection(
-      id: 'recursos',
+      id: id,
       child: FlenxColumn(
         gap: 14,
         cross: FlenxAlign.stretch,
         [
-          FlenxText(eyebrow,
-              align: FlenxTextAlign.center,
-              color: FlenxPalette.primary,
-              weight: 700),
-          FlenxHeading(title, align: FlenxTextAlign.center),
-          FlenxText(subtitle,
-              align: FlenxTextAlign.center, color: FlenxPalette.muted),
+          _a(FlenxText(eyebrow, align: FlenxTextAlign.center, color: 'var(--primary, ${FlenxPalette.primary})', weight: 700), FlenxAnimation.slideUp, 0),
+          _a(FlenxHeading(title, align: FlenxTextAlign.center), FlenxAnimation.slideUp, 100),
+          _a(FlenxText(subtitle, align: FlenxTextAlign.center, color: FlenxPalette.muted), FlenxAnimation.fadeIn, 200),
           FlenxGrid(
             minItemWidth: 300,
             [
-              for (final f in features)
-                FlenxCard(
-                  FlenxColumn(gap: 10, [
-                    _icon(f.icon),
-                    FlenxHeading(f.title, level: 3),
-                    FlenxText(f.description, color: FlenxPalette.muted),
-                  ]),
+              for (var i = 0; i < features.length; i++)
+                _a(
+                  FlenxCard(
+                    FlenxColumn(gap: 10, [
+                      _icon(features[i].icon),
+                      FlenxHeading(features[i].title, level: 3),
+                      FlenxText(features[i].description, color: FlenxPalette.muted),
+                    ]),
+                    hover: cardHover,
+                    glowColor: cardGlowColor,
+                  ),
+                  FlenxAnimation.slideUp,
+                  100 + i * 80,
                 ),
             ],
           ),

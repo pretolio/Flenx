@@ -2,6 +2,7 @@ import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
 
 import '../../flenx_palette.dart';
+import '../flenx_animated.dart';
 import '../flenx_card.dart';
 import '../flenx_column.dart';
 import '../flenx_grid.dart';
@@ -24,6 +25,9 @@ class FlenxSteps extends StatelessComponent {
     this.eyebrow,
     this.title,
     this.background,
+    this.badgeColor = FlenxPalette.primary,
+    this.animate = false,
+    this.id,
     super.key,
   });
 
@@ -31,13 +35,18 @@ class FlenxSteps extends StatelessComponent {
   final String? eyebrow;
   final String? title;
   final String? background;
+  final String badgeColor;
+
+  /// Ativa scroll-reveal nos textos de cabeçalho e em cada passo.
+  final bool animate;
+  final String? id;
 
   Component _badge(int n) => div(
         styles: Styles(raw: {
           'width': '38px',
           'height': '38px',
           'border-radius': '10px',
-          'background': FlenxPalette.primary,
+          'background': badgeColor,
           'color': '#fff',
           'display': 'flex',
           'align-items': 'center',
@@ -47,32 +56,38 @@ class FlenxSteps extends StatelessComponent {
         [.text('$n')],
       );
 
+  Component _a(Component child, FlenxAnimation anim, int delay) => animate
+      ? FlenxAnimated(child, animation: anim, delay: delay)
+      : child;
+
   @override
   Component build(BuildContext context) {
     return FlenxSection(
+      id: id,
       background: background,
       child: FlenxColumn(
         gap: 36,
         cross: FlenxAlign.stretch,
         [
           if (eyebrow != null)
-            FlenxText(eyebrow!,
-                align: FlenxTextAlign.center,
-                color: FlenxPalette.primary,
-                weight: 700),
+            _a(FlenxText(eyebrow!, align: FlenxTextAlign.center, color: 'var(--primary, ${FlenxPalette.primary})', weight: 700), FlenxAnimation.slideUp, 0),
           if (title != null)
-            FlenxHeading(title!, align: FlenxTextAlign.center),
+            _a(FlenxHeading(title!, align: FlenxTextAlign.center), FlenxAnimation.slideUp, 100),
           FlenxGrid(
             minItemWidth: 260,
             [
               for (var i = 0; i < steps.length; i++)
-                FlenxCard(
-                  FlenxColumn(gap: 10, [
-                    _badge(i + 1),
-                    FlenxHeading(steps[i].title, level: 3),
-                    FlenxText(steps[i].description, color: FlenxPalette.muted),
-                  ]),
-                  background: FlenxPalette.surface,
+                _a(
+                  FlenxCard(
+                    FlenxColumn(gap: 10, [
+                      _badge(i + 1),
+                      FlenxHeading(steps[i].title, level: 3),
+                      FlenxText(steps[i].description, color: FlenxPalette.muted),
+                    ]),
+                    background: FlenxPalette.surface,
+                  ),
+                  FlenxAnimation.slideUp,
+                  100 + i * 120,
                 ),
             ],
           ),

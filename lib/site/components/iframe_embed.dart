@@ -16,6 +16,7 @@ class IframeEmbed extends StatelessComponent {
     this.title = 'Conteúdo incorporado',
     this.ratio,
     this.height = 480,
+    this.cssHeight,
     this.rounded = true,
     this.lazy = true,
     this.allowFullscreen = true,
@@ -35,8 +36,12 @@ class IframeEmbed extends StatelessComponent {
   /// [height] e o iframe ocupa 100% da largura mantendo a proporção.
   final String? ratio;
 
-  /// Altura fixa em px quando [ratio] é nulo.
+  /// Altura fixa em px quando [ratio] e [cssHeight] são nulos.
   final int height;
+
+  /// Altura em CSS puro (ex.: `'calc(100vh - 72px)'`). Tem prioridade sobre
+  /// [height] quando definido. Ignorado quando [ratio] estiver definido.
+  final String? cssHeight;
 
   /// Cantos arredondados.
   final bool rounded;
@@ -88,7 +93,7 @@ class IframeEmbed extends StatelessComponent {
         } else ...{
           'display': 'block',
           'width': '100%',
-          'height': '${height}px',
+          'height': cssHeight ?? '${height}px',
         },
       }),
     );

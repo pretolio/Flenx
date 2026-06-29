@@ -19,6 +19,29 @@ class LlmsFullGenerator {
       ..writeln('> ${config.description}')
       ..writeln();
 
+    // Dados estruturados da empresa
+    final addr = config.address;
+    if (config.telephone != null || config.email != null || addr != null || config.sameAs.isNotEmpty) {
+      b.writeln('## Contato e localização');
+      b.writeln();
+      if (config.telephone != null) b.writeln('- **Telefone:** ${config.telephone}');
+      if (config.email != null) b.writeln('- **E-mail:** ${config.email}');
+      if (addr != null) {
+        b.writeln('- **Endereço:** ${addr.streetAddress}, ${addr.addressLocality}${addr.addressRegion != null ? " – ${addr.addressRegion}" : ""}, ${addr.postalCode}');
+        if (addr.hasGeo) b.writeln('- **Geo:** latitude ${addr.latitude}, longitude ${addr.longitude}');
+      }
+      for (final s in config.sameAs) b.writeln('- **Social:** $s');
+      b.writeln();
+    }
+
+    if (config.about != null) {
+      b
+        ..writeln('## Sobre a empresa')
+        ..writeln()
+        ..writeln(config.about!.trim())
+        ..writeln();
+    }
+
     for (final r in visible) {
       b
         ..writeln('---')

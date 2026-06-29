@@ -5,6 +5,9 @@
 /// seu site fornecendo o conteúdo.
 library flenx;
 
+// Jaspr re-exportado — projetos que usam Flenx não precisam importar jaspr diretamente
+export 'package:jaspr/jaspr.dart';
+
 // Paleta central de cores (site + admin)
 export 'flenx_palette.dart';
 

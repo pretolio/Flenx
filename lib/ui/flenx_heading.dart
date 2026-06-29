@@ -1,6 +1,8 @@
 import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
 
+import 'flenx_animated.dart';
+import 'flenx_animation.dart';
 import 'flenx_ui_enums.dart';
 
 /// Título — como um `Text` de destaque. [level] 1–3 vira `<h1>..<h3>` (bom para
@@ -13,6 +15,9 @@ class FlenxHeading extends StatelessComponent {
     this.color,
     this.align,
     this.weight = 800,
+    this.animation,
+    this.animationDelay = 0,
+    this.animationDuration = 600,
     super.key,
   });
 
@@ -23,11 +28,16 @@ class FlenxHeading extends StatelessComponent {
   final FlenxTextAlign? align;
   final int weight;
 
+  /// Anima o título com scroll-reveal. `null` = sem animação.
+  final FlenxAnimation? animation;
+  final int animationDelay;
+  final int animationDuration;
+
   double get _size => size ?? const {1: 44.0, 2: 32.0, 3: 20.0}[level] ?? 32.0;
 
   @override
   Component build(BuildContext context) {
-    return Component.element(
+    final elem = Component.element(
       tag: 'h${level.clamp(1, 6)}',
       styles: Styles(raw: {
         'margin': '0',
@@ -39,5 +49,7 @@ class FlenxHeading extends StatelessComponent {
       }),
       children: [.text(data)],
     );
+    if (animation == null) return elem;
+    return FlenxAnimated(elem, animation: animation!, delay: animationDelay, duration: animationDuration);
   }
 }

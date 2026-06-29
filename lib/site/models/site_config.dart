@@ -1,12 +1,24 @@
-/// Configuração personalizável do site institucional (contato, WhatsApp, leads).
-/// Tudo tem default pronto; o usuário troca o que quiser.
+import 'login_option.dart';
+import 'menu_link.dart';
+import 'site_brand.dart';
+
+/// Configuração central do site institucional: marca, nav, contato e WhatsApp.
 class SiteConfig {
   const SiteConfig({
+    this.brand = const SiteBrand(label: 'Site', homeHref: '/'),
+    this.links = const [],
+    this.loginLabel = 'Entrar',
+    this.loginOptions = const [],
     this.whatsappNumber = '5511999999999',
-    this.whatsappMessage = 'Olá! Vim pelo site do Flenx e quero saber mais.',
+    this.whatsappMessage = 'Olá! Vim pelo site e quero saber mais.',
     this.leadAction = '/api/leads',
     this.contactEmail = 'contato@flenx.dev',
   });
+
+  final SiteBrand brand;
+  final List<MenuLink> links;
+  final String loginLabel;
+  final List<LoginOption> loginOptions;
 
   /// Número no formato internacional, só dígitos (ex.: 55 + DDD + número).
   final String whatsappNumber;

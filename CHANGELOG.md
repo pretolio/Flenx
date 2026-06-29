@@ -1,5 +1,41 @@
 # Changelog
 
+## 0.2.0
+
+### Novos componentes
+- **FlenxAnimated** — scroll-reveal com IntersectionObserver (fadeIn, slideUp, slideDown, slideLeft, slideRight, zoomIn, pulse, bounce, float, spin)
+- **FlenxAnimation** — enum de animações para todos os componentes
+- **FlenxHeroSplit** — hero duas colunas (texto + imagem); no mobile a imagem vira fundo desfocado
+- **FlenxSvg** — exibe SVG externo (`<img>`) ou inline (sem HTML/CSS)
+- **FlenxLottie** — animação Lottie via CDN com fila de inicialização
+- **FlenxRive** — animação Rive via CDN com fila de inicialização
+- **FlenxAudioPlayer** — player de áudio inline (faixa ou rádio ao vivo)
+- **FlenxAudioPlayerFloat** — player flutuante fixo no bottom (rádio / podcast)
+- **FlenxAccordion / FlenxAccordionItem** — acordeão FAQ puro CSS
+- **FlenxBanner** — banner de anúncio/alerta com ícone e dismiss
+- **FlenxAlert** — alerta inline com variantes (info, success, warning, error)
+- **FlenxSpacer** — espaçamento vertical explícito
+
+### Animações em componentes existentes
+- `FlenxColumn`, `FlenxGrid` — parâmetro `animation` com stagger automático nos filhos
+- `FlenxCard`, `FlenxHeading`, `FlenxText`, `FlenxButton`, `FlenxSection` — parâmetro `animation`
+- `FeaturesSection`, `FlenxSteps` — parâmetro `animate: bool`
+
+### Background image
+- `FlenxSection` e `FlenxCard` — parâmetros `backgroundImage` e `backgroundImageOpacity`
+
+### Sistema de temas (CSS custom properties)
+- `FlenxPage` — novos parâmetros `primaryColor`, `primaryDarkColor`, `secondaryColor`; injeta `:root { --primary: X; --primary-d: Y; }` para que **todos** os componentes usem a cor da marca automaticamente
+- `site_header_styles` — `.login-btn`, `.brand`, `.nav-link:hover` e dropdown usam `var(--primary)` / `var(--primary-d)`
+- `FlenxButton` — default via `var(--primary, fallback)`; aceita `color` para sobrescrever por instância
+- `FeaturesSection` e `FlenxSteps` — eyebrow/badge via `var(--primary, fallback)`
+
+### SEO / GEO / AEO
+- `SeoConfig` — novos campos: `telephone`, `email`, `address: SeoAddress?`, `about: String?`
+- `SeoAddress` — endereço físico (PostalAddress + GeoCoordinates para schema.org)
+- `JsonLdGenerator` — emite `@type: LocalBusiness` (com endereço, telefone, geo) quando `address` está presente
+- `LlmsTxtGenerator` e `LlmsFullGenerator` — injetam bloco de contato/endereço e `about` no topo do `/llms.txt` e `/llms-full.txt`
+
 ## 0.1.1
 
 - README reformulado: logo, badges, links (pub.dev, showcase, exemplos) e

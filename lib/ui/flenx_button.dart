@@ -2,6 +2,8 @@ import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
 
 import '../flenx_palette.dart';
+import 'flenx_animated.dart';
+import 'flenx_animation.dart';
 import 'flenx_ui_enums.dart';
 
 /// Botão/link — como um `ElevatedButton`/`TextButton`. Aponta para [href].
@@ -13,34 +15,49 @@ class FlenxButton extends StatelessComponent {
     this.label, {
     required this.href,
     this.variant = FlenxButtonVariant.primary,
+    this.color,
     this.newTab = false,
     this.hover = true,
+    this.animation,
+    this.animationDelay = 0,
+    this.animationDuration = 600,
     super.key,
   });
 
   final String label;
   final String href;
   final FlenxButtonVariant variant;
+
+  /// Sobrescreve a cor de acento usada pelo variant (ghost/soft usam primary por padrão).
+  final String? color;
   final bool newTab;
 
   /// Efeito de hover predefinido. `false` desliga.
   final bool hover;
 
-  Map<String, String> get _variantStyles => switch (variant) {
-        FlenxButtonVariant.primary => {
-            'background': FlenxPalette.primary,
-            'color': '#ffffff',
-          },
-        FlenxButtonVariant.ghost => {
-            'background': 'transparent',
-            'color': FlenxPalette.primary,
-            'box-shadow': 'inset 0 0 0 1.5px ${FlenxPalette.primary}',
-          },
-        FlenxButtonVariant.soft => {
-            'background': FlenxPalette.surface,
-            'color': FlenxPalette.primary,
-          },
-      };
+  /// Anima o botão com scroll-reveal. `null` = sem animação.
+  final FlenxAnimation? animation;
+  final int animationDelay;
+  final int animationDuration;
+
+  Map<String, String> get _variantStyles {
+    final accent = color ?? 'var(--primary, ${FlenxPalette.primary})';
+    return switch (variant) {
+      FlenxButtonVariant.primary => {
+          'background': accent,
+          'color': '#ffffff',
+        },
+      FlenxButtonVariant.ghost => {
+          'background': 'transparent',
+          'color': accent,
+          'box-shadow': 'inset 0 0 0 1.5px $accent',
+        },
+      FlenxButtonVariant.soft => {
+          'background': FlenxPalette.surface,
+          'color': accent,
+        },
+    };
+  }
 
   @override
   Component build(BuildContext context) {
@@ -62,13 +79,18 @@ class FlenxButton extends StatelessComponent {
         ..._variantStyles,
       }),
     );
-    if (!hover) return link;
-    // Injeta o :hover scoped (impossível inline) — predefinido.
-    return span(styles: Styles(raw: {'display': 'inline-block'}), [
-      Component.element(tag: 'style', children: [
-        RawText('.$cls:hover{filter:brightness(1.06);transform:translateY(-1px)}'),
-      ]),
-      link,
-    ]);
+    Component result = link;
+    if (hover) {
+      result = span(styles: Styles(raw: {'display': 'inline-block'}), [
+        Component.element(tag: 'style', children: [
+          RawText('.$cls:hover{filter:brightness(1.06);transform:translateY(-1px)}'),
+        ]),
+        link,
+      ]);
+    }
+    if (animation != null) {
+      return FlenxAnimated(result, animation: animation!, delay: animationDelay, duration: animationDuration);
+    }
+    return result;
   }
 }

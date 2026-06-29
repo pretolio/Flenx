@@ -25,6 +25,35 @@ class LlmsTxtGenerator {
       ..writeln('> ${config.description}')
       ..writeln();
 
+    // Bloco de identidade da empresa (contato, endereço)
+    final hasContact = config.telephone != null ||
+        config.email != null ||
+        config.address != null ||
+        config.sameAs.isNotEmpty;
+    if (hasContact) {
+      b.writeln('## Informações da empresa');
+      b.writeln();
+      if (config.telephone != null) b.writeln('- **Telefone:** ${config.telephone}');
+      if (config.email != null) b.writeln('- **E-mail:** ${config.email}');
+      if (config.address != null) {
+        final a = config.address!;
+        b.writeln('- **Endereço:** ${a.streetAddress}, ${a.addressLocality}${a.addressRegion != null ? " – ${a.addressRegion}" : ""}, ${a.postalCode}, ${a.addressCountry}');
+        if (a.hasGeo) b.writeln('- **Coordenadas:** ${a.latitude}, ${a.longitude}');
+      }
+      for (final s in config.sameAs) {
+        b.writeln('- **Perfil:** $s');
+      }
+      b.writeln();
+    }
+
+    if (config.about != null) {
+      b
+        ..writeln('## Sobre')
+        ..writeln()
+        ..writeln(config.about!.trim())
+        ..writeln();
+    }
+
     for (final entry in grouped.entries) {
       b
         ..writeln('## ${entry.key}')

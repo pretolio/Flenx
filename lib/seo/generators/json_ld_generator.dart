@@ -23,14 +23,26 @@ class JsonLdGenerator {
     ];
   }
 
-  Map<String, dynamic> _organization() => {
-        '@context': 'https://schema.org',
-        '@type': 'Organization',
-        'name': config.organizationName ?? config.siteName,
-        'url': config.baseUrl,
-        if (config.logoUrl != null) 'logo': config.url(config.logoUrl!),
-        if (config.sameAs.isNotEmpty) 'sameAs': config.sameAs,
-      };
+  Map<String, dynamic> _organization() {
+    final addr = config.address;
+    return {
+      '@context': 'https://schema.org',
+      '@type': addr != null ? 'LocalBusiness' : 'Organization',
+      'name': config.organizationName ?? config.siteName,
+      'url': config.baseUrl,
+      if (config.logoUrl != null) 'logo': config.url(config.logoUrl!),
+      if (config.telephone != null) 'telephone': config.telephone,
+      if (config.email != null) 'email': config.email,
+      if (config.sameAs.isNotEmpty) 'sameAs': config.sameAs,
+      if (addr != null) 'address': addr.toJsonLd(),
+      if (addr != null && addr.hasGeo)
+        'geo': {
+          '@type': 'GeoCoordinates',
+          'latitude': addr.latitude,
+          'longitude': addr.longitude,
+        },
+    };
+  }
 
   Map<String, dynamic> _website() => {
         '@context': 'https://schema.org',

@@ -20,6 +20,7 @@ class FlenxFooter extends StatelessComponent {
     this.columns = const [],
     this.copyright,
     this.background = FlenxPalette.darkBg,
+    this.id,
     super.key,
   });
 
@@ -28,6 +29,7 @@ class FlenxFooter extends StatelessComponent {
   final List<FlenxFooterColumn> columns;
   final String? copyright;
   final String background;
+  final String? id;
 
   Component _link(MenuLink l) => a(
         [.text(l.label)],
@@ -44,6 +46,7 @@ class FlenxFooter extends StatelessComponent {
   Component build(BuildContext context) {
     return Component.element(
       tag: 'footer',
+      id: id,
       styles: Styles(raw: {'background': background, 'color': '#cbd5e1', 'padding': '56px 24px 28px'}),
       children: [
         div(

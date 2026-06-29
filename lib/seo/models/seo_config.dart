@@ -1,4 +1,5 @@
 import 'crawler_rule.dart';
+import 'seo_address.dart';
 
 /// Configuração global de SEO/GEO/AEO do site. Fonte única para baseUrl,
 /// identidade da organização e política de crawlers.
@@ -14,6 +15,10 @@ class SeoConfig {
     this.sameAs = const [],
     this.searchUrlTemplate,
     this.themeColor,
+    this.telephone,
+    this.email,
+    this.address,
+    this.about,
     this.globalDisallow = const [],
     List<CrawlerRule>? crawlerRules,
   }) : crawlerRules = crawlerRules ?? defaultCrawlerRules;
@@ -33,6 +38,22 @@ class SeoConfig {
   /// Template de busca p/ SearchAction (ex.: `/busca?q={search_term_string}`).
   final String? searchUrlTemplate;
   final String? themeColor;
+
+  /// Telefone principal (ex.: `'+55 11 5108-0113'`).
+  final String? telephone;
+
+  /// E-mail de contato público.
+  final String? email;
+
+  /// Endereço físico — quando preenchido, o schema muda de Organization para
+  /// LocalBusiness, habilitando rich results de endereço/geo no Google.
+  final SeoAddress? address;
+
+  /// Markdown com informações detalhadas da empresa: história, serviços,
+  /// área de atuação, contatos, horários, diferenciais, etc.
+  /// Injetado no topo de `/llms.txt` e `/llms-full.txt` para maximizar
+  /// a extração por AI assistants (GEO/AEO).
+  final String? about;
 
   /// Caminhos bloqueados para todos os agentes.
   final List<String> globalDisallow;
