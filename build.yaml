@@ -1,0 +1,11 @@
+# Restringe os builders do pacote `flenx` ao código-fonte (lib/, bin/).
+# Necessário porque os exemplos vivem em example/ DENTRO da raiz do pacote
+# (monorepo) e dependem do flenx via path — sem isto o build_runner tenta
+# tratar example/**/.dart_tool como assets do flenx e falha.
+targets:
+  $default:
+    sources:
+      - lib/**
+      - bin/**
+      - pubspec.yaml
+      - $package$
