@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
   <head>
-    <base href="index.html"/>
+    <base href="/Flenx/news/"/>
     <meta charset="utf-8"/>
     <style>
       html, body {
@@ -57,7 +57,7 @@
     <title>Flenx News — últimas notícias</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <!--/-->
-    
+    <script src="main.client.dart.js" defer></script>
   </head>
   <body>
     <div class="flenx-site">
@@ -159,80 +159,164 @@
         }
         
       </style>
-      <style>:root{--primary:#01589B;--primary-d:#02406f;--secondary:#0a86e0;}</style>
+      <style>:root{--primary:#C4170C;--primary-d:#A01209;--secondary:#1A1A1A;}</style>
       <div style="background: #01589B; color: #ffffff; padding: 10px 24px; text-align: center">
         <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 16.0px; align-items: center; justify-content: center">
           <p style="margin: 0; font-size: 14.0px; font-weight: 600; color: #ffffff">🔴 Plantão Flenx News — cobertura ao vivo</p>
         </div>
       </div>
-      <header class="site-header">
+      <header style="position: sticky; top: 0; z-index: 50; background: #ffffff; border-bottom: 1px solid #E2E8F0; box-shadow: 0 1px 4px rgba(0,0,0,.04)">
         <style>
-          .site-header{display:block;position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid #e5e7eb;font-family:system-ui,-apple-system,sans-serif}
-          .header-inner{max-width:1120px;margin:0 auto;padding:0 20px;height:64px;display:flex;align-items:center;gap:20px}
-          .brand{flex-shrink:0;display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--primary);font-weight:800;font-size:1.25rem}
-          .brand-img{height:32px}
-          .nav-toggle{display:none}
-          .hamburger{display:none;cursor:pointer;font-size:1.6rem;line-height:1;color:var(--primary);padding:6px;user-select:none}
-          /* Padrão: logo à esquerda, menus à direita */
-          .nav-wrap{display:flex;align-items:center;gap:24px;margin-left:auto}
-          /* Opção: menus centralizados (logo esq., login dir.) */
-          .nav-center .nav-wrap{flex:1;margin-left:0}
-          .nav-center .nav-list{margin-left:auto;margin-right:auto}
-          .nav-list{display:flex;align-items:center;gap:4px;list-style:none;margin:0;padding:0}
-          .nav-item{position:relative}
-          .nav-link{display:flex;align-items:center;gap:4px;padding:10px 12px;color:#1f2937;text-decoration:none;border-radius:8px;cursor:pointer;font-size:.95rem}
-          .nav-link:hover{background:#f3f4f6;color:var(--primary)}
-          .caret{font-size:.7rem}
-          .dropdown{position:absolute;top:100%;left:0;min-width:210px;background:#fff;border:1px solid #e5e7eb;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.08);list-style:none;margin:6px 0 0;padding:6px;opacity:0;visibility:hidden;transform:translateY(6px);transition:.15s ease}
-          .has-dropdown:hover>.dropdown,.has-dropdown:focus-within>.dropdown{opacity:1;visibility:visible;transform:none}
-          .dropdown li a{display:block;padding:9px 12px;color:#374151;text-decoration:none;border-radius:6px;font-size:.92rem}
-          .dropdown li a:hover{background:#f3f4f6;color:var(--primary)}
-          .dropdown-right{left:auto;right:0}
-          .login-btn{display:inline-flex;align-items:center;gap:6px;background:var(--primary);color:#fff;padding:9px 18px;border-radius:9999px;text-decoration:none;font-weight:600;cursor:pointer;border:none;font-size:.95rem}
-          .login-btn:hover{background:var(--primary-d)}
-          .login-menu{position:relative}
-          @media (max-width:860px){
-           .hamburger{display:block}
-           .nav-wrap{display:none;position:absolute;top:64px;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:#fff;border-bottom:1px solid #e5e7eb;padding:10px;box-shadow:0 10px 24px rgba(0,0,0,.08)}
-           .nav-toggle:checked ~ .nav-wrap{display:flex}
-           .nav-list{flex-direction:column;align-items:stretch;gap:0;width:100%}
-           .dropdown{position:static;opacity:1;visibility:visible;transform:none;box-shadow:none;border:none;margin:0 0 0 12px;min-width:auto}
-           .login-btn{justify-content:center;margin-top:10px}
-          }
+          .fnews-edit{display:flex;gap:22px;overflow-x:auto;scrollbar-width:none;padding:10px 0;}
+          .fnews-edit::-webkit-scrollbar{display:none;}
+          .fnews-edit a{color:#0F172A;font-size:14px;font-weight:700;text-decoration:none;white-space:nowrap;transition:color .15s;}
+          .fnews-edit a:hover{color:var(--primary);}
+          .fnews-hat{color:var(--primary);font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;}
+          .fnews-card{display:block;text-decoration:none;}
+          .fnews-thumb{overflow:hidden;border-radius:4px;}
+          .fnews-card img,.fnews-lead img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s ease;}
+          .fnews-card:hover img,.fnews-lead:hover img{transform:scale(1.04);}
+          .fnews-card .fnews-title{color:#0F172A;font-weight:700;line-height:1.25;transition:color .15s;}
+          .fnews-card:hover .fnews-title{color:var(--primary);}
+          .fnews-lead{display:block;text-decoration:none;}
+          .fnews-lead .fnews-title{color:#0F172A;font-weight:800;line-height:1.1;font-size:clamp(26px,4vw,42px);transition:color .15s;}
+          .fnews-lead:hover .fnews-title{color:var(--primary);}
+          .fnews-mr a{text-decoration:none;color:#0F172A;font-weight:700;line-height:1.3;transition:color .15s;}
+          .fnews-mr a:hover{color:var(--primary);}
+          .fnews-logo{display:inline-flex;align-items:baseline;gap:2px;background:var(--primary);color:#fff;padding:6px 12px;border-radius:8px;text-decoration:none;font-weight:900;letter-spacing:-.02em;}
+          .fnews-cols{display:flex;flex-wrap:wrap;gap:40px;align-items:flex-start;}
+          .fnews-cols>.fnews-main{flex:2 1 380px;min-width:0;}
+          .fnews-cols>.fnews-aside{flex:1 1 280px;min-width:0;}
           
         </style>
-        <div class="header-inner">
-          <a class="brand" href="index.html"><span class="brand-text">Flenx News</span></a>
-          <input type="checkbox" id="flenx-nav-toggle" class="nav-toggle" aria-label="Abrir menu"/>
-          <label class="hamburger" for="flenx-nav-toggle"><span>☰</span></label>
-          <div class="nav-wrap">
-            <ul class="nav-list">
-              <li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
-              <li class="nav-item"><a class="nav-link" href="blog/index.html">Notícias</a></li>
-              <li class="nav-item"><a class="nav-link" href="blog/categoria/index.html">Categorias</a></li>
-              <li class="nav-item"><a class="nav-link" href="sobre/index.html">Sobre</a></li>
-            </ul>
-            <a class="login-btn" href="login/index.html">Entrar</a>
+        <div style="max-width: 1120px; margin: 0 auto; padding: 0 16px">
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0">
+            <a class="fnews-logo" href="/Flenx/news/"><span style="font-size: 22px">flenx</span><span style="font-size: 13px; opacity: .85">news</span></a>
+            <span style="display: inline-flex; align-items: center; gap: 6px; color: var(--primary); font-size: 12px; font-weight: 800; letter-spacing: .05em"><span style="width: 8px; height: 8px; border-radius: 50%; background: var(--primary); display: inline-block"></span>AO VIVO</span>
           </div>
+          <nav class="fnews-edit" style="border-top: 1px solid #E2E8F0">
+            <a href="/Flenx/news/">Início</a>
+            <a href="/Flenx/news/blog">Notícias</a>
+            <a href="/Flenx/news/blog/categoria">Categorias</a>
+            <a href="/Flenx/news/sobre">Sobre</a>
+          </nav>
         </div>
       </header>
-      <section style="padding: 96.0px 24px; background: linear-gradient(135deg, #01406F 0%, #01589B 100%)">
+      <section style="padding: 28.0px 24px; background: #ffffff">
         <div style="max-width: 1120.0px; margin: 0 auto">
-          <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 48.0px; align-items: center; justify-content: space-between">
-            <div style="display: flex; flex-direction: column; gap: 18.0px; align-items: flex-start; justify-content: flex-start; max-width: 560.0px">
-              <p style="margin: 0; font-size: 16.0px; font-weight: 700; color: #7dd3fc">Portal de notícias</p>
-              <h1 style="margin: 0; font-size: 46.0px; font-weight: 800; line-height: 1.15; color: #ffffff">Flext News</h1>
-              <p style="margin: 0; font-size: 18.0px; font-weight: 400; color: #dbeafe; line-height: 1.6">Tecnologia, economia e esportes — em tempo real.</p>
-              <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 12.0px; align-items: center; justify-content: flex-start">
-                <span style="display: inline-block"><style>.fbtn-primary:hover{filter:brightness(1.06);transform:translateY(-1px)}</style><a class="fbtn-primary" style="display: inline-block; padding: 12px 22px; border-radius: 10px; font-weight: 700; text-decoration: none; cursor: pointer; transition: filter .15s ease, transform .15s ease; background: var(--primary, #01589B); color: #ffffff" href="blog/index.html">Ver todas</a></span>
+          <div style="display: flex; flex-direction: column; gap: 36.0px; align-items: stretch; justify-content: flex-start">
+            <a class="fnews-lead" href="/Flenx/news/blog/flext-news-estreia">
+              <div class="fnews-thumb" style="aspect-ratio: 16 / 9">
+                <img alt="Flext News estreia com admin completo" src="https://picsum.photos/seed/flext-news-estreia/1200/675"/>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section style="padding: 72.0px 24px">
-        <div style="max-width: 1120.0px; margin: 0 auto">
-          <span style="display: contents"><style>.fap{display:flex;align-items:center;gap:14px;padding:16px 20px;border-radius:14px;border:1px solid #e2e8f0;font-family:inherit;user-select:none}
+              <div style="padding: 14px 0 0">
+                <span class="fnews-hat">Tecnologia</span>
+                <div class="fnews-title" style="margin: 6px 0 8px">Flext News estreia com admin completo</div>
+                <p style="color: #0F172A; font-size: 17px; line-height: 1.45; margin: 0 0 8px">Portal de exemplo agora cria notícias pelo painel</p>
+                <span style="color: #64748B; font-size: 13px">Por Redação Flext · 26/06/2026</span>
+              </div>
+            </a>
+            <div class="fnews-cols">
+              <div class="fnews-main">
+                <div style="display: flex; flex-direction: column; gap: 20.0px; align-items: stretch; justify-content: flex-start">
+                  <div style="display: flex; align-items: center; gap: 10px; margin: 0 0 16px">
+                    <span style="width: 5px; height: 22px; background: var(--primary); border-radius: 2px; display: inline-block"></span>
+                    <span style="font-size: 20px; font-weight: 800; color: #0F172A">Últimas notícias</span>
+                  </div>
+                  <div style="display: flex; flex-wrap: wrap; gap: 28.0px; justify-content: flex-start; align-items: stretch">
+                    <div style="flex: 1 1 240.0px; max-width: 100%">
+                      <span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+.fa-reveal.fa-visible{opacity:1;transform:none!important}
+.fa-up{transform:translateY(36px)}
+.fa-down{transform:translateY(-36px)}
+.fa-left{transform:translateX(36px)}
+.fa-right{transform:translateX(-36px)}
+.fa-zoom{transform:scale(.92)}
+</style><script>(function(){
+if(window.__faObs)return;
+var o=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
+new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
+window.__faObs=o;
+})();
+</script><div class="fa-reveal fa-up" style="transition-duration: 600ms"><a class="fnews-card" href="/Flenx/news/blog/ia-no-jornalismo"><div class="fnews-thumb" style="aspect-ratio: 16 / 9"><img alt="IA no jornalismo: ferramenta, não substituto" src="https://picsum.photos/seed/ia-no-jornalismo/1200/675"/></div><div style="padding: 10px 0 0"><span class="fnews-hat">Tecnologia</span><div class="fnews-title" style="margin: 6px 0 0; font-size: 18px">IA no jornalismo: ferramenta, não substituto</div><p style="color: #64748B; font-size: 14px; line-height: 1.4; margin: 6px 0 0">Redações adotam IA para apuração, mas mantêm curadoria humana.</p></div></a></div></span>
+                    </div>
+                    <div style="flex: 1 1 240.0px; max-width: 100%">
+                      <span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+.fa-reveal.fa-visible{opacity:1;transform:none!important}
+.fa-up{transform:translateY(36px)}
+.fa-down{transform:translateY(-36px)}
+.fa-left{transform:translateX(36px)}
+.fa-right{transform:translateX(-36px)}
+.fa-zoom{transform:scale(.92)}
+</style><script>(function(){
+if(window.__faObs)return;
+var o=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
+new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
+window.__faObs=o;
+})();
+</script><div class="fa-reveal fa-up" style="transition-duration: 600ms; transition-delay: 80ms"><a class="fnews-card" href="/Flenx/news/blog/dart-cresce-2026"><div class="fnews-thumb" style="aspect-ratio: 16 / 9"><img alt="Dart cresce e vira queridinho da web em 2026" src="https://picsum.photos/seed/dart-cresce-2026/1200/675"/></div><div style="padding: 10px 0 0"><span class="fnews-hat">Tecnologia</span><div class="fnews-title" style="margin: 6px 0 0; font-size: 18px">Dart cresce e vira queridinho da web em 2026</div><p style="color: #64748B; font-size: 14px; line-height: 1.4; margin: 6px 0 0">Com SSR e frameworks como o Flenx, a linguagem ganha espaço fora do mobile.</p></div></a></div></span>
+                    </div>
+                    <div style="flex: 1 1 240.0px; max-width: 100%">
+                      <span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+.fa-reveal.fa-visible{opacity:1;transform:none!important}
+.fa-up{transform:translateY(36px)}
+.fa-down{transform:translateY(-36px)}
+.fa-left{transform:translateX(36px)}
+.fa-right{transform:translateX(-36px)}
+.fa-zoom{transform:scale(.92)}
+</style><script>(function(){
+if(window.__faObs)return;
+var o=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
+new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
+window.__faObs=o;
+})();
+</script><div class="fa-reveal fa-up" style="transition-duration: 600ms; transition-delay: 160ms"><a class="fnews-card" href="/Flenx/news/blog/economia-juros"><div class="fnews-thumb" style="aspect-ratio: 16 / 9"><img alt="Banco Central mantém juros e mercado reage" src="https://picsum.photos/seed/economia-juros/1200/675"/></div><div style="padding: 10px 0 0"><span class="fnews-hat">Economia</span><div class="fnews-title" style="margin: 6px 0 0; font-size: 18px">Banco Central mantém juros e mercado reage</div><p style="color: #64748B; font-size: 14px; line-height: 1.4; margin: 6px 0 0">Decisão era esperada; bolsa opera em leve alta após o anúncio.</p></div></a></div></span>
+                    </div>
+                    <div style="flex: 1 1 240.0px; max-width: 100%">
+                      <span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
+.fa-reveal.fa-visible{opacity:1;transform:none!important}
+.fa-up{transform:translateY(36px)}
+.fa-down{transform:translateY(-36px)}
+.fa-left{transform:translateX(36px)}
+.fa-right{transform:translateX(-36px)}
+.fa-zoom{transform:scale(.92)}
+</style><script>(function(){
+if(window.__faObs)return;
+var o=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
+new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
+window.__faObs=o;
+})();
+</script><div class="fa-reveal fa-up" style="transition-duration: 600ms; transition-delay: 240ms"><a class="fnews-card" href="/Flenx/news/blog/esportes-final"><div class="fnews-thumb" style="aspect-ratio: 16 / 9"><img alt="Decisão do campeonato vai para os pênaltis" src="https://picsum.photos/seed/esportes-final/1200/675"/></div><div style="padding: 10px 0 0"><span class="fnews-hat">Esportes</span><div class="fnews-title" style="margin: 6px 0 0; font-size: 18px">Decisão do campeonato vai para os pênaltis</div><p style="color: #64748B; font-size: 14px; line-height: 1.4; margin: 6px 0 0">Após empate em 2 a 2, título foi decidido nas penalidades.</p></div></a></div></span>
+                    </div>
+                  </div>
+                  <div style="height: 8.0px; flex-shrink: 0"></div>
+                  <div>
+                    <div style="margin: 16px 0; text-align: center">
+                      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0000000000000000" data-ad-slot="1111111111" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="fnews-aside">
+                <div style="display: flex; flex-direction: column; gap: 28.0px; align-items: stretch; justify-content: flex-start">
+                  <span style="display: contents"><style>.fap{display:flex;align-items:center;gap:14px;padding:16px 20px;border-radius:14px;border:1px solid #e2e8f0;font-family:inherit;user-select:none}
 .fap-btn{width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .15s,filter .15s;color:#fff;font-size:17px;line-height:1}
 .fap-btn:hover{transform:scale(1.08);filter:brightness(1.12)}
 .fap-info{flex:1;min-width:0}
@@ -244,7 +328,7 @@
 .fap-live{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;letter-spacing:.06em;padding:3px 9px;border-radius:20px;color:#fff;flex-shrink:0}
 .fap-dot{width:7px;height:7px;border-radius:50%;background:#fff;animation:fap-blink 1.2s ease-in-out infinite}
 @keyframes fap-blink{0%,100%{opacity:1}50%{opacity:.25}}
-.fap-btn-fap15b5fd92{background:#01589B}.fap-bar-fap15b5fd92{background:#01589B}.fap-live-fap15b5fd92{background:#01589B}</style><div class="fap" style="background: #ffffff"><audio id="fap15b5fd92-a" src="https://stream.zeno.fm/0r0xa792kwzuv" preload="none"></audio><button id="fap15b5fd92-btn" class="fap-btn fap-btn-fap15b5fd92" type="button" aria-label="Play">▶</button><div class="fap-info"><div style="display: flex; align-items: center; gap: 8px; min-width: 0"><span class="fap-title">Flenx News Rádio</span><span class="fap-live fap-live-fap15b5fd92"><span class="fap-dot"></span>AO VIVO</span></div><div class="fap-sub">Notícias 24h · ao vivo</div></div></div><script>(function(){
+.fap-btn-fap15b5fd92{background:#C4170C}.fap-bar-fap15b5fd92{background:#C4170C}.fap-live-fap15b5fd92{background:#C4170C}</style><div class="fap" style="background: #ffffff"><audio id="fap15b5fd92-a" src="https://stream.zeno.fm/0r0xa792kwzuv" preload="none"></audio><button id="fap15b5fd92-btn" class="fap-btn fap-btn-fap15b5fd92" type="button" aria-label="Play">▶</button><div class="fap-info"><div style="display: flex; align-items: center; gap: 8px; min-width: 0"><span class="fap-title">Flenx News Rádio</span><span class="fap-live fap-live-fap15b5fd92"><span class="fap-dot"></span>AO VIVO</span></div><div class="fap-sub">Notícias 24h · ao vivo</div></div></div><script>(function(){
   var id='fap15b5fd92';
   var audio=document.getElementById(id+'-a');
   var btn=document.getElementById(id+'-btn');
@@ -274,113 +358,30 @@
   if(false){try{audio.play();}catch(e){}}
 })();
 </script></span>
-        </div>
-      </section>
-      <section style="padding: 72.0px 24px; background: #F8FAFC">
-        <div style="max-width: 1120.0px; margin: 0 auto">
-          <div style="display: flex; flex-direction: column; gap: 12.0px; align-items: flex-start; justify-content: flex-start">
-            <p style="margin: 0; font-size: 16.0px; font-weight: 700; color: #01589B">Destaque</p>
-            <h1 style="margin: 0; font-size: 44.0px; font-weight: 800; line-height: 1.15">Flext News estreia com admin completo</h1>
-            <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 10.0px; align-items: center; justify-content: flex-start">
-              <a href="blog/categoria/tecnologia/index.html"><p style="margin: 0; font-size: 13.0px; font-weight: 700; color: #06B6D4">Tecnologia</p></a>
-              <p style="margin: 0; font-size: 13.0px; font-weight: 400; color: #64748B">Por Redação Flext</p>
-              <p style="margin: 0; font-size: 13.0px; font-weight: 400; color: #64748B">26/06/2026</p>
-            </div>
-            <p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B; line-height: 1.6">Notícia criada via API/admin do flext_news.</p>
-            <span style="display: inline-block"><style>.fbtn-primary:hover{filter:brightness(1.06);transform:translateY(-1px)}</style><a class="fbtn-primary" style="display: inline-block; padding: 12px 22px; border-radius: 10px; font-weight: 700; text-decoration: none; cursor: pointer; transition: filter .15s ease, transform .15s ease; background: var(--primary, #01589B); color: #ffffff" href="blog/flext-news-estreia/index.html">Ler agora</a></span>
-          </div>
-        </div>
-      </section>
-      <section style="padding: 72.0px 24px">
-        <div style="max-width: 1120.0px; margin: 0 auto">
-          <div style="display: flex; flex-direction: column; gap: 24.0px; align-items: stretch; justify-content: flex-start">
-            <div>
-              <div style="margin: 16px 0; text-align: center">
-                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0000000000000000" data-ad-slot="1111111111" data-ad-format="auto" data-full-width-responsive="true"></ins>
-                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-              </div>
-            </div>
-            <h2 style="margin: 0; font-size: 32.0px; font-weight: 800; line-height: 1.15">Últimas notícias</h2>
-            <div style="display: flex; flex-wrap: wrap; gap: 20.0px; justify-content: center; align-items: stretch">
-              <div style="flex: 1 1 300.0px; max-width: 100%">
-                <span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
-.fa-reveal.fa-visible{opacity:1;transform:none!important}
-.fa-up{transform:translateY(36px)}
-.fa-down{transform:translateY(-36px)}
-.fa-left{transform:translateX(36px)}
-.fa-right{transform:translateX(-36px)}
-.fa-zoom{transform:scale(.92)}
-</style><script>(function(){
-if(window.__faObs)return;
-var o=new IntersectionObserver(function(es){
-  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
-},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
-function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
-if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
-new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
-window.__faObs=o;
-})();
-</script><div class="fa-reveal fa-up" style="transition-duration: 600ms"><div style="background: #ffffff; padding: 20.0px; border-radius: 16.0px; border: 1px solid #E2E8F0"><div style="display: flex; flex-direction: column; gap: 8.0px; align-items: flex-start; justify-content: flex-start"><h3 style="margin: 0; font-size: 20.0px; font-weight: 800; line-height: 1.15">IA no jornalismo: ferramenta, não substituto</h3><div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 10.0px; align-items: center; justify-content: flex-start"><a href="blog/categoria/tecnologia/index.html"><p style="margin: 0; font-size: 13.0px; font-weight: 700; color: #06B6D4">Tecnologia</p></a><p style="margin: 0; font-size: 13.0px; font-weight: 400; color: #64748B">Por Redação Flenx News</p><p style="margin: 0; font-size: 13.0px; font-weight: 400; color: #64748B">21/06/2026</p></div><p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B">Redações adotam IA para apuração, mas mantêm curadoria humana.</p><span style="display: inline-block"><style>.fbtn-primary:hover{filter:brightness(1.06);transform:translateY(-1px)}</style><a class="fbtn-primary" style="display: inline-block; padding: 12px 22px; border-radius: 10px; font-weight: 700; text-decoration: none; cursor: pointer; transition: filter .15s ease, transform .15s ease; background: var(--primary, #01589B); color: #ffffff" href="blog/ia-no-jornalismo/index.html">Ler notícia</a></span></div></div></div></span>
-              </div>
-              <div style="flex: 1 1 300.0px; max-width: 100%">
-                <span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
-.fa-reveal.fa-visible{opacity:1;transform:none!important}
-.fa-up{transform:translateY(36px)}
-.fa-down{transform:translateY(-36px)}
-.fa-left{transform:translateX(36px)}
-.fa-right{transform:translateX(-36px)}
-.fa-zoom{transform:scale(.92)}
-</style><script>(function(){
-if(window.__faObs)return;
-var o=new IntersectionObserver(function(es){
-  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
-},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
-function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
-if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
-new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
-window.__faObs=o;
-})();
-</script><div class="fa-reveal fa-up" style="transition-duration: 600ms; transition-delay: 80ms"><div style="background: #ffffff; padding: 20.0px; border-radius: 16.0px; border: 1px solid #E2E8F0"><div style="display: flex; flex-direction: column; gap: 8.0px; align-items: flex-start; justify-content: flex-start"><h3 style="margin: 0; font-size: 20.0px; font-weight: 800; line-height: 1.15">Dart cresce e vira queridinho da web em 2026</h3><div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 10.0px; align-items: center; justify-content: flex-start"><a href="blog/categoria/tecnologia/index.html"><p style="margin: 0; font-size: 13.0px; font-weight: 700; color: #06B6D4">Tecnologia</p></a><p style="margin: 0; font-size: 13.0px; font-weight: 400; color: #64748B">Por Redação Flenx News</p><p style="margin: 0; font-size: 13.0px; font-weight: 400; color: #64748B">20/06/2026</p></div><p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B">Com SSR e frameworks como o Flenx, a linguagem ganha espaço fora do mobile.</p><span style="display: inline-block"><style>.fbtn-primary:hover{filter:brightness(1.06);transform:translateY(-1px)}</style><a class="fbtn-primary" style="display: inline-block; padding: 12px 22px; border-radius: 10px; font-weight: 700; text-decoration: none; cursor: pointer; transition: filter .15s ease, transform .15s ease; background: var(--primary, #01589B); color: #ffffff" href="blog/dart-cresce-2026/index.html">Ler notícia</a></span></div></div></div></span>
-              </div>
-              <div style="flex: 1 1 300.0px; max-width: 100%">
-                <span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
-.fa-reveal.fa-visible{opacity:1;transform:none!important}
-.fa-up{transform:translateY(36px)}
-.fa-down{transform:translateY(-36px)}
-.fa-left{transform:translateX(36px)}
-.fa-right{transform:translateX(-36px)}
-.fa-zoom{transform:scale(.92)}
-</style><script>(function(){
-if(window.__faObs)return;
-var o=new IntersectionObserver(function(es){
-  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
-},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
-function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
-if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
-new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
-window.__faObs=o;
-})();
-</script><div class="fa-reveal fa-up" style="transition-duration: 600ms; transition-delay: 160ms"><div style="background: #ffffff; padding: 20.0px; border-radius: 16.0px; border: 1px solid #E2E8F0"><div style="display: flex; flex-direction: column; gap: 8.0px; align-items: flex-start; justify-content: flex-start"><h3 style="margin: 0; font-size: 20.0px; font-weight: 800; line-height: 1.15">Banco Central mantém juros e mercado reage</h3><div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 10.0px; align-items: center; justify-content: flex-start"><a href="blog/categoria/economia/index.html"><p style="margin: 0; font-size: 13.0px; font-weight: 700; color: #06B6D4">Economia</p></a><p style="margin: 0; font-size: 13.0px; font-weight: 400; color: #64748B">Por Redação Flenx News</p><p style="margin: 0; font-size: 13.0px; font-weight: 400; color: #64748B">19/06/2026</p></div><p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B">Decisão era esperada; bolsa opera em leve alta após o anúncio.</p><span style="display: inline-block"><style>.fbtn-primary:hover{filter:brightness(1.06);transform:translateY(-1px)}</style><a class="fbtn-primary" style="display: inline-block; padding: 12px 22px; border-radius: 10px; font-weight: 700; text-decoration: none; cursor: pointer; transition: filter .15s ease, transform .15s ease; background: var(--primary, #01589B); color: #ffffff" href="blog/economia-juros/index.html">Ler notícia</a></span></div></div></div></span>
-              </div>
-              <div style="flex: 1 1 300.0px; max-width: 100%">
-                <span style="display: contents"><style>.fa-reveal{opacity:0;transition-property:opacity,transform;transition-timing-function:cubic-bezier(.4,0,.2,1);will-change:opacity,transform}
-.fa-reveal.fa-visible{opacity:1;transform:none!important}
-.fa-up{transform:translateY(36px)}
-.fa-down{transform:translateY(-36px)}
-.fa-left{transform:translateX(36px)}
-.fa-right{transform:translateX(-36px)}
-.fa-zoom{transform:scale(.92)}
-</style><script>(function(){
-if(window.__faObs)return;
-var o=new IntersectionObserver(function(es){
-  es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('fa-visible');o.unobserve(e.target);}});
-},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
-function watch(){document.querySelectorAll('.fa-reveal:not([data-o])').forEach(function(el){el.setAttribute('data-o','1');o.observe(el);})}
-if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',watch);}else{watch();}
-new MutationObserver(watch).observe(document.documentElement,{childList:true,subtree:true});
-window.__faObs=o;
-})();
-</script><div class="fa-reveal fa-up" style="transition-duration: 600ms; transition-delay: 240ms"><div style="background: #ffffff; padding: 20.0px; border-radius: 16.0px; border: 1px solid #E2E8F0"><div style="display: flex; flex-direction: column; gap: 8.0px; align-items: flex-start; justify-content: flex-start"><h3 style="margin: 0; font-size: 20.0px; font-weight: 800; line-height: 1.15">Decisão do campeonato vai para os pênaltis</h3><div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 10.0px; align-items: center; justify-content: flex-start"><a href="blog/categoria/esportes/index.html"><p style="margin: 0; font-size: 13.0px; font-weight: 700; color: #06B6D4">Esportes</p></a><p style="margin: 0; font-size: 13.0px; font-weight: 400; color: #64748B">Por Redação Flenx News</p><p style="margin: 0; font-size: 13.0px; font-weight: 400; color: #64748B">18/06/2026</p></div><p style="margin: 0; font-size: 16.0px; font-weight: 400; color: #64748B">Após empate em 2 a 2, título foi decidido nas penalidades.</p><span style="display: inline-block"><style>.fbtn-primary:hover{filter:brightness(1.06);transform:translateY(-1px)}</style><a class="fbtn-primary" style="display: inline-block; padding: 12px 22px; border-radius: 10px; font-weight: 700; text-decoration: none; cursor: pointer; transition: filter .15s ease, transform .15s ease; background: var(--primary, #01589B); color: #ffffff" href="blog/esportes-final/index.html">Ler notícia</a></span></div></div></div></span>
+                  <div class="fnews-mr">
+                    <div style="font-size: 15px; font-weight: 800; color: #0F172A; text-transform: uppercase; letter-spacing: .04em; border-bottom: 3px solid var(--primary); padding-bottom: 8px; margin-bottom: 4px">Mais lidas</div>
+                    <div style="display: flex; gap: 12px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid #E2E8F0">
+                      <span style="color: var(--primary); font-size: 26px; font-weight: 900; line-height: 1; min-width: 24px">1</span>
+                      <a href="/Flenx/news/blog/flext-news-estreia">Flext News estreia com admin completo</a>
+                    </div>
+                    <div style="display: flex; gap: 12px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid #E2E8F0">
+                      <span style="color: var(--primary); font-size: 26px; font-weight: 900; line-height: 1; min-width: 24px">2</span>
+                      <a href="/Flenx/news/blog/ia-no-jornalismo">IA no jornalismo: ferramenta, não substituto</a>
+                    </div>
+                    <div style="display: flex; gap: 12px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid #E2E8F0">
+                      <span style="color: var(--primary); font-size: 26px; font-weight: 900; line-height: 1; min-width: 24px">3</span>
+                      <a href="/Flenx/news/blog/dart-cresce-2026">Dart cresce e vira queridinho da web em 2026</a>
+                    </div>
+                    <div style="display: flex; gap: 12px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid #E2E8F0">
+                      <span style="color: var(--primary); font-size: 26px; font-weight: 900; line-height: 1; min-width: 24px">4</span>
+                      <a href="/Flenx/news/blog/economia-juros">Banco Central mantém juros e mercado reage</a>
+                    </div>
+                    <div style="display: flex; gap: 12px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid #E2E8F0">
+                      <span style="color: var(--primary); font-size: 26px; font-weight: 900; line-height: 1; min-width: 24px">5</span>
+                      <a href="/Flenx/news/blog/esportes-final">Decisão do campeonato vai para os pênaltis</a>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -395,12 +396,12 @@ window.__faObs=o;
             </div>
             <div>
               <div style="font-weight: 700; color: #fff; margin-bottom: 4px">Seções</div>
-              <a style="color: #94a3b8; text-decoration: none; display: block; margin-top: 8px" href="blog/index.html">Todas as notícias</a>
-              <a style="color: #94a3b8; text-decoration: none; display: block; margin-top: 8px" href="blog/categoria/index.html">Categorias</a>
+              <a style="color: #94a3b8; text-decoration: none; display: block; margin-top: 8px" href="/Flenx/news/blog">Todas as notícias</a>
+              <a style="color: #94a3b8; text-decoration: none; display: block; margin-top: 8px" href="/Flenx/news/blog/categoria">Categorias</a>
             </div>
             <div>
               <div style="font-weight: 700; color: #fff; margin-bottom: 4px">Institucional</div>
-              <a style="color: #94a3b8; text-decoration: none; display: block; margin-top: 8px" href="sobre/index.html">Sobre</a>
+              <a style="color: #94a3b8; text-decoration: none; display: block; margin-top: 8px" href="/Flenx/news/sobre">Sobre</a>
             </div>
           </div>
           <div style="margin-top: 32px; padding-top: 20px; border-top: 1px solid #243245; color: #94a3b8; font-size: 14px">© 2026 Flenx News. Feito com Dart, jaspr e Flutter.</div>
