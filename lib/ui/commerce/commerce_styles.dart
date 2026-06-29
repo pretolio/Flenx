@@ -1,128 +1,136 @@
-/// CSS do kit de e-commerce (loja estilo marketplace de moda). Injetado uma
-/// única vez pelo [FlenxStoreShell]. Os componentes só emitem elementos com
-/// estas classes — o app nunca escreve HTML/CSS.
+/// CSS do kit de e-commerce — paleta sofisticada (grafite + dourado + marfim).
+/// Injetado uma única vez pelo [FlenxStoreShell]; o app nunca escreve HTML/CSS.
 const flenxCommerceCss = r'''
-.fxz{font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#222}
+.fxz{--ink:#14161a;--ink2:#232730;--gold:#a8854f;--gold-l:#c9a86a;--champ:#d8bd8a;
+  --ivory:#faf8f5;--line:#ece5d8;--text:#20242c;--muted:#8a8f99;
+  font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text)}
 .fxz *{box-sizing:border-box}
 .fxz a{text-decoration:none;color:inherit}
+.fxz img{max-width:100%;display:block}
 .fxz-wrap{max-width:1180px;margin:0 auto;padding:0 16px}
 
 /* topo */
-.fxz-top{background:#1f1f1f;color:#fff}
-.fxz-top-in{display:flex;align-items:center;gap:20px;padding:12px 0}
-.fxz-logo{font-weight:900;font-size:24px;letter-spacing:-1px;color:#fff;white-space:nowrap}
-.fxz-logo b{color:#e2231a}
-.fxz-cep{display:flex;align-items:center;gap:6px;font-size:12px;color:#cfcfcf;white-space:nowrap}
+.fxz-top{background:var(--ink);color:#fff}
+.fxz-top-in{display:flex;align-items:center;gap:20px;padding:13px 0}
+.fxz-logo{font-weight:800;font-size:23px;letter-spacing:3px;text-transform:uppercase;color:#fff;white-space:nowrap}
+.fxz-logo b{color:var(--gold-l);font-weight:800}
+.fxz-cep{display:flex;align-items:center;gap:6px;font-size:12px;color:#b9b3a8;white-space:nowrap}
 .fxz-cep strong{color:#fff;display:block}
-.fxz-search{flex:1;display:flex;background:#fff;border-radius:6px;overflow:hidden;min-width:160px}
+.fxz-search{flex:1;display:flex;background:#fff;border-radius:4px;overflow:hidden;min-width:160px}
 .fxz-search input{flex:1;border:0;padding:11px 14px;font-size:14px;outline:none}
-.fxz-search button{border:0;background:#fff;color:#1f1f1f;padding:0 16px;cursor:pointer;font-size:18px}
+.fxz-search button{border:0;background:#fff;color:var(--ink);padding:0 16px;cursor:pointer;font-size:18px}
 .fxz-acts{display:flex;align-items:center;gap:22px;white-space:nowrap}
 .fxz-act{display:flex;align-items:center;gap:7px;font-size:13px;color:#fff}
-.fxz-act .ic{font-size:19px}
+.fxz-act .ic{font-size:18px}
 .fxz-cart{position:relative}
-.fxz-cart .badge{position:absolute;top:-8px;right:-10px;background:#e2231a;color:#fff;border-radius:999px;font-size:11px;font-weight:700;min-width:18px;height:18px;display:grid;place-items:center;padding:0 4px}
+.fxz-cart .badge{position:absolute;top:-8px;right:-10px;background:var(--gold);color:var(--ink);border-radius:999px;font-size:11px;font-weight:800;min-width:18px;height:18px;display:grid;place-items:center;padding:0 4px}
 
 /* nav + promo */
-.fxz-nav{background:#fff;border-bottom:1px solid #eee}
-.fxz-nav-in{display:flex;gap:26px;overflow-x:auto}
-.fxz-nav a{padding:14px 2px;font-size:14px;font-weight:700;color:#333;border-bottom:3px solid transparent;white-space:nowrap}
-.fxz-nav a:hover{color:#e2231a;border-bottom-color:#e2231a}
-.fxz-nav a.sale{color:#e2231a}
-.fxz-promo{background:#111;color:#fff;text-align:center;font-size:13.5px;padding:9px 16px}
-.fxz-promo b{color:#ffd54a}
+.fxz-nav{background:#fff;border-bottom:1px solid var(--line)}
+.fxz-nav-in{display:flex;gap:28px;overflow-x:auto}
+.fxz-nav a{padding:15px 2px;font-size:13.5px;font-weight:600;letter-spacing:.3px;color:#3a3f49;border-bottom:2px solid transparent;white-space:nowrap;transition:.15s}
+.fxz-nav a:hover{color:var(--gold);border-bottom-color:var(--gold)}
+.fxz-nav a.sale{color:var(--gold);font-weight:700}
+.fxz-promo{background:var(--ink2);color:#efe9dd;text-align:center;font-size:13px;letter-spacing:.4px;padding:9px 16px}
+.fxz-promo b{color:var(--champ)}
 
 /* hero */
-.fxz-hero{position:relative;background:linear-gradient(120deg,#7a5638,#b5824f 60%,#caa06b);color:#fff;overflow:hidden}
-.fxz-hero-in{max-width:1180px;margin:0 auto;padding:54px 60px;display:flex;align-items:center;justify-content:space-between;min-height:300px}
-.fxz-hero h2{font-size:52px;font-weight:900;letter-spacing:-1px;margin:0}
-.fxz-hero p{font-size:18px;opacity:.92;margin:6px 0 0}
-.fxz-hero .eyebrow{font-weight:800;letter-spacing:3px;text-transform:uppercase;font-size:13px;opacity:.9}
+.fxz-hero{position:relative;background:linear-gradient(120deg,#15181f,#262c37 55%,#333b48);color:#fff;overflow:hidden}
+.fxz-hero::after{content:"";position:absolute;right:-120px;top:-120px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,106,.18),transparent 70%)}
+.fxz-hero-in{max-width:1180px;margin:0 auto;padding:60px 60px;display:flex;align-items:center;justify-content:space-between;min-height:300px;position:relative;z-index:1}
+.fxz-hero h2{font-size:50px;font-weight:800;letter-spacing:-.5px;margin:0;line-height:1.05}
+.fxz-hero p{font-size:17px;color:#cfd3da;margin:10px 0 0;max-width:440px}
+.fxz-hero .eyebrow{font-weight:700;letter-spacing:4px;text-transform:uppercase;font-size:12px;color:var(--champ)}
 .fxz-hero .price{text-align:right}
-.fxz-hero .price small{display:block;font-size:14px;opacity:.9}
-.fxz-hero .price .big{font-size:60px;font-weight:900;line-height:1}
-.fxz-hero .cta{display:inline-block;margin-top:14px;background:#f3c98b;color:#3a2a17;font-weight:800;padding:12px 30px;border-radius:6px}
-.fxz-arrow{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.85);color:#333;display:grid;place-items:center;font-size:22px;font-weight:700}
-.fxz-arrow.l{left:14px}.fxz-arrow.r{right:14px}
-.fxz-dots{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:8px}
-.fxz-dots span{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.5)}
-.fxz-dots span.on{background:#fff}
+.fxz-hero .price span{display:block;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:#cfd3da}
+.fxz-hero .price .big{font-size:58px;font-weight:800;line-height:1;color:#fff;letter-spacing:-1px}
+.fxz-hero .cta{display:inline-block;margin-top:20px;background:var(--gold-l);color:var(--ink);font-weight:700;letter-spacing:1px;text-transform:uppercase;font-size:13px;padding:14px 34px;border-radius:3px;transition:.15s}
+.fxz-hero .cta:hover{background:var(--gold)}
+.fxz-arrow{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:#fff;display:grid;place-items:center;font-size:20px}
+.fxz-arrow.l{left:16px}.fxz-arrow.r{right:16px}
+.fxz-arrow:hover{background:rgba(255,255,255,.22)}
+.fxz-dots{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:8px}
+.fxz-dots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.4)}
+.fxz-dots span.on{background:var(--champ)}
 
-/* pílulas de preço */
-.fxz-pills{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:18px 0}
-.fxz-pill{background:#1f1f1f;color:#fff;border-radius:8px;text-align:center;padding:16px;font-weight:800;font-size:15px}
-.fxz-pill b{color:#ffd54a;font-size:20px;display:block;margin-top:2px}
+/* pílulas de preço — claras e elegantes (corrige contraste) */
+.fxz-pills{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:22px 0}
+.fxz-pill{background:var(--ivory);border:1px solid var(--line);border-radius:6px;text-align:center;padding:16px;transition:.15s}
+.fxz-pill:hover{border-color:var(--gold);box-shadow:0 8px 22px rgba(20,22,26,.07)}
+.fxz-pill{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+.fxz-pill b{display:block;margin-top:4px;color:var(--ink);font-size:21px;letter-spacing:-.5px}
 
 /* marcas */
-.fxz-brands{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;padding:8px 0 24px}
-.fxz-brand{border:1px solid #eee;border-radius:10px;overflow:hidden;text-align:center;transition:.15s}
-.fxz-brand:hover{box-shadow:0 10px 26px rgba(0,0,0,.10);transform:translateY(-3px)}
-.fxz-brand .pic{height:120px;display:grid;place-items:center;font-size:48px;background:linear-gradient(135deg,#f3f5f8,#e7ecf2)}
-.fxz-brand .cf{display:block;background:#1f1f1f;color:#fff;font-weight:700;font-size:13px;padding:9px}
+.fxz-brands{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;padding:8px 0 26px}
+.fxz-brand{border:1px solid var(--line);border-radius:8px;overflow:hidden;text-align:center;transition:.18s}
+.fxz-brand:hover{box-shadow:0 12px 26px rgba(20,22,26,.10);transform:translateY(-3px);border-color:var(--gold-l)}
+.fxz-brand .pic{height:118px;display:grid;place-items:center;font-size:46px;background:linear-gradient(135deg,#f6f3ee,#efe9df)}
+.fxz-brand .cf{display:block;background:var(--ink);color:#fff;font-weight:600;letter-spacing:1px;text-transform:uppercase;font-size:12px;padding:10px}
 
 /* prateleira */
-.fxz-shelf{padding:8px 0 28px}
-.fxz-shelf-head{background:#e2231a;color:#fff;border-radius:8px 8px 0 0;display:flex;align-items:center;gap:16px;padding:12px 18px}
-.fxz-shelf-head .t{font-weight:900;font-size:18px}
-.fxz-clock{display:flex;gap:6px;align-items:center}
-.fxz-clock b{background:#111;color:#fff;border-radius:5px;padding:5px 8px;font-size:15px;font-weight:800;min-width:30px;text-align:center}
-.fxz-shelf-head .sub{margin-left:auto;font-size:13px;opacity:.95}
-.fxz-carousel{display:flex;gap:14px;overflow-x:auto;padding:18px;border:1px solid #eee;border-top:0;border-radius:0 0 8px 8px;scroll-snap-type:x mandatory}
+.fxz-shelf{padding:8px 0 30px}
+.fxz-shelf-head{background:var(--ink);color:#fff;border-radius:6px 6px 0 0;display:flex;align-items:center;gap:16px;padding:14px 20px}
+.fxz-shelf-head .t{font-weight:700;font-size:17px;letter-spacing:2px;text-transform:uppercase}
+.fxz-clock{display:flex;gap:5px;align-items:center;color:var(--champ);font-weight:700}
+.fxz-clock b{background:var(--ink2);color:var(--champ);border-radius:4px;padding:5px 8px;font-size:14px;font-weight:700;min-width:30px;text-align:center}
+.fxz-shelf-head .sub{margin-left:auto;font-size:12.5px;letter-spacing:.5px;color:#cfc9bd}
+.fxz-carousel{display:flex;gap:14px;overflow-x:auto;padding:18px;border:1px solid var(--line);border-top:0;border-radius:0 0 6px 6px;scroll-snap-type:x mandatory}
 
 /* card de produto */
-.fxz-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;padding:8px 0 32px}
-.fxz-card{flex:0 0 240px;scroll-snap-align:start;border:1px solid #eee;border-radius:10px;background:#fff;padding:12px;position:relative;transition:.15s;display:flex;flex-direction:column}
+.fxz-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px;padding:8px 0 36px}
+.fxz-card{flex:0 0 240px;scroll-snap-align:start;border:1px solid var(--line);border-radius:8px;background:#fff;padding:14px;position:relative;transition:.18s;display:flex;flex-direction:column}
 .fxz-grid .fxz-card{flex:auto}
-.fxz-card:hover{box-shadow:0 12px 30px rgba(0,0,0,.12);transform:translateY(-3px)}
-.fxz-card .heart{position:absolute;top:12px;right:12px;font-size:18px;color:#bbb}
-.fxz-badge{position:absolute;top:12px;left:12px;background:#1b9e4b;color:#fff;font-weight:800;font-size:12px;padding:3px 8px;border-radius:5px}
-.fxz-pic{height:180px;display:grid;place-items:center;font-size:72px;background:linear-gradient(135deg,#f6f8fb,#eef2f7);border-radius:8px;margin-bottom:10px}
-.fxz-card .brand{font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#888}
-.fxz-card .name{font-size:13.5px;color:#333;margin:3px 0 8px;line-height:1.35;min-height:38px}
-.fxz-card .old{font-size:12px;color:#aaa;text-decoration:line-through}
-.fxz-card .price{font-size:19px;font-weight:900;color:#111}
-.fxz-card .inst{font-size:12px;color:#1b9e4b;font-weight:700;margin-top:2px}
-.fxz-card .buy{margin-top:10px;display:block;text-align:center;background:#e2231a;color:#fff;font-weight:800;font-size:13px;padding:10px;border-radius:6px}
-.fxz-card .buy:hover{background:#b71c14}
+.fxz-card:hover{box-shadow:0 14px 32px rgba(20,22,26,.12);transform:translateY(-3px);border-color:var(--gold-l)}
+.fxz-card .heart{position:absolute;top:14px;right:14px;font-size:18px;color:#c7c2b8}
+.fxz-badge{position:absolute;top:14px;left:14px;background:var(--ink);color:var(--champ);font-weight:700;font-size:11px;letter-spacing:.5px;padding:4px 9px;border-radius:4px}
+.fxz-pic{height:180px;display:grid;place-items:center;font-size:70px;background:linear-gradient(135deg,#f7f4ef,#efe9df);border-radius:6px;margin-bottom:12px}
+.fxz-card .brand{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold)}
+.fxz-card .name{font-size:13.5px;color:var(--text);margin:4px 0 10px;line-height:1.4;min-height:38px}
+.fxz-card .old{font-size:12px;color:#b5b0a6;text-decoration:line-through}
+.fxz-card .price{font-size:19px;font-weight:800;color:var(--ink);letter-spacing:-.3px}
+.fxz-card .inst{font-size:12px;color:var(--gold);font-weight:600;margin-top:2px}
+.fxz-card .buy{margin-top:12px;display:block;text-align:center;background:var(--ink);color:#fff;font-weight:700;letter-spacing:1px;text-transform:uppercase;font-size:12px;padding:11px;border-radius:4px;transition:.15s}
+.fxz-card .buy:hover{background:var(--gold);color:var(--ink)}
 
 /* benefícios + rodapé */
-.fxz-benes{display:flex;justify-content:center;gap:60px;flex-wrap:wrap;background:#f6f7f9;padding:22px 16px;border-top:1px solid #eee}
-.fxz-bene{display:flex;align-items:center;gap:12px;font-size:14px;color:#444}
-.fxz-bene .ic{font-size:26px}
-.fxz-bene b{display:block;color:#111}
-.fxz-foot{background:#1f1f1f;color:#bdbdbd;padding:40px 16px 16px}
+.fxz-benes{display:flex;justify-content:center;gap:60px;flex-wrap:wrap;background:var(--ivory);padding:24px 16px;border-top:1px solid var(--line)}
+.fxz-bene{display:flex;align-items:center;gap:12px;font-size:14px;color:#545961}
+.fxz-bene .ic{font-size:24px}
+.fxz-bene b{display:block;color:var(--ink)}
+.fxz-foot{background:var(--ink);color:#a9a39a;padding:42px 16px 16px}
 .fxz-foot-cols{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
-.fxz-foot h4{color:#fff;font-size:14px;margin:0 0 12px}
-.fxz-foot a{display:block;color:#bdbdbd;font-size:13px;padding:4px 0}
-.fxz-foot a:hover{color:#fff}
+.fxz-foot h4{color:#fff;font-size:13px;letter-spacing:1px;text-transform:uppercase;margin:0 0 14px}
+.fxz-foot a{display:block;color:#a9a39a;font-size:13px;padding:4px 0}
+.fxz-foot a:hover{color:var(--champ)}
 .fxz-pay{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
-.fxz-pay span{background:#333;border-radius:4px;padding:4px 8px;font-size:11px;font-weight:700;color:#eee}
-.fxz-foot-bottom{max-width:1180px;margin:24px auto 0;border-top:1px solid #333;padding-top:16px;font-size:12px;color:#8a8a8a;text-align:center}
-.fxz-sec-title{font-size:22px;font-weight:900;letter-spacing:-.5px;margin:6px 0 0}
+.fxz-pay span{background:var(--ink2);border-radius:4px;padding:4px 8px;font-size:11px;font-weight:700;letter-spacing:.5px;color:#efe9dd}
+.fxz-foot-bottom{max-width:1180px;margin:26px auto 0;border-top:1px solid #2c313b;padding-top:18px;font-size:12px;color:#7e8088;text-align:center;letter-spacing:.3px}
+.fxz-sec-title{font-size:22px;font-weight:800;letter-spacing:.5px;color:var(--ink);margin:8px 0 0}
 
 /* detalhe do produto */
-.fxz-crumb{font-size:13px;color:#888;padding:14px 0}
-.fxz-crumb a:hover{color:#e2231a}
-.fxz-pd{display:grid;grid-template-columns:1fr 1fr;gap:40px;padding:8px 0 32px;align-items:start}
-.fxz-pd-pic{height:440px;display:grid;place-items:center;font-size:180px;background:linear-gradient(135deg,#f6f8fb,#eef2f7);border-radius:14px;position:relative}
-.fxz-pd-pic .b{position:absolute;top:16px;left:16px;background:#1b9e4b;color:#fff;font-weight:800;font-size:13px;padding:4px 10px;border-radius:6px}
-.fxz-pd-info .brand{font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#888}
-.fxz-pd-info h1{font-size:30px;font-weight:900;letter-spacing:-.5px;margin:4px 0 14px;line-height:1.15}
-.fxz-pd-info .old{font-size:15px;color:#aaa;text-decoration:line-through}
-.fxz-pd-info .price{font-size:34px;font-weight:900;color:#111;margin:2px 0}
-.fxz-pd-info .inst{font-size:14px;color:#1b9e4b;font-weight:700}
-.fxz-pd-info .desc{color:#555;line-height:1.7;margin:18px 0;font-size:15px}
+.fxz-crumb{font-size:13px;color:var(--muted);padding:16px 0;letter-spacing:.3px}
+.fxz-crumb a:hover{color:var(--gold)}
+.fxz-pd{display:grid;grid-template-columns:1fr 1fr;gap:48px;padding:8px 0 34px;align-items:start}
+.fxz-pd-pic{height:440px;display:grid;place-items:center;font-size:180px;background:linear-gradient(135deg,#f7f4ef,#efe9df);border-radius:10px;position:relative}
+.fxz-pd-pic .b{position:absolute;top:18px;left:18px;background:var(--ink);color:var(--champ);font-weight:700;font-size:12px;letter-spacing:.5px;padding:5px 11px;border-radius:4px}
+.fxz-pd-info .brand{font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
+.fxz-pd-info h1{font-size:32px;font-weight:800;letter-spacing:-.5px;margin:6px 0 16px;line-height:1.12;color:var(--ink)}
+.fxz-pd-info .old{font-size:15px;color:#b5b0a6;text-decoration:line-through}
+.fxz-pd-info .price{font-size:34px;font-weight:800;color:var(--ink);margin:2px 0;letter-spacing:-1px}
+.fxz-pd-info .inst{font-size:14px;color:var(--gold);font-weight:600}
+.fxz-pd-info .desc{color:#545961;line-height:1.75;margin:20px 0;font-size:15px}
 .fxz-pd-buys{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
-.fxz-pd-buys a{font-weight:800;font-size:15px;padding:14px 28px;border-radius:8px}
-.fxz-pd-buys .buy{background:#e2231a;color:#fff}
-.fxz-pd-buys .buy:hover{background:#b71c14}
-.fxz-pd-buys .ghost{background:#fff;color:#1f1f1f;border:1.5px solid #ddd}
+.fxz-pd-buys a{font-weight:700;letter-spacing:1px;text-transform:uppercase;font-size:13px;padding:15px 30px;border-radius:4px;transition:.15s}
+.fxz-pd-buys .buy{background:var(--ink);color:#fff}
+.fxz-pd-buys .buy:hover{background:var(--gold);color:var(--ink)}
+.fxz-pd-buys .ghost{background:#fff;color:var(--ink);border:1.5px solid var(--line)}
+.fxz-pd-buys .ghost:hover{border-color:var(--gold);color:var(--gold)}
 
 @media(max-width:900px){
   .fxz-pd{grid-template-columns:1fr}.fxz-pd-pic{height:300px;font-size:120px}
   .fxz-pills,.fxz-brands{grid-template-columns:repeat(2,1fr)}
   .fxz-foot-cols{grid-template-columns:repeat(2,1fr)}
   .fxz-hero h2{font-size:34px}.fxz-hero .price .big{font-size:40px}
-  .fxz-hero-in{padding:32px 24px;flex-direction:column;gap:16px;align-items:flex-start}
+  .fxz-hero-in{padding:34px 24px;flex-direction:column;gap:16px;align-items:flex-start}
 }
 ''';
