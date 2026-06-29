@@ -116,33 +116,128 @@ Pronto — site SSR com SEO/sitemap/robots/llms.txt automáticos.
 
 ## 🏗️ Build e deploy
 
-O Flenx suporta diferentes alvos de build. Escolha conforme onde vai hospedar:
+O Flenx tem **três alvos de build**. Escolha pelo que seu site usa e por onde vai hospedar:
 
-| Alvo | Comando | `jaspr.mode` | Onde hospedar |
-|---|---|---|---|
-| **Dev (hot reload)** | `jaspr serve` | `server` | local (`localhost:8080`) |
-| **Servidor SSR** (recomendado) | `jaspr build` | `server` | qualquer host Dart: Render, Fly.io, Cloud Run, VPS, Docker |
-| **Site estático** | `jaspr build` | `static` | GitHub Pages, Netlify, Vercel, S3 |
-| **API em PHP** (opcional) | `dart run tool/build.dart` | — | hospedagem PHP/MySQL |
+| Alvo | `jaspr.mode` | Comando | Mantém APIs/admin/banco? | Onde hospedar |
+|---|---|---|---|---|
+| **Servidor SSR** (recomendado) | `server` | `jaspr build` | ✅ Sim | Render, Fly.io, Cloud Run, VPS, Docker — qualquer host Dart |
+| **Site estático** | `static` | `jaspr build` | ❌ Não (só conteúdo) | GitHub Pages, Netlify, Vercel, S3, Cloudflare Pages |
+| **Estático + API PHP** | `static` | `dart run tool/build.dart` | ✅ Sim (via PHP/MySQL) | hospedagem compartilhada (cPanel, Hostinger, Hostgator…) |
 
-**Servidor SSR** (mantém admin, APIs, banco, formulários):
+> Regra prática: **tem admin/carrinho/formulário/banco?** Use **SSR** (ou **PHP**). É **só conteúdo** (landing, blog, institucional)? **Estático** serve e é o mais barato.
 
-```bash
-jaspr build                          # gera build/jaspr/ com um executável self-contained
-./build/jaspr/app                    # roda o servidor (porta via env PORT)
-# alvos: jaspr build --target exe|aot-snapshot|kernel  --target-os linux|macos|windows
-```
+<details open>
+<summary><strong>1. Servidor SSR — qualquer host com Dart (recomendado)</strong></summary>
 
-**Site estático** (somente conteúdo pré-renderizado):
+Gera um executável self-contained que serve as páginas e roda APIs, admin, banco e formulários.
 
 ```bash
-# defina  jaspr: mode: static  no pubspec, então:
-jaspr build                          # gera build/jaspr/ com HTML + assets estáticos
+# no pubspec.yaml:  jaspr: { mode: server }
+dart run flenx:bootstrap
+jaspr build                 # gera build/jaspr/ (app + assets)
+PORT=8080 ./build/jaspr/app # roda o servidor; lê a porta de $PORT
+# alvos extras: jaspr build --target exe|aot-snapshot|kernel --target-os linux|macos|windows
 ```
 
-> ⚠️ **Estático tem limites:** recursos que dependem de servidor — APIs, banco, painel admin, carrinho, formulários — **não funcionam** em modo `static`. Para apps com admin/loja, use `mode: server` e um host com Dart.
+**Docker** (serve em qualquer lugar — Cloud Run, Fly.io, VPS, Kubernetes):
 
-**API em PHP** (para hospedagem sem Dart): com `buildPhp = true` no `main.dart`, `dart run tool/build.dart` gera `build/php/` (PDO + `migrations.sql`).
+```dockerfile
+# Dockerfile
+FROM dart:stable AS build
+WORKDIR /app
+COPY pubspec.* ./
+RUN dart pub get
+COPY . .
+RUN dart pub global activate jaspr_cli && dart run flenx:bootstrap && \
+    dart pub global run jaspr_cli:jaspr build
+FROM scratch
+COPY --from=build /app/build/jaspr /app
+COPY --from=build /runtime/ /
+ENV PORT=8080
+EXPOSE 8080
+CMD ["/app/app"]
+```
+
+```bash
+docker build -t meusite . && docker run -p 8080:8080 --env-file .env meusite
+```
+
+**Render / Fly.io / Cloud Run** (usam o Dockerfile acima):
+
+| Plataforma | Como subir |
+|---|---|
+| **Render** | New → Web Service → repo Git → "Docker" → defina as env vars do `.env` no painel |
+| **Fly.io** | `fly launch` (detecta o Dockerfile) → `fly secrets set DB_PROVIDER=... JWT_SECRET=...` → `fly deploy` |
+| **Cloud Run** | `gcloud run deploy meusite --source . --port 8080 --set-env-vars=...` |
+| **VPS (systemd)** | copie `build/jaspr/` para o servidor e rode o executável atrás de Nginx (proxy reverso na porta `$PORT`) |
+
+> Defina as variáveis de ambiente (banco, JWT, gateways) no painel da plataforma — nunca commite o `.env`.
+</details>
+
+<details>
+<summary><strong>2. Site estático — GitHub Pages, Netlify, Vercel…</strong></summary>
+
+Pré-renderiza todas as rotas em HTML. Hospede em qualquer CDN/host de arquivos.
+
+```bash
+# no pubspec.yaml:  jaspr: { mode: static }
+dart run flenx:bootstrap
+jaspr build                 # gera build/jaspr/ com HTML + assets prontos
+```
+
+Publique o conteúdo de **`build/jaspr/`**:
+
+| Host | Como |
+|---|---|
+| **GitHub Pages** | suba `build/jaspr/` para o branch `gh-pages` (adicione um arquivo `.nojekyll`) |
+| **Netlify** | build command `dart run flenx:bootstrap && jaspr build`, publish dir `build/jaspr` |
+| **Vercel** | output dir `build/jaspr` (framework: Other) |
+| **Cloudflare Pages / S3** | aponte o bucket/Pages para `build/jaspr/` |
+
+> ⚠️ **Limites do estático:** APIs, banco, painel admin, carrinho e formulários **não funcionam** (não há servidor). Para esses recursos use **SSR** ou o build **PHP** abaixo. Bom para landing/blog/institucional. O SEO/sitemap/`llms.txt` continuam funcionando normalmente.
+</details>
+
+<details>
+<summary><strong>3. Estático + API PHP — hospedagem compartilhada (cPanel/Hostinger)</strong></summary>
+
+Para rodar **com banco e formulários numa hospedagem barata sem Dart**: o front vai estático e as APIs viram arquivos PHP (PDO + MySQL).
+
+```dart
+// lib/main.dart
+const buildPhp = true;   // liga a geração da API PHP
+```
+
+```bash
+dart run tool/build.dart    # gera build/jaspr/ (front estático) + build/php/ (endpoints .php + migrations.sql)
+```
+
+**Subindo** (FTP/cPanel):
+1. Suba o conteúdo de `build/jaspr/` para a pasta pública (`public_html/`).
+2. Suba `build/php/` para uma subpasta de API (ex.: `public_html/api/`), de modo que `/api/leads` → `api/leads.php`.
+3. Importe `build/php/migrations.sql` no MySQL (phpMyAdmin) para criar as tabelas.
+4. Configure as credenciais do banco no PHP gerado (host, usuário, senha do MySQL da hospedagem).
+
+Cada `ApiEndpoint` vira um `.php` equivalente (mesma validação de campos e ações `InsertInto`, `SendEmail`, `Redirect`…). Assim o **mesmo código Dart** roda como servidor Dart **ou** como API PHP, sem reescrever.
+</details>
+
+<details>
+<summary><strong>Variáveis de ambiente (.env) — só lado servidor</strong></summary>
+
+SSR e PHP leem credenciais do ambiente (nunca expostas ao cliente). Principais:
+
+```bash
+PORT=8080                       # porta do servidor SSR
+DB_PROVIDER=supabase            # supabase | firebase | rest | jsonl | memory
+SUPABASE_URL=...                # (por provedor — ver tabela do banco)
+SUPABASE_KEY=...
+JWT_SECRET=troque-isto          # auth
+PAYMENT_PROVIDER=mercadopago    # asaas | mercadopago
+MP_ACCESS_TOKEN=...             # credenciais do gateway
+TWILIO_SID=... TWILIO_TOKEN=... # notificações (opcional)
+```
+
+Em produção, defina-as no painel da plataforma (Render/Fly/Cloud Run) ou no `.env` do servidor — **nunca** commite o arquivo.
+</details>
 
 ## 📐 Regras de ouro (escreva só Dart)
 
