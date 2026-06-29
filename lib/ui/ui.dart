@@ -51,6 +51,7 @@ export 'blocks/news/flenx_sidebar_layout.dart';
 export 'commerce/commerce_models.dart';
 export 'commerce/flenx_store_shell.dart';
 export 'commerce/flenx_hero_banner.dart';
+export 'commerce/flenx_hero_carousel.dart';
 export 'commerce/flenx_store_sections.dart';
 export 'commerce/flenx_product_card.dart';
 export 'commerce/flenx_product_shelf.dart';

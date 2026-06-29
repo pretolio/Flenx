@@ -16,6 +16,41 @@ const storeCategories = [
   MenuLink(label: 'Ofertas', href: '/produtos'),
 ];
 
+const storeHeroSlides = [
+  FlenxHeroSlide(
+    eyebrow: 'Coleção tech',
+    title: 'Setup que rende',
+    subtitle: 'Periféricos premium para montar sua estação.',
+    priceFrom: 'a partir de',
+    priceValue: r'R$ 189,90',
+    ctaHref: '/produtos',
+    backgroundImage:
+        'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?auto=format&fit=crop&w=1600&q=80',
+  ),
+  FlenxHeroSlide(
+    eyebrow: 'Áudio imersivo',
+    title: 'Som que envolve',
+    subtitle: 'Fones com cancelamento de ruído e 30h de bateria.',
+    priceFrom: 'a partir de',
+    priceValue: r'R$ 299,90',
+    ctaLabel: 'ouvir agora',
+    ctaHref: '/produto/fone-bluetooth',
+    backgroundImage:
+        'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1600&q=80',
+  ),
+  FlenxHeroSlide(
+    eyebrow: 'Linha gamer',
+    title: 'Precisão total',
+    subtitle: 'Teclados mecânicos e monitores de alta taxa.',
+    priceFrom: 'a partir de',
+    priceValue: r'R$ 459,00',
+    ctaLabel: 'ver ofertas',
+    ctaHref: '/produtos',
+    backgroundImage:
+        'https://images.unsplash.com/photo-1541140532154-b024d705b90a?auto=format&fit=crop&w=1600&q=80',
+  ),
+];
+
 const storePricePills = [
   FlenxPricePill(value: r'R$ 19,90', href: '/produtos'),
   FlenxPricePill(value: r'R$ 49,90', href: '/produtos'),

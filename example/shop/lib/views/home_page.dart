@@ -26,15 +26,7 @@ class HomePage extends StatelessComponent {
       copyright:
           '© 2026 Flenx Store — loja de exemplo feita 100% em Dart com o Flenx (SSR + SEO).',
       children: [
-        FlenxHeroBanner(
-          eyebrow: 'Coleção tech',
-          title: settings.get('hero_title', 'Setup Lifestyle'),
-          subtitle: settings.get('hero_subtitle',
-              'Monte sua estação de trabalho com estilo e economia.'),
-          priceFrom: 'a partir de',
-          priceValue: r'R$ 189,90',
-          ctaHref: '/produtos',
-        ),
+        const FlenxHeroCarousel(slides: storeHeroSlides),
         FlenxPricePills(items: storePricePills),
         FlenxBrandStrip(items: storeBrands),
         FlenxProductShelf(

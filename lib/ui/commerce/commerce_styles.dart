@@ -34,16 +34,18 @@ const flenxCommerceCss = r'''
 .fxz-promo{background:var(--ink2);color:#efe9dd;text-align:center;font-size:13px;letter-spacing:.4px;padding:9px 16px}
 .fxz-promo b{color:var(--champ)}
 
-/* hero */
-.fxz-hero{position:relative;background:linear-gradient(120deg,#15181f,#262c37 55%,#333b48);color:#fff;overflow:hidden}
-.fxz-hero::after{content:"";position:absolute;right:-120px;top:-120px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,106,.18),transparent 70%)}
-.fxz-hero-in{max-width:1180px;margin:0 auto;padding:60px 60px;display:flex;align-items:center;justify-content:space-between;min-height:300px;position:relative;z-index:1}
-.fxz-hero h2{font-size:50px;font-weight:800;letter-spacing:-.5px;margin:0;line-height:1.05}
-.fxz-hero p{font-size:17px;color:#cfd3da;margin:10px 0 0;max-width:440px}
+/* hero (carrossel) */
+.fxz-hero{position:relative;overflow:hidden;min-height:410px;background:#15181f;color:#fff}
+.fxz-slide{position:absolute;inset:0;opacity:0;transition:opacity .9s ease;background:#15181f center/cover no-repeat;pointer-events:none}
+.fxz-slide.on{opacity:1;pointer-events:auto}
+.fxz-slide::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(11,13,17,.92),rgba(11,13,17,.62) 48%,rgba(11,13,17,.28))}
+.fxz-hero-in{max-width:1180px;margin:0 auto;padding:56px 60px;display:flex;align-items:center;justify-content:space-between;gap:30px;width:100%;min-height:410px;position:relative;z-index:1}
+.fxz-hero h2{font-size:48px;font-weight:800;letter-spacing:-.5px;margin:0;line-height:1.06}
+.fxz-hero p{font-size:17px;color:#d3d7de;margin:10px 0 0;max-width:430px}
 .fxz-hero .eyebrow{font-weight:700;letter-spacing:4px;text-transform:uppercase;font-size:12px;color:var(--champ)}
-.fxz-hero .price{text-align:right}
-.fxz-hero .price span{display:block;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:#cfd3da}
-.fxz-hero .price .big{font-size:58px;font-weight:800;line-height:1;color:#fff;letter-spacing:-1px}
+.fxz-hero .price{text-align:right;flex:0 0 auto}
+.fxz-hero .price span{display:block;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:#d3d7de}
+.fxz-hero .price .big{font-size:54px;font-weight:800;line-height:1.05;color:#fff;letter-spacing:-1px;white-space:nowrap}
 .fxz-hero .cta{display:inline-block;margin-top:20px;background:var(--gold-l);color:var(--ink);font-weight:700;letter-spacing:1px;text-transform:uppercase;font-size:13px;padding:14px 34px;border-radius:3px;transition:.15s}
 .fxz-hero .cta:hover{background:var(--gold)}
 .fxz-arrow{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:#fff;display:grid;place-items:center;font-size:20px}
