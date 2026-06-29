@@ -159,7 +159,26 @@
         .fxz-foot-bottom{max-width:1180px;margin:24px auto 0;border-top:1px solid #333;padding-top:16px;font-size:12px;color:#8a8a8a;text-align:center}
         .fxz-sec-title{font-size:22px;font-weight:900;letter-spacing:-.5px;margin:6px 0 0}
         
+        /* detalhe do produto */
+        .fxz-crumb{font-size:13px;color:#888;padding:14px 0}
+        .fxz-crumb a:hover{color:#e2231a}
+        .fxz-pd{display:grid;grid-template-columns:1fr 1fr;gap:40px;padding:8px 0 32px;align-items:start}
+        .fxz-pd-pic{height:440px;display:grid;place-items:center;font-size:180px;background:linear-gradient(135deg,#f6f8fb,#eef2f7);border-radius:14px;position:relative}
+        .fxz-pd-pic .b{position:absolute;top:16px;left:16px;background:#1b9e4b;color:#fff;font-weight:800;font-size:13px;padding:4px 10px;border-radius:6px}
+        .fxz-pd-info .brand{font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#888}
+        .fxz-pd-info h1{font-size:30px;font-weight:900;letter-spacing:-.5px;margin:4px 0 14px;line-height:1.15}
+        .fxz-pd-info .old{font-size:15px;color:#aaa;text-decoration:line-through}
+        .fxz-pd-info .price{font-size:34px;font-weight:900;color:#111;margin:2px 0}
+        .fxz-pd-info .inst{font-size:14px;color:#1b9e4b;font-weight:700}
+        .fxz-pd-info .desc{color:#555;line-height:1.7;margin:18px 0;font-size:15px}
+        .fxz-pd-buys{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+        .fxz-pd-buys a{font-weight:800;font-size:15px;padding:14px 28px;border-radius:8px}
+        .fxz-pd-buys .buy{background:#e2231a;color:#fff}
+        .fxz-pd-buys .buy:hover{background:#b71c14}
+        .fxz-pd-buys .ghost{background:#fff;color:#1f1f1f;border:1.5px solid #ddd}
+        
         @media(max-width:900px){
+          .fxz-pd{grid-template-columns:1fr}.fxz-pd-pic{height:300px;font-size:120px}
           .fxz-pills,.fxz-brands{grid-template-columns:repeat(2,1fr)}
           .fxz-foot-cols{grid-template-columns:repeat(2,1fr)}
           .fxz-hero h2{font-size:34px}.fxz-hero .price .big{font-size:40px}
