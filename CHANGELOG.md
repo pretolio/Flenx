@@ -36,6 +36,25 @@
 - `JsonLdGenerator` — emite `@type: LocalBusiness` (com endereço, telefone, geo) quando `address` está presente
 - `LlmsTxtGenerator` e `LlmsFullGenerator` — injetam bloco de contato/endereço e `about` no topo do `/llms.txt` e `/llms-full.txt`
 
+### Kit de e-commerce (loja estilo marketplace)
+- **FlenxStoreShell** — raiz da loja: header (logo, CEP, busca, conta/desejos/carrinho), nav de categorias, promo e rodapé
+- **FlenxHeroCarousel / FlenxHeroSlide** — hero em carrossel com fade automático, imagem de fundo e indicadores clicáveis
+- **FlenxHeroBanner** — banner de destaque único (eyebrow, título, preço, CTA)
+- **FlenxProductCard** — card de produto (foto/emoji, selo, marca, preços, parcelas, comprar)
+- **FlenxProductShelf** — prateleira com contador regressivo ao vivo e carrossel horizontal com auto-avanço
+- **FlenxProductGrid** — grade de catálogo
+- **FlenxProductDetail** — página de detalhe (trilha, foto, preços, descrição, CTAs)
+- **FlenxPricePills / FlenxBrandStrip / FlenxBenefitsBar** — faixas de preço, marcas e benefícios
+- Modelos: `FlenxPricePill`, `FlenxBrandItem`, `FlenxBenefit`, `FlenxHeroSlide`
+
+### Blocos de portal de notícias (estilo G1)
+- **FlenxNewsHeader** — cabeçalho de portal com editorias e indicador AO VIVO
+- **FlenxNewsHighlight** — manchete principal (imagem 16:9, chapéu, linha-fina, autor · data)
+- **FlenxNewsCard** — cartão de notícia
+- **FlenxNewsSectionTitle** — título de editoria
+- **FlenxMostRead** — bloco "Mais lidas" numerado
+- **FlenxSidebarLayout** — layout de duas colunas (conteúdo + sidebar)
+
 ## 0.1.1
 
 - README reformulado: logo, badges, links (pub.dev, showcase, exemplos) e
