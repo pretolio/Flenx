@@ -54,3 +54,4 @@ export 'commerce/flenx_hero_banner.dart';
 export 'commerce/flenx_store_sections.dart';
 export 'commerce/flenx_product_card.dart';
 export 'commerce/flenx_product_shelf.dart';
+export 'commerce/flenx_product_detail.dart';

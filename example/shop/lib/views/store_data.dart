@@ -88,3 +88,28 @@ FlenxProductCard productCard(Product p) {
     buyHref: '/carrinho?add=${p.slug}',
   );
 }
+
+/// Detalhe completo do produto (página `/produto/<slug>`).
+FlenxProductDetail productDetail(Product p) {
+  final old = p.price * 1.28;
+  final disc = (((old - p.price) / old) * 100).round();
+  final inst = p.price / 10;
+  final wa = 'https://wa.me/5511999999999?text=Quero%20o%20${p.name}';
+  return FlenxProductDetail(
+    name: p.name,
+    brand: _brands[p.slug] ?? 'FLENX',
+    emoji: p.emoji,
+    price: _money(p.price),
+    oldPrice: _money(old),
+    installment: '10x de ${_money(inst)} sem juros',
+    badge: '-$disc% OFF',
+    description: p.description,
+    buyHref: '/carrinho?add=${p.slug}',
+    secondaryHref: wa,
+    secondaryLabel: 'Comprar no WhatsApp',
+    breadcrumb: const [
+      MenuLink(label: 'Início', href: '/'),
+      MenuLink(label: 'Produtos', href: '/produtos'),
+    ],
+  );
+}

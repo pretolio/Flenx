@@ -1,9 +1,10 @@
 import 'package:flenx/flenx.dart';
 
 import '../data/product.dart';
-import 'shop_nav.dart';
+import 'store_data.dart';
 
-/// Página de um produto (`/produto/<slug>`). Detalhe + comprar via WhatsApp.
+/// Página de um produto (`/produto/<slug>`) no layout de marketplace — só
+/// componentes Dart do kit de e-commerce (FlenxStoreShell + FlenxProductDetail).
 class ProductPage extends StatelessComponent {
   const ProductPage(this.product, {super.key});
 
@@ -11,48 +12,18 @@ class ProductPage extends StatelessComponent {
 
   @override
   Component build(BuildContext context) {
-    final wa = 'https://wa.me/5511999999999?text=Quero%20o%20${product.name}';
-    return FlenxPage([
-      const SiteHeader(
-        brand: shopBrand,
-        links: shopLinks,
-        loginLabel: 'Minha conta',
-        loginOptions: shopLogin,
-      ),
-      FlenxSection(
-        child: FlenxRow(
-          gap: 40,
-          wrap: true,
-          cross: FlenxAlign.start,
-          [
-            FlenxCard(
-              FlenxText(product.emoji, size: 120, align: FlenxTextAlign.center),
-              background: FlenxPalette.surface,
-              padding: 48,
-            ),
-            FlenxColumn(gap: 14, maxWidthPx: 480, [
-              if (product.tag != null)
-                FlenxText(product.tag!, color: FlenxPalette.accent, weight: 700),
-              FlenxHeading(product.name, level: 1),
-              FlenxText(product.priceLabel,
-                  size: 28, weight: 800, color: FlenxPalette.primary),
-              FlenxText(product.description,
-                  color: FlenxPalette.muted, lineHeight: 1.6),
-              FlenxRow(gap: 12, wrap: true, [
-                FlenxButton('Adicionar ao carrinho',
-                    href: '/carrinho?add=${product.slug}'),
-                FlenxButton('Comprar no WhatsApp',
-                    href: wa,
-                    newTab: true,
-                    variant: FlenxButtonVariant.ghost),
-                FlenxButton('Voltar ao catálogo',
-                    href: '/produtos', variant: FlenxButtonVariant.ghost),
-              ]),
-            ]),
-          ],
-        ),
-      ),
-      const ShopFooter(),
-    ]);
+    return FlenxStoreShell(
+      brand: 'flenx',
+      cep: '01310-100, São Paulo',
+      categories: storeCategories,
+      accountHref: '/admin',
+      footerColumns: storeFooterColumns,
+      payments: const ['VISA', 'MASTER', 'ELO', 'PIX', 'BOLETO'],
+      copyright: '© 2026 Flenx Store — feito com Flenx (SSR + SEO).',
+      children: [
+        productDetail(product),
+        FlenxBenefitsBar(items: storeBenefits),
+      ],
+    );
   }
 }
