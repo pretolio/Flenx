@@ -7,7 +7,7 @@ library;
 
 import 'dart:async';
 
-import 'package:jaspr/dom.dart' show StyleRule, css, script, link;
+import 'package:jaspr/dom.dart' show StyleRule, Styles, Selector, script, link;
 import 'package:jaspr/server.dart';
 
 import 'ads/ads_config.dart';
@@ -24,9 +24,9 @@ import 'site_server.dart';
 // Reexporta o barrel principal para o app importar só `package:flenx/app.dart`
 // e ter SeoConfig, RouteMeta, JsonlDbExecutor, ApiEndpoint, modelos, etc.
 export 'package:jaspr/server.dart' show ServerOptions;
-// Estilos (css/Styles/StyleRule) — para o app customizar globalStyles/rawGlobalStyles sem
-// precisar importar jaspr diretamente (ex.: css(':root'), css.keyframes(...)).
-export 'package:jaspr/dom.dart' show css, Styles, StyleRule;
+// Estilos tipados (padrão Flutter) para `globalStyles` — Styles + unidades
+// (`.px`, `.rem`…) sem precisar importar jaspr diretamente.
+export 'package:jaspr/dom.dart' show Styles, Unit, UnitExt, Color;
 export 'flenx.dart';
 export 'site_server.dart' show PageResult;
 
@@ -83,11 +83,12 @@ class FlenxApp {
     DbExecutor? db,
     EmailSender? onEmail,
     TokenVerifier? tokenVerifier,
-    // Estilos globais TIPADOS (Dart) — ex.: `css('.x').styles(color: ..., padding: ...)`.
-    List<StyleRule> globalStyles = const [],
-    // Escape hatch de CSS puro (só quando a API tipada não cobre) —
-    // ex.: `css('.x').styles(raw: {'height': '48px'})`.
-    List<StyleRule> rawGlobalStyles = const [],
+    // Estilos globais TIPADOS (Dart), no padrão Flutter: seletor -> Styles.
+    // Ex.: `{'.brand-img': Styles(height: 48.px), 'a': Styles(color: ...)}`.
+    Map<String, Styles> globalStyles = const {},
+    // Escape hatch de CSS puro: lista de strings (pode ser o conteúdo de um
+    // arquivo .css). Ex.: `['.x{height:48px}', await File('site.css').readAsString()]`.
+    List<String> rawGlobalStyles = const [],
     AdsConfig? ads,
     String lang = 'pt-BR',
     int? port,
@@ -153,16 +154,16 @@ class FlenxApp {
       onEmail: onEmail,
       tokenVerifier: tokenVerifier,
       notFound: notFound,
-      globalStyles: [
-        // Token da marca (--primary) definido cedo para valer em toda a UI.
+      // Estilos tipados (Map seletor->Styles) convertidos em regras.
+      styleRules: [
+        for (final e in globalStyles.entries)
+          StyleRule(selector: Selector(e.key), styles: e.value),
+      ],
+      // CSS puro: token da marca (--primary) + strings passadas pelo app.
+      rawStyles: [
         if (primaryColor != null)
-          css(':root').styles(
-            raw: {
-              '--primary': primaryColor,
-              if (primaryColorDark != null) '--primary-dark': primaryColorDark,
-            },
-          ),
-        ...globalStyles,
+          ':root{--primary:$primaryColor'
+              '${primaryColorDark != null ? ';--primary-dark:$primaryColorDark' : ''}}',
         ...rawGlobalStyles,
       ],
       headExtra: [
