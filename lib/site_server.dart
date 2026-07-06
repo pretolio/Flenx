@@ -88,10 +88,12 @@ class FlenxServer {
         final path = request.requestedUri.path.isEmpty
             ? '/'
             : request.requestedUri.path;
-        final result = await resolvePage(
-          path,
-          request.requestedUri.queryParameters,
-        );
+        // `/404.html`: serve a página notFound com status 200 (necessário para o
+        // build estático gravar 404.html — o crawler ignora respostas != 200).
+        final is404Page = path == '/404.html';
+        final result = is404Page
+            ? null
+            : await resolvePage(path, request.requestedUri.queryParameters);
         final known = result != null;
 
         final routeMeta =
@@ -123,7 +125,7 @@ class FlenxServer {
         );
 
         final response = await render(document);
-        if (known) return response;
+        if (known || is404Page) return response;
         final html = await response.readAsString();
         return Response.notFound(
           html,
@@ -160,6 +162,18 @@ class FlenxServer {
           meta.path,
           priority: meta.priority,
         );
+      }
+      // Gera automaticamente os arquivos de SEO (SeoEndpoints) e a página 404 —
+      // sem nenhuma configuração do usuário. Têm extensão, então o jaspr_cli os
+      // grava direto (ex.: build/jaspr/robots.txt), não como pasta/index.html.
+      for (final extra in const [
+        '/robots.txt',
+        '/sitemap.xml',
+        '/llms.txt',
+        '/llms-full.txt',
+        '/404.html',
+      ]) {
+        await ServerApp.requestRouteGeneration(extra);
       }
     }
     return server;

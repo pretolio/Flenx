@@ -7,6 +7,9 @@
   todas as suas rotas ao proxy do `jaspr_cli` no modo generate (`ServerApp.requestRouteGeneration`).
   Antes o build travava em "Starting server app..." porque a flenx usa servidor
   próprio (shelf) e não a `ServerApp` do jaspr, então nenhuma rota era reportada.
+- **SEO + 404 gerados automaticamente no build estático, sem config**: o build
+  agora emite `robots.txt`, `sitemap.xml`, `llms.txt`, `llms-full.txt` e `404.html`
+  direto na saída (a flenx reporta esses paths e serve `/404.html` com status 200).
 
 ### Tema / marca
 - **`FlenxApp.run(primaryColor:, primaryColorDark:)`** — define os tokens CSS
