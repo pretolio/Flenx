@@ -22,6 +22,11 @@
 - **`SeoConfig(defaultImage:)`** — `og:image`/`twitter:image` padrão para todas as
   páginas quando a rota não define `RouteMeta.image` (cai para `logoUrl` se ausente).
 
+### Acessibilidade
+- **`FlenxPage` agora emite um landmark `<main>`** — o conteúdo fica dentro de
+  `<main>`, com header/footer (SiteHeader/FlenxFooter) fora, preservando os
+  landmarks banner/contentinfo no topo. Corrige o aviso "documento sem main".
+
 ### DX
 - `package:flenx/app.dart` agora re-exporta `css`, `Styles` e `StyleRule` — dá para
   customizar `globalStyles` (ex.: `css.keyframes(...)`) sem importar jaspr direto.

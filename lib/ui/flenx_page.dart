@@ -60,11 +60,32 @@ class FlenxPage extends StatelessComponent {
   @override
   Component build(BuildContext context) {
     final override = _overrideVars;
+
+    // Acessibilidade: garante um landmark <main>. Componentes cujo nome de tipo
+    // contém "Header"/"Footer" (ex.: SiteHeader, FlenxFooter, AlstopHeader)
+    // ficam FORA do <main> — assim os landmarks banner/contentinfo continuam no
+    // topo; todo o resto do conteúdo vai DENTRO do <main>.
+    final head = <Component>[];
+    final foot = <Component>[];
+    final body = <Component>[];
+    for (final child in children) {
+      final name = child.runtimeType.toString();
+      if (name.contains('Header')) {
+        head.add(child);
+      } else if (name.contains('Footer')) {
+        foot.add(child);
+      } else {
+        body.add(child);
+      }
+    }
+
     return div(classes: 'flenx-site', [
       Component.element(tag: 'style', children: [RawText(flenxSiteCss)]),
       if (override != null)
         Component.element(tag: 'style', children: [RawText(override)]),
-      ...children,
+      ...head,
+      Component.element(tag: 'main', children: body),
+      ...foot,
     ]);
   }
 }
