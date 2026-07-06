@@ -3,9 +3,9 @@
 </p>
 
 <p align="center">
-  <strong>Flutter/Dart na web, no estilo Next.js.</strong><br>
-  Você escreve <strong>só Dart</strong> — sem HTML/CSS. O Flenx faz <strong>SSR</strong>, embute
-  <strong>widgets Flutter</strong> como ilhas e gera <strong>SEO/sitemap/llms.txt</strong> automaticamente.
+  <strong>Crie sites em Dart — sem escrever HTML nem CSS.</strong><br>
+  Você monta as páginas com componentes prontos (botão, card, hero, rodapé…) e o Flenx gera
+  o site por baixo: rápido, bem posicionado no Google e pronto pra publicar.
 </p>
 
 <p align="center">
@@ -32,7 +32,21 @@
 
 ---
 
-O Flenx é um framework para construir **sites e apps web em Dart** com renderização no servidor (via [jaspr](https://jaspr.site)). Tudo é **opcional** — comece com um site SSR + SEO em minutos e ative blog, admin, APIs e banco conforme o projeto cresce.
+### O que é, em palavras simples
+
+O Flenx é um **kit para criar sites usando só Dart** — a mesma linguagem do Flutter. Em vez de
+mexer com HTML e CSS, você encaixa **componentes prontos** (títulos, botões, cards, seções, rodapé)
+e o Flenx transforma isso num site de verdade.
+
+O que ele faz por você, sem configuração:
+- **Site rápido e "amigo do Google"** — as páginas já vêm prontas do servidor (o Google e as IAs
+  entendem tudo), com SEO, `sitemap.xml`, `robots.txt` e `404` gerados sozinhos.
+- **Cresce com o projeto** — comece com uma página simples e, quando precisar, ligue blog, painel
+  administrativo, formulários e banco de dados. Nada disso é obrigatório no começo.
+- **Publica fácil** — um comando gera os arquivos prontos pra subir em qualquer hospedagem.
+
+> Por baixo, o Flenx usa o [jaspr](https://jaspr.site) (o "Flutter para a web") — mas você não
+> precisa saber disso pra usar: é só Dart e os componentes deste guia.
 
 ## 📑 Índice
 
@@ -48,19 +62,17 @@ O Flenx é um framework para construir **sites e apps web em Dart** com renderiz
 
 ## ✨ Recursos
 
-- **UI em Dart** — `FlenxColumn`, `FlenxHero`, `FlenxCard`, `FlenxHeroCover`… geram o HTML/CSS por baixo.
-- **SEO automático** — meta tags, Open Graph (com `defaultImage`), JSON-LD, `sitemap.xml`, `robots.txt`, `llms.txt` e `404.html` a partir de uma única definição de rota.
-- **Marca sem CSS** — `primaryColor`, `faviconUrl`, `SiteBrand(logoHeight:)`, `globalStyles` (tipado, estilo Flutter) e escape hatch `rawGlobalStyles`.
-- **Extras globais** — `floatingButtons` (WhatsApp/Telegram/qualquer chat), `globalScripts` (analytics) e `preloadImages` (LCP) em todas as páginas.
-- **Deploy estático 1-comando** — `jaspr build` gera HTML + SEO + `404.html` + favicon + `.htaccess` (Apache) prontos, sem configuração.
-- **Blog** — posts em Markdown **e/ou** banco, com editor estilo G1, categorias, tags, busca e paginação.
-- **Painel admin** — ilha Flutter pronta: CRUD genérico, permissões por papel e edição da home.
-- **APIs + banco** — endpoints declarativos (Dart **ou** PHP) e banco plugável: Supabase, Firebase, REST ou JSONL.
-- **Ilhas Flutter** — widgets Flutter reais hidratados no cliente, dentro das páginas SSR.
+- **Componentes prontos** — títulos, botões, cards, hero, rodapé… tudo em Dart (`FlenxHero`, `FlenxCard`, `FlenxHeroCover`…). Você encaixa, o Flenx vira HTML.
+- **Aparece bem no Google (SEO)** — sozinho, gera as meta tags, `sitemap.xml`, `robots.txt`, arquivos para IAs (`llms.txt`) e a página de erro `404` — a partir da lista de páginas.
+- **Sua marca sem escrever CSS** — cor principal, favicon, tamanho do logo e estilos globais por parâmetros simples (`primaryColor`, `faviconUrl`, `globalStyles`…).
+- **Extras em todas as páginas** — botão flutuante de WhatsApp/Telegram (`floatingButtons`), scripts de analytics (`globalScripts`) e pré-carregamento de imagens (`preloadImages`).
+- **Publicar é 1 comando** — gera o site pronto (HTML + SEO + `404` + favicon + `.htaccess`) pra subir em qualquer hospedagem.
+- **Cresce quando você precisar** — blog (Markdown e/ou banco, com editor), painel administrativo, formulários, APIs e banco de dados (Supabase, Firebase, REST…).
+- **Interatividade com Flutter** — quando precisar de algo dinâmico (carrinho, mapa, gráfico), embute um widget Flutter de verdade na página.
 
 ## 🚀 Começar
 
-**1. Instale** (projeto jaspr em modo servidor):
+**1. Instale** no seu projeto Dart:
 
 ```bash
 dart pub add flenx jaspr
@@ -72,7 +84,7 @@ dart pub add dev:build_runner dev:build_web_compilers dev:jaspr_builder
 environment:
   sdk: ^3.10.0
 dependencies:
-  flenx: ^0.2.0
+  flenx: ^0.3.0
   jaspr: ^0.23.1
 jaspr:
   mode: server
