@@ -34,7 +34,7 @@ class FlenxServer {
     this.db,
     this.onEmail,
     this.tokenVerifier,
-    this.globalStyles = const [],
+    this.rawGlobalStyles = const [],
     this.headExtra = const [],
     this.lang = 'pt-BR',
     this.flutterBootstrap = 'flutter_bootstrap.js?cb=1',
@@ -53,7 +53,7 @@ class FlenxServer {
   final TokenVerifier? tokenVerifier;
 
   /// Estilos globais extra (somados ao reset padrão).
-  final List<StyleRule> globalStyles;
+  final List<StyleRule> rawGlobalStyles;
 
   /// Tags extra para o `<head>` de toda página (ex.: loader de anúncios,
   /// scripts de analytics).
@@ -114,7 +114,7 @@ class FlenxServer {
         final document = Document(
           title: routeMeta.title,
           lang: lang,
-          styles: [..._resetStyles, ...globalStyles],
+          styles: [..._resetStyles, ...rawGlobalStyles],
           head: [
             ...meta.build(routeMeta),
             ...headExtra,

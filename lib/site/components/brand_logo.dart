@@ -9,12 +9,22 @@ class BrandLogo extends StatelessComponent {
 
   final SiteBrand brand;
 
+  static String _px(double v) =>
+      v == v.roundToDouble() ? '${v.toInt()}px' : '${v}px';
+
   @override
   Component build(BuildContext context) {
     return a(
       [
         if (brand.logoSrc != null)
-          img(src: brand.logoSrc!, alt: brand.label, classes: 'brand-img')
+          img(
+            src: brand.logoSrc!,
+            alt: brand.label,
+            classes: 'brand-img',
+            styles: brand.logoHeight != null
+                ? Styles(raw: {'height': _px(brand.logoHeight!)})
+                : null,
+          )
         else
           span(classes: 'brand-text', [.text(brand.label)]),
       ],

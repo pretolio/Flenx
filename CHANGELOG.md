@@ -11,10 +11,17 @@
   agora emite `robots.txt`, `sitemap.xml`, `llms.txt`, `llms-full.txt` e `404.html`
   direto na saída (a flenx reporta esses paths e serve `/404.html` com status 200).
 
+### UI / só-Dart (sem HTML/CSS no app)
+- **`FlenxHeroCover`** — hero de tela cheia com imagem de fundo (Ken Burns), logo
+  flutuando e conteúdo animado, 100% via parâmetros (o CSS fica dentro do componente).
+- **`SiteBrand(logoHeight:)`** — altura do logo no header sem escrever CSS.
+- **`FlenxApp.run(globalStyles:)` → `rawGlobalStyles:`** — renomeado para deixar
+  claro que é o escape hatch de CSS puro; prefira os parâmetros tipados.
+
 ### Tema / marca
 - **`FlenxApp.run(primaryColor:, primaryColorDark:)`** — define os tokens CSS
   `--primary`/`--primary-dark` (usados por botões, links e destaques) sem precisar
-  setar manualmente via `globalStyles`.
+  escrever CSS.
 - **`FlenxApp.run(faviconUrl:, appleTouchIconUrl:)`** — emite `<link rel="icon">` e
   `<link rel="apple-touch-icon">` no `<head>`.
 

@@ -27,6 +27,7 @@ export 'flenx_spacer.dart';
 
 // Blocos de seção prontos
 export 'blocks/flenx_hero.dart';
+export 'blocks/flenx_hero_cover.dart';
 export 'blocks/flenx_hero_split.dart';
 export 'blocks/flenx_code_card.dart';
 export 'blocks/flenx_trust_bar.dart';
