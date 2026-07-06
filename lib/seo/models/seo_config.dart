@@ -11,6 +11,7 @@ class SeoConfig {
     this.defaultLocale = 'pt_BR',
     this.twitterHandle,
     this.logoUrl,
+    this.defaultImage,
     this.organizationName,
     this.sameAs = const [],
     this.searchUrlTemplate,
@@ -30,6 +31,10 @@ class SeoConfig {
   final String defaultLocale;
   final String? twitterHandle;
   final String? logoUrl;
+
+  /// Imagem padrão de compartilhamento (og:image/twitter:image) usada quando a
+  /// rota não define `RouteMeta.image`. Ideal ~1200x630. Cai para [logoUrl].
+  final String? defaultImage;
   final String? organizationName;
 
   /// Perfis sociais/oficiais (JSON-LD `sameAs`).

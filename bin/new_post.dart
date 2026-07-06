@@ -10,14 +10,15 @@ import 'package:flenx/blog/blog_scaffold.dart';
 /// A pasta de destino é, nesta ordem: `--dir=`, env `FLENX_BLOG_DIR`,
 /// ou o padrão `content/blog`. Cria `<dir>/<slug>.md` com `draft: true`.
 void main(List<String> argv) {
-  final dir = _dirArg(argv) ??
-      Platform.environment['FLENX_BLOG_DIR'] ??
-      'content/blog';
+  final dir =
+      _dirArg(argv) ?? Platform.environment['FLENX_BLOG_DIR'] ?? 'content/blog';
   final args = argv.where((a) => !a.startsWith('--dir=')).toList();
 
   if (args.isEmpty) {
-    stderr.writeln('Uso: dart run flenx:new_post "Título" '
-        '[Categoria] [tag1,tag2] [--dir=pasta]');
+    stderr.writeln(
+      'Uso: dart run flenx:new_post "Título" '
+      '[Categoria] [tag1,tag2] [--dir=pasta]',
+    );
     exitCode = 64;
     return;
   }
@@ -29,8 +30,9 @@ void main(List<String> argv) {
       : <String>[];
 
   try {
-    final file = BlogScaffold(dir: dir)
-        .create(title: title, category: category, tags: tags);
+    final file = BlogScaffold(
+      dir: dir,
+    ).create(title: title, category: category, tags: tags);
     stdout.writeln('Criado: ${file.path}');
     stdout.writeln('Edite o conteúdo e troque "draft: true" para publicar.');
   } on FileSystemException catch (e) {

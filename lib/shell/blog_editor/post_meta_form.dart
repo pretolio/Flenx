@@ -23,16 +23,20 @@ class PostMetaForm extends StatelessWidget {
         _f(c.title, 'Manchete (título)', big: true),
         _f(c.subtitle, 'Linha-fina (subtítulo)'),
         _f(c.description, 'Resumo (para listagem e SEO)', lines: 2),
-        Row(children: [
-          Expanded(child: _f(c.author, 'Autor')),
-          const SizedBox(width: 12),
-          Expanded(child: _f(c.category, 'Categoria (ex.: Brasil/Economia)')),
-        ]),
-        Row(children: [
-          Expanded(child: _f(c.tags, 'Tags (separadas por vírgula)')),
-          const SizedBox(width: 12),
-          Expanded(child: _f(c.image, 'URL da imagem de capa')),
-        ]),
+        Row(
+          children: [
+            Expanded(child: _f(c.author, 'Autor')),
+            const SizedBox(width: 12),
+            Expanded(child: _f(c.category, 'Categoria (ex.: Brasil/Economia)')),
+          ],
+        ),
+        Row(
+          children: [
+            Expanded(child: _f(c.tags, 'Tags (separadas por vírgula)')),
+            const SizedBox(width: 12),
+            Expanded(child: _f(c.image, 'URL da imagem de capa')),
+          ],
+        ),
         SwitchListTile(
           contentPadding: EdgeInsets.zero,
           title: const Text('Rascunho (não publica)'),
@@ -43,8 +47,12 @@ class PostMetaForm extends StatelessWidget {
     );
   }
 
-  Widget _f(TextEditingController ctrl, String label,
-      {int lines = 1, bool big = false}) {
+  Widget _f(
+    TextEditingController ctrl,
+    String label, {
+    int lines = 1,
+    bool big = false,
+  }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: TextField(
@@ -82,7 +90,7 @@ class PostMetaControllers {
       author,
       category,
       tags,
-      image
+      image,
     ]) {
       c.dispose();
     }

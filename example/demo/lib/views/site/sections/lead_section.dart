@@ -25,19 +25,18 @@ class LeadSection extends StatelessComponent {
           FlenxColumn(
             gap: 14,
             [
-              const FlenxText('Fale com a gente',
-                  color: FlenxPalette.primary, weight: 700),
+              const FlenxText('Fale com a gente', color: FlenxPalette.primary, weight: 700),
               const FlenxHeading('Quer usar o Flenx no seu projeto?'),
               const FlenxText(
-                  'Deixe seu contato e receba novidades, exemplos e ajuda '
-                  'para começar. Sem spam.',
-                  color: FlenxPalette.muted,
-                  lineHeight: 1.6),
+                'Deixe seu contato e receba novidades, exemplos e ajuda '
+                'para começar. Sem spam.',
+                color: FlenxPalette.muted,
+                lineHeight: 1.6,
+              ),
               FlenxColumn(
                 gap: 8,
                 [
-                  for (final b in _benefits)
-                    FlenxRow(gap: 8, [const FlenxText('✅'), FlenxText(b)]),
+                  for (final b in _benefits) FlenxRow(gap: 8, [const FlenxText('✅'), FlenxText(b)]),
                 ],
               ),
             ],

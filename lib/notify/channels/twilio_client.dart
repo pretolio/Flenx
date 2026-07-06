@@ -17,7 +17,8 @@ Future<void> sendTwilioMessage({
     final auth = base64Encode(utf8.encode('$accountSid:$authToken'));
     final res = await c.post(
       Uri.parse(
-          'https://api.twilio.com/2010-04-01/Accounts/$accountSid/Messages.json'),
+        'https://api.twilio.com/2010-04-01/Accounts/$accountSid/Messages.json',
+      ),
       headers: {'Authorization': 'Basic $auth'},
       body: {'From': from, 'To': to, 'Body': body},
     );

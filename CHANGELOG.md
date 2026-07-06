@@ -15,6 +15,10 @@
 - **`FlenxApp.run(faviconUrl:, appleTouchIconUrl:)`** — emite `<link rel="icon">` e
   `<link rel="apple-touch-icon">` no `<head>`.
 
+### SEO
+- **`SeoConfig(defaultImage:)`** — `og:image`/`twitter:image` padrão para todas as
+  páginas quando a rota não define `RouteMeta.image` (cai para `logoUrl` se ausente).
+
 ### DX
 - `package:flenx/app.dart` agora re-exporta `css`, `Styles` e `StyleRule` — dá para
   customizar `globalStyles` (ex.: `css.keyframes(...)`) sem importar jaspr direto.

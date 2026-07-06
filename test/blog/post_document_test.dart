@@ -14,8 +14,11 @@ void main() {
     final doc = PostDocument([
       const HeadingBlock('Entenda o caso', level: 2),
       const ParagraphBlock('Texto com **negrito** e [link](/x).'),
-      const ImageBlock('/img/foto.jpg',
-          caption: 'Multidão na avenida', credit: 'Foto: Agência'),
+      const ImageBlock(
+        '/img/foto.jpg',
+        caption: 'Multidão na avenida',
+        credit: 'Foto: Agência',
+      ),
       const QuoteBlock('Foi histórico.', cite: 'Fulano'),
       const ListBlock(['Primeiro', 'Segundo'], ordered: true),
       const EmbedBlock('<iframe src="https://youtube.com/embed/x"></iframe>'),

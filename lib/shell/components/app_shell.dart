@@ -26,8 +26,10 @@ class AppShell extends StatefulWidget {
     this.isDark = false,
     this.onToggleTheme,
     super.key,
-  })  : assert(pages.length > 0 || body != null,
-            'Forneça `pages` (rota→conteúdo) ou um `body`.');
+  }) : assert(
+         pages.length > 0 || body != null,
+         'Forneça `pages` (rota→conteúdo) ou um `body`.',
+       );
 
   final AppUser user;
   final List<NavItem> navItems;

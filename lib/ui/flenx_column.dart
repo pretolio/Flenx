@@ -2,7 +2,6 @@ import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
 
 import 'flenx_animated.dart';
-import 'flenx_animation.dart';
 import 'flenx_ui_enums.dart';
 
 /// Coluna (vertical) — como o `Column` do Flutter. [gap] é o espaço entre os
@@ -57,14 +56,16 @@ class FlenxColumn extends StatelessComponent {
   @override
   Component build(BuildContext context) {
     return div(
-      styles: Styles(raw: {
-        'display': 'flex',
-        'flex-direction': 'column',
-        'gap': '${gap}px',
-        'align-items': cross.css,
-        'justify-content': main.css,
-        if (maxWidthPx != null) 'max-width': '${maxWidthPx}px',
-      }),
+      styles: Styles(
+        raw: {
+          'display': 'flex',
+          'flex-direction': 'column',
+          'gap': '${gap}px',
+          'align-items': cross.css,
+          'justify-content': main.css,
+          if (maxWidthPx != null) 'max-width': '${maxWidthPx}px',
+        },
+      ),
       _kids,
     );
   }

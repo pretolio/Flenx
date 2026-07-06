@@ -68,8 +68,16 @@ const storeBrands = [
 ];
 
 const storeBenefits = [
-  FlenxBenefit(icon: '🚚', title: 'Entrega expressa', subtitle: 'a partir de 1 dia útil'),
-  FlenxBenefit(icon: '💳', title: 'Parcele em até 10x', subtitle: 'sem juros no cartão'),
+  FlenxBenefit(
+    icon: '🚚',
+    title: 'Entrega expressa',
+    subtitle: 'a partir de 1 dia útil',
+  ),
+  FlenxBenefit(
+    icon: '💳',
+    title: 'Parcele em até 10x',
+    subtitle: 'sem juros no cartão',
+  ),
   FlenxBenefit(icon: '🔁', title: 'Troca fácil', subtitle: 'até 30 dias'),
   FlenxBenefit(icon: '🔒', title: 'Compra segura', subtitle: 'site protegido'),
 ];

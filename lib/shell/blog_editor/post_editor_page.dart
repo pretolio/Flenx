@@ -94,7 +94,8 @@ class _PostEditorPageState extends State<PostEditorPage> {
     setState(() => _saving = true);
     try {
       final doc = PostDocument(
-          _blocks.map((b) => b.toPostBlock()).toList(growable: false));
+        _blocks.map((b) => b.toPostBlock()).toList(growable: false),
+      );
       final payload = <String, Object?>{
         if (_isEdit) 'id': widget.existing!['id'],
         'slug': _isEdit ? widget.existing!['slug'] : Slugify.call(title),
@@ -112,8 +113,10 @@ class _PostEditorPageState extends State<PostEditorPage> {
             ? '${widget.existing!['date']}'
             : DateTime.now().toIso8601String(),
       };
-      await widget.client
-          .post(_isEdit ? widget.updatePath : widget.createPath, payload);
+      await widget.client.post(
+        _isEdit ? widget.updatePath : widget.createPath,
+        payload,
+      );
       _snack(_isEdit ? 'Post atualizado.' : 'Post publicado no blog.');
       widget.onSaved?.call();
     } catch (e) {
@@ -131,26 +134,36 @@ class _PostEditorPageState extends State<PostEditorPage> {
     return ListView(
       padding: const EdgeInsets.all(20),
       children: [
-        Row(children: [
-          Expanded(
-            child: Text(_isEdit ? 'Editar post' : 'Novo post',
-                style:
-                    const TextStyle(fontSize: 24, fontWeight: FontWeight.w800)),
-          ),
-          if (widget.onSaved != null)
-            TextButton(onPressed: widget.onSaved, child: const Text('Voltar')),
-          const SizedBox(width: 8),
-          FilledButton.icon(
-            onPressed: _saving ? null : _save,
-            icon: _saving
-                ? const SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: CircularProgressIndicator(strokeWidth: 2))
-                : const Icon(Icons.save_outlined),
-            label: const Text('Salvar'),
-          ),
-        ]),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                _isEdit ? 'Editar post' : 'Novo post',
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ),
+            if (widget.onSaved != null)
+              TextButton(
+                onPressed: widget.onSaved,
+                child: const Text('Voltar'),
+              ),
+            const SizedBox(width: 8),
+            FilledButton.icon(
+              onPressed: _saving ? null : _save,
+              icon: _saving
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(Icons.save_outlined),
+              label: const Text('Salvar'),
+            ),
+          ],
+        ),
         const SizedBox(height: 16),
         PostMetaForm(
           c: _meta,
@@ -158,8 +171,10 @@ class _PostEditorPageState extends State<PostEditorPage> {
           onDraftChanged: (v) => setState(() => _draft = v),
         ),
         const Divider(height: 32),
-        const Text('Corpo do post',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+        const Text(
+          'Corpo do post',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+        ),
         const SizedBox(height: 12),
         for (var i = 0; i < _blocks.length; i++)
           BlockCard(

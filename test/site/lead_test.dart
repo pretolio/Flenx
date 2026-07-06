@@ -26,10 +26,12 @@ void main() {
 
   group('SiteConfig', () {
     test('monta a URL do WhatsApp com a mensagem codificada', () {
-      const c = SiteConfig(whatsappNumber: '5511988887777', whatsappMessage: 'Olá Flenx');
+      const c = SiteConfig(
+        whatsappNumber: '5511988887777',
+        whatsappMessage: 'Olá Flenx',
+      );
       expect(c.whatsappUrl, startsWith('https://wa.me/5511988887777?text='));
       expect(c.whatsappUrl, contains('Ol%C3%A1%20Flenx'));
     });
   });
 }
-

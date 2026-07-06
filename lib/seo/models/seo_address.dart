@@ -21,11 +21,11 @@ class SeoAddress {
   bool get hasGeo => latitude != null && longitude != null;
 
   Map<String, dynamic> toJsonLd() => {
-        '@type': 'PostalAddress',
-        'streetAddress': streetAddress,
-        'addressLocality': addressLocality,
-        if (addressRegion != null) 'addressRegion': addressRegion,
-        'postalCode': postalCode,
-        'addressCountry': addressCountry,
-      };
+    '@type': 'PostalAddress',
+    'streetAddress': streetAddress,
+    'addressLocality': addressLocality,
+    if (addressRegion != null) 'addressRegion': addressRegion,
+    'postalCode': postalCode,
+    'addressCountry': addressCountry,
+  };
 }

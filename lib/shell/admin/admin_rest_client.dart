@@ -32,7 +32,9 @@ class AdminRestClient {
 
   /// POST com corpo JSON. Retorna o `data` (ex.: `{id: N}`).
   Future<Map<String, Object?>> post(
-      String path, Map<String, Object?> body) async {
+    String path,
+    Map<String, Object?> body,
+  ) async {
     final res = await http.post(
       Uri.parse('$baseUrl$path'),
       headers: const {'content-type': 'application/json'},

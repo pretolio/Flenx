@@ -11,12 +11,7 @@ import '../flenx_ui_enums.dart';
 
 /// Chamada para ação (CTA): título, subtítulo e um botão, num cartão centrado.
 class FlenxCta extends StatelessComponent {
-  const FlenxCta({
-    required this.title,
-    this.subtitle,
-    this.action,
-    super.key,
-  });
+  const FlenxCta({required this.title, this.subtitle, this.action, super.key});
 
   final String title;
   final String? subtitle;
@@ -33,8 +28,11 @@ class FlenxCta extends StatelessComponent {
           [
             FlenxHeading(title, align: FlenxTextAlign.center),
             if (subtitle != null)
-              FlenxText(subtitle!,
-                  align: FlenxTextAlign.center, color: FlenxPalette.muted),
+              FlenxText(
+                subtitle!,
+                align: FlenxTextAlign.center,
+                color: FlenxPalette.muted,
+              ),
             if (action != null) action!,
           ],
         ),

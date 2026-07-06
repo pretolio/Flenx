@@ -10,8 +10,10 @@ void main() {
     });
 
     test('fromQuery aplica limites sãos', () {
-      final p = PageRequest.fromQuery({'page': '2', 'perPage': '500'},
-          maxPerPage: 100);
+      final p = PageRequest.fromQuery({
+        'page': '2',
+        'perPage': '500',
+      }, maxPerPage: 100);
       expect(p.page, 2);
       expect(p.perPage, 100); // capado
       final d = PageRequest.fromQuery({}, defaultPerPage: 15);

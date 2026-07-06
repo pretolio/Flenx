@@ -73,11 +73,13 @@ class _FlenxResourcePageState extends State<FlenxResourcePage> {
         content: Text('"${row[_c.titleKey]}" será removido.'),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancelar')),
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancelar'),
+          ),
           FilledButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: const Text('Excluir')),
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Excluir'),
+          ),
         ],
       ),
     );
@@ -102,23 +104,30 @@ class _FlenxResourcePageState extends State<FlenxResourcePage> {
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(24, 24, 24, 8),
-          child: Row(children: [
-            Expanded(
-              child: Text(_c.title,
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  _c.title,
                   style: const TextStyle(
-                      fontSize: 24, fontWeight: FontWeight.w800)),
-            ),
-            IconButton(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+              IconButton(
                 onPressed: _load,
                 tooltip: 'Recarregar',
-                icon: const Icon(Icons.refresh)),
-            if (_c.canCreate)
-              FilledButton.icon(
-                onPressed: () => _openForm(),
-                icon: const Icon(Icons.add),
-                label: Text('Novo ${_c.singular}'),
+                icon: const Icon(Icons.refresh),
               ),
-          ]),
+              if (_c.canCreate)
+                FilledButton.icon(
+                  onPressed: () => _openForm(),
+                  icon: const Icon(Icons.add),
+                  label: Text('Novo ${_c.singular}'),
+                ),
+            ],
+          ),
         ),
         Expanded(child: _body(scheme)),
       ],
@@ -127,15 +136,20 @@ class _FlenxResourcePageState extends State<FlenxResourcePage> {
 
   Widget _body(ColorScheme scheme) {
     if (_error != null) {
-      return Center(child: Text(_error!, style: TextStyle(color: scheme.error)));
+      return Center(
+        child: Text(_error!, style: TextStyle(color: scheme.error)),
+      );
     }
     if (_rows == null) {
       return const Center(child: CircularProgressIndicator());
     }
     if (_rows!.isEmpty) {
       return Center(
-          child: Text('Nenhum ${_c.singular} ainda.',
-              style: TextStyle(color: scheme.onSurfaceVariant)));
+        child: Text(
+          'Nenhum ${_c.singular} ainda.',
+          style: TextStyle(color: scheme.onSurfaceVariant),
+        ),
+      );
     }
     return ListView.separated(
       padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
@@ -144,21 +158,28 @@ class _FlenxResourcePageState extends State<FlenxResourcePage> {
       itemBuilder: (_, i) {
         final row = _rows![i];
         return ListTile(
-          title: Text('${row[_c.titleKey] ?? '(sem título)'}',
-              style: const TextStyle(fontWeight: FontWeight.w600)),
+          title: Text(
+            '${row[_c.titleKey] ?? '(sem título)'}',
+            style: const TextStyle(fontWeight: FontWeight.w600),
+          ),
           subtitle: _c.subtitleKey != null
               ? Text('${row[_c.subtitleKey] ?? ''}')
               : null,
-          trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-            if (_c.canEdit)
-              IconButton(
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (_c.canEdit)
+                IconButton(
                   icon: const Icon(Icons.edit_outlined),
-                  onPressed: () => _openForm(row: row)),
-            if (_c.canDelete)
-              IconButton(
+                  onPressed: () => _openForm(row: row),
+                ),
+              if (_c.canDelete)
+                IconButton(
                   icon: Icon(Icons.delete_outline, color: scheme.error),
-                  onPressed: () => _delete(row)),
-          ]),
+                  onPressed: () => _delete(row),
+                ),
+            ],
+          ),
         );
       },
     );

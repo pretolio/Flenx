@@ -62,7 +62,8 @@ class FlenxHeroSplit extends StatelessComponent {
 
   String get _uid => 'fhs${imageSrc.hashCode.abs().toRadixString(16)}';
 
-  String get _css => '''
+  String get _css =>
+      '''
 .fhs-$_uid{display:flex;align-items:center;gap:56px}
 .fhs-text-$_uid{flex:1;min-width:0}
 .fhs-iw-$_uid{flex:0 0 44%;max-width:480px}
@@ -83,23 +84,27 @@ class FlenxHeroSplit extends StatelessComponent {
       Component.element(
         tag: 'section',
         id: id,
-        styles: Styles(raw: {
-          'position': 'relative',
-          'overflow': 'hidden',
-          'padding': '${paddingY}px 24px',
-          if (background != null) 'background': background!,
-        }),
+        styles: Styles(
+          raw: {
+            'position': 'relative',
+            'overflow': 'hidden',
+            'padding': '${paddingY}px 24px',
+            if (background != null) 'background': background!,
+          },
+        ),
         children: [
           // Fundo desfocado (visível apenas no mobile)
           div(classes: 'fhs-bg-$_uid', []),
           // Container central com max-width
           div(
-            styles: Styles(raw: {
-              'max-width': '${maxWidthPx}px',
-              'margin': '0 auto',
-              'position': 'relative',
-              'z-index': '1',
-            }),
+            styles: Styles(
+              raw: {
+                'max-width': '${maxWidthPx}px',
+                'margin': '0 auto',
+                'position': 'relative',
+                'z-index': '1',
+              },
+            ),
             [
               div(classes: 'fhs-$_uid', [
                 // Coluna de texto

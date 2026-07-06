@@ -24,14 +24,19 @@ class SectionPlaceholder extends StatelessWidget {
             child: Icon(icon, size: 34, color: scheme.primary),
           ),
           const SizedBox(height: 16),
-          Text(title,
-              style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w800,
-                  color: scheme.onSurface)),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w800,
+              color: scheme.onSurface,
+            ),
+          ),
           const SizedBox(height: 6),
-          Text('Seção "$title" — em construção.',
-              style: TextStyle(color: scheme.onSurfaceVariant)),
+          Text(
+            'Seção "$title" — em construção.',
+            style: TextStyle(color: scheme.onSurfaceVariant),
+          ),
         ],
       ),
     );

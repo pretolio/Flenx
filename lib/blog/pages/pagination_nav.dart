@@ -17,15 +17,25 @@ class PaginationNav extends StatelessComponent {
 
   @override
   Component build(BuildContext context) {
-    return Component.element(tag: 'nav', classes: 'pagination', children: [
-      if (current > 1)
-        a([.text('‹ Anterior')], href: href(current - 1), classes: 'page-btn'),
-      for (var n = 1; n <= totalPages; n++)
-        a([.text('$n')],
+    return Component.element(
+      tag: 'nav',
+      classes: 'pagination',
+      children: [
+        if (current > 1)
+          a(
+            [.text('‹ Anterior')],
+            href: href(current - 1),
+            classes: 'page-btn',
+          ),
+        for (var n = 1; n <= totalPages; n++)
+          a(
+            [.text('$n')],
             href: href(n),
-            classes: n == current ? 'page-btn active' : 'page-btn'),
-      if (current < totalPages)
-        a([.text('Próxima ›')], href: href(current + 1), classes: 'page-btn'),
-    ]);
+            classes: n == current ? 'page-btn active' : 'page-btn',
+          ),
+        if (current < totalPages)
+          a([.text('Próxima ›')], href: href(current + 1), classes: 'page-btn'),
+      ],
+    );
   }
 }

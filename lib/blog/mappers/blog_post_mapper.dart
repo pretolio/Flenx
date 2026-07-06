@@ -27,19 +27,19 @@ class BlogPostMapper {
 
   /// Post → linha de banco (chaves = [columns]).
   Map<String, Object?> toRow(BlogPost p) => {
-        'slug': p.slug,
-        'title': p.title,
-        'subtitle': p.subtitle,
-        'description': p.description,
-        'body': p.bodyMarkdown,
-        'author': p.author,
-        'image': p.image,
-        'category': p.category?.segments.join('/'),
-        'tags': p.tags.map((t) => t.name).join(', '),
-        'draft': p.draft ? 1 : 0,
-        'views': p.views,
-        'date': _dateStr(p.date),
-      };
+    'slug': p.slug,
+    'title': p.title,
+    'subtitle': p.subtitle,
+    'description': p.description,
+    'body': p.bodyMarkdown,
+    'author': p.author,
+    'image': p.image,
+    'category': p.category?.segments.join('/'),
+    'tags': p.tags.map((t) => t.name).join(', '),
+    'draft': p.draft ? 1 : 0,
+    'views': p.views,
+    'date': _dateStr(p.date),
+  };
 
   /// Linha de banco → post.
   BlogPost fromRow(Map<String, Object?> r) {

@@ -19,7 +19,8 @@ class FlenxNotFound extends StatelessComponent {
     this.config = const SiteConfig(),
     this.code = '404',
     this.title = 'Página não encontrada',
-    this.message = 'O link que você acessou não existe ou foi movido. '
+    this.message =
+        'O link que você acessou não existe ou foi movido. '
         'Confira o endereço ou volte para o início.',
     this.actions = const [MenuLink(label: 'Voltar ao início', href: '/')],
     super.key,
@@ -51,9 +52,11 @@ class FlenxNotFound extends StatelessComponent {
             p([.text(message)]),
             div(classes: 'nf-actions', [
               for (var i = 0; i < actions.length; i++)
-                a([.text(actions[i].label)],
-                    href: actions[i].href ?? '/',
-                    classes: i == 0 ? 'btn btn-primary' : 'btn btn-soft'),
+                a(
+                  [.text(actions[i].label)],
+                  href: actions[i].href ?? '/',
+                  classes: i == 0 ? 'btn btn-primary' : 'btn btn-soft',
+                ),
             ]),
           ]),
         ]),

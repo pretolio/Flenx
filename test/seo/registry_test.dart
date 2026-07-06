@@ -19,12 +19,7 @@ void main() {
       ]);
 
       final all = await registry.resolveAll();
-      expect(all.map((r) => r.path), [
-        '/',
-        '/blog/a',
-        '/blog/b',
-        '/blog/c',
-      ]);
+      expect(all.map((r) => r.path), ['/', '/blog/a', '/blog/b', '/blog/c']);
     });
 
     test('deduplica paths repetidos', () async {
@@ -43,8 +38,7 @@ void main() {
       final registry = RouteRegistry([
         const StaticRouteSource([
           RouteMeta(path: '/', title: 'Home', description: 'd'),
-          RouteMeta(
-              path: '/x', title: 'X', description: 'd', noindex: true),
+          RouteMeta(path: '/x', title: 'X', description: 'd', noindex: true),
         ]),
       ]);
       final idx = await registry.indexable();
@@ -63,4 +57,3 @@ void main() {
     });
   });
 }
-

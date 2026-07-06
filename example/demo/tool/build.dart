@@ -11,8 +11,7 @@ import 'package:flenx_demo/main.dart' show buildPhp;
 Future<void> main() async {
   if (buildPhp) {
     await const PhpApiGenerator().writeTo('build/php', apis, models: dbModels);
-    stdout.writeln(
-        '✓ API PHP gerada em build/php/ (${apis.length} endpoints + migrations.sql).');
+    stdout.writeln('✓ API PHP gerada em build/php/ (${apis.length} endpoints + migrations.sql).');
   } else {
     stdout.writeln('• PHP desativado (buildPhp=false no main.dart).');
   }

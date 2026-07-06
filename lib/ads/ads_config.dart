@@ -22,8 +22,8 @@ class AdPlacement {
     this.position = AdPosition.inContent,
     this.paths = const [],
     this.categories = const [],
-  })  : slot = '',
-        format = 'auto';
+  }) : slot = '',
+       format = 'auto';
 
   final String slot;
   final AdPosition position;
@@ -43,7 +43,8 @@ class AdPlacement {
   bool matches({String? path, String? category}) {
     final pathOk = paths.isEmpty || (path != null && paths.contains(path));
     final catOk =
-        categories.isEmpty || (category != null && categories.contains(category));
+        categories.isEmpty ||
+        (category != null && categories.contains(category));
     return pathOk && catOk;
   }
 }
@@ -74,9 +75,11 @@ class AdsConfig {
   }) {
     if (!enabled) return const [];
     return placements
-        .where((p) =>
-            p.matches(path: path, category: category) &&
-            (position == null || p.position == position))
+        .where(
+          (p) =>
+              p.matches(path: path, category: category) &&
+              (position == null || p.position == position),
+        )
         .toList();
   }
 }

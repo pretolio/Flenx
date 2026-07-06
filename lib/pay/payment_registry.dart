@@ -5,8 +5,8 @@ import 'gateways/mercado_pago_gateway.dart';
 import 'payment_gateway.dart';
 
 /// Cria um gateway a partir do ambiente (`.env`) + client HTTP opcional.
-typedef GatewayFactory = PaymentGateway Function(
-    Map<String, String> env, http.Client? client);
+typedef GatewayFactory =
+    PaymentGateway Function(Map<String, String> env, http.Client? client);
 
 /// Registro de provedores de pagamento. Já vem com Asaas e Mercado Pago;
 /// para um provedor novo basta `PaymentRegistry.register('stripe', ...)`
@@ -31,12 +31,16 @@ class PaymentRegistry {
   static List<String> get available => _factories.keys.toList();
 
   /// Resolve o gateway pelo nome do provedor.
-  static PaymentGateway resolve(String provider, Map<String, String> env,
-      {http.Client? client}) {
+  static PaymentGateway resolve(
+    String provider,
+    Map<String, String> env, {
+    http.Client? client,
+  }) {
     final factory = _factories[provider.toLowerCase()];
     if (factory == null) {
       throw ArgumentError(
-          'PAYMENT_PROVIDER inválido: "$provider" (use ${available.join(", ")})');
+        'PAYMENT_PROVIDER inválido: "$provider" (use ${available.join(", ")})',
+      );
     }
     return factory(env, client);
   }

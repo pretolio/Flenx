@@ -24,13 +24,15 @@ class FlenxImage extends StatelessComponent {
     return img(
       src: src,
       alt: alt,
-      styles: Styles(raw: {
-        'max-width': '100%',
-        'display': 'block',
-        if (widthPx != null) 'width': '${widthPx}px',
-        if (heightPx != null) 'height': '${heightPx}px',
-        if (radius > 0) 'border-radius': '${radius}px',
-      }),
+      styles: Styles(
+        raw: {
+          'max-width': '100%',
+          'display': 'block',
+          if (widthPx != null) 'width': '${widthPx}px',
+          if (heightPx != null) 'height': '${heightPx}px',
+          if (radius > 0) 'border-radius': '${radius}px',
+        },
+      ),
     );
   }
 }

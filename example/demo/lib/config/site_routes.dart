@@ -12,8 +12,7 @@ final siteRoutes = <FlenxRoute>[
     const RouteMeta(
       path: '/',
       title: 'Flenx — Flutter na web como nunca antes',
-      description:
-          'Framework Flutter estilo Next.js: SSR, widgets reais e SEO/GEO/AEO automáticos.',
+      description: 'Framework Flutter estilo Next.js: SSR, widgets reais e SEO/GEO/AEO automáticos.',
       kind: PageKind.website,
       priority: 1.0,
       changeFreq: ChangeFreq.daily,
@@ -40,8 +39,7 @@ final siteRoutes = <FlenxRoute>[
     const RouteMeta(
       path: '/site',
       title: 'Flenx — site institucional',
-      description:
-          'Página institucional do Flenx com header de top menu, dropdowns e login.',
+      description: 'Página institucional do Flenx com header de top menu, dropdowns e login.',
       kind: PageKind.website,
       priority: 0.9,
       changeFreq: ChangeFreq.monthly,

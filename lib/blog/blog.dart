@@ -68,7 +68,7 @@ class Blog {
             (
               label: c.category.segments.join(' / '),
               path: c.category.path,
-              count: c.posts.length
+              count: c.posts.length,
             ),
         ],
       );
@@ -85,8 +85,9 @@ class Blog {
     }
     if (path.startsWith('/blog/categoria/')) {
       final key = path.substring('/blog/categoria/'.length);
-      final archive =
-          _first(taxonomy.categories.where((c) => c.category.key == key));
+      final archive = _first(
+        taxonomy.categories.where((c) => c.category.key == key),
+      );
       if (archive == null) return null;
       return ArchivePage(
         title: 'Categoria: ${archive.category.name}',
@@ -115,6 +116,5 @@ class Blog {
     return BlogPostPage(post: post, htmlBody: _md.toHtml(post.bodyMarkdown));
   }
 
-  static T? _first<T>(Iterable<T> items) =>
-      items.isEmpty ? null : items.first;
+  static T? _first<T>(Iterable<T> items) => items.isEmpty ? null : items.first;
 }

@@ -45,11 +45,11 @@ class PageMeta {
       PageMeta(page: req.page, perPage: req.perPage, total: total);
 
   Map<String, dynamic> toJson() => {
-        'page': page,
-        'perPage': perPage,
-        'total': total,
-        'totalPages': totalPages,
-        'hasNext': hasNext,
-        'hasPrev': hasPrev,
-      };
+    'page': page,
+    'perPage': perPage,
+    'total': total,
+    'totalPages': totalPages,
+    'hasNext': hasNext,
+    'hasPrev': hasPrev,
+  };
 }

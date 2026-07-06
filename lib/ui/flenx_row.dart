@@ -24,14 +24,16 @@ class FlenxRow extends StatelessComponent {
   @override
   Component build(BuildContext context) {
     return div(
-      styles: Styles(raw: {
-        'display': 'flex',
-        'flex-direction': 'row',
-        if (wrap) 'flex-wrap': 'wrap',
-        'gap': '${gap}px',
-        'align-items': cross.css,
-        'justify-content': main.css,
-      }),
+      styles: Styles(
+        raw: {
+          'display': 'flex',
+          'flex-direction': 'row',
+          if (wrap) 'flex-wrap': 'wrap',
+          'gap': '${gap}px',
+          'align-items': cross.css,
+          'justify-content': main.css,
+        },
+      ),
       children,
     );
   }

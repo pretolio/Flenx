@@ -2,7 +2,8 @@ import '../../../flenx_palette.dart';
 
 /// CSS dos blocos de notícia (estilo portal). O destaque usa `var(--primary)`,
 /// herdando a cor primária definida no [FlenxPage] — sem cor fixa.
-const flenxNewsCss = '''
+const flenxNewsCss =
+    '''
 .fnews-edit{display:flex;gap:22px;overflow-x:auto;scrollbar-width:none;padding:10px 0;}
 .fnews-edit::-webkit-scrollbar{display:none;}
 .fnews-edit a{color:${FlenxPalette.ink};font-size:14px;font-weight:700;text-decoration:none;white-space:nowrap;transition:color .15s;}

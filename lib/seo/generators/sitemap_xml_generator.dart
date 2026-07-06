@@ -43,8 +43,10 @@ class SitemapXmlGenerator {
       b.writeln('    <priority>${r.priority!.toStringAsFixed(1)}</priority>');
     }
     r.alternates.forEach((locale, href) {
-      b.writeln('    <xhtml:link rel="alternate" hreflang="$locale" '
-          'href="${XmlUtils.escape(href)}"/>');
+      b.writeln(
+        '    <xhtml:link rel="alternate" hreflang="$locale" '
+        'href="${XmlUtils.escape(href)}"/>',
+      );
     });
     b.writeln('  </url>');
   }

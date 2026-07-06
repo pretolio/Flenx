@@ -22,16 +22,20 @@ class PhpApiGenerator {
   }
 
   /// Escreve os `.php` em [dir] e, se houver [models], a `migrations.sql`.
-  Future<void> writeTo(String dir, List<ApiEndpoint> endpoints,
-      {List<DbModel> models = const []}) async {
+  Future<void> writeTo(
+    String dir,
+    List<ApiEndpoint> endpoints, {
+    List<DbModel> models = const [],
+  }) async {
     final out = Directory(dir);
     await out.create(recursive: true);
     generate(endpoints).forEach((name, content) {
       File('$dir/$name').writeAsStringSync(content);
     });
     if (models.isNotEmpty) {
-      File('$dir/migrations.sql')
-          .writeAsStringSync(const SqlMigrationGenerator().generate(models));
+      File(
+        '$dir/migrations.sql',
+      ).writeAsStringSync(const SqlMigrationGenerator().generate(models));
     }
   }
 
@@ -48,7 +52,11 @@ class PhpApiGenerator {
       b.write(_action(a));
     }
     // Resposta padrão se nenhuma ação encerrou antes.
-    b.writeln('flenx_respond(true, ' r'$flenx_result ?? null' ');');
+    b.writeln(
+      'flenx_respond(true, '
+      r'$flenx_result ?? null'
+      ');',
+    );
     return b.toString();
   }
 
@@ -57,20 +65,28 @@ class PhpApiGenerator {
     final get = "(\$in['$n'] ?? '')";
     final sb = StringBuffer();
     if (f.required) {
-      sb.writeln("if (trim($get) === '') "
-          "flenx_respond(false, null, 'O campo \"$n\" é obrigatório.', null, 400);");
+      sb.writeln(
+        "if (trim($get) === '') "
+        "flenx_respond(false, null, 'O campo \"$n\" é obrigatório.', null, 400);",
+      );
     }
     if (f.email) {
-      sb.writeln("if ($get !== '' && !filter_var($get, FILTER_VALIDATE_EMAIL)) "
-          "flenx_respond(false, null, 'O campo \"$n\" deve ser um e-mail válido.', null, 400);");
+      sb.writeln(
+        "if ($get !== '' && !filter_var($get, FILTER_VALIDATE_EMAIL)) "
+        "flenx_respond(false, null, 'O campo \"$n\" deve ser um e-mail válido.', null, 400);",
+      );
     }
     if (f.isInt) {
-      sb.writeln("if ($get !== '' && !is_numeric($get)) "
-          "flenx_respond(false, null, 'O campo \"$n\" deve ser um número inteiro.', null, 400);");
+      sb.writeln(
+        "if ($get !== '' && !is_numeric($get)) "
+        "flenx_respond(false, null, 'O campo \"$n\" deve ser um número inteiro.', null, 400);",
+      );
     }
     if (f.maxLength != null) {
-      sb.writeln("if (mb_strlen($get) > ${f.maxLength}) "
-          "flenx_respond(false, null, 'O campo \"$n\" excede ${f.maxLength} caracteres.', null, 400);");
+      sb.writeln(
+        "if (mb_strlen($get) > ${f.maxLength}) "
+        "flenx_respond(false, null, 'O campo \"$n\" excede ${f.maxLength} caracteres.', null, 400);",
+      );
     }
     return sb.toString();
   }
@@ -83,9 +99,13 @@ class PhpApiGenerator {
             .toList();
         final names = cols.map((c) => '`${c.name}`').join(',');
         final marks = cols.map((_) => '?').join(',');
-        final vals = cols.map((c) => c.name == 'created_at'
-            ? "date('c')"
-            : "(\$in['${c.name}'] ?? null)").join(', ');
+        final vals = cols
+            .map(
+              (c) => c.name == 'created_at'
+                  ? "date('c')"
+                  : "(\$in['${c.name}'] ?? null)",
+            )
+            .join(', ');
         return "\$stmt = flenx_db()->prepare('INSERT INTO `${model.table}` ($names) VALUES ($marks)');\n"
             "\$stmt->execute([$vals]);\n"
             "\$flenx_result = ['id' => (int) flenx_db()->lastInsertId()];\n";
@@ -129,7 +149,9 @@ class PhpApiGenerator {
 
   String _jsonLiteral(Map<String, Object?> m) {
     final entries = m.entries
-        .map((e) => '"${e.key}":${e.value is String ? '"${e.value}"' : e.value}')
+        .map(
+          (e) => '"${e.key}":${e.value is String ? '"${e.value}"' : e.value}',
+        )
         .join(',');
     return '{$entries}';
   }

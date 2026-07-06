@@ -32,7 +32,8 @@ class FlenxHeroBanner extends StatelessComponent {
     return div(classes: 'fxz-hero', [
       div(classes: 'fxz-hero-in', [
         div([
-          if (eyebrow != null) span(classes: 'eyebrow', [Component.text(eyebrow!)]),
+          if (eyebrow != null)
+            span(classes: 'eyebrow', [Component.text(eyebrow!)]),
           h2([Component.text(title)]),
           if (subtitle != null) p([Component.text(subtitle!)]),
           a([Component.text(ctaLabel)], href: ctaHref, classes: 'cta'),
@@ -45,11 +46,7 @@ class FlenxHeroBanner extends StatelessComponent {
       ]),
       a([Component.text('‹')], href: ctaHref, classes: 'fxz-arrow l'),
       a([Component.text('›')], href: ctaHref, classes: 'fxz-arrow r'),
-      div(classes: 'fxz-dots', [
-        span(classes: 'on', []),
-        span([]),
-        span([]),
-      ]),
+      div(classes: 'fxz-dots', [span(classes: 'on', []), span([]), span([])]),
     ]);
   }
 }

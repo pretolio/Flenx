@@ -7,8 +7,8 @@ import 'rest_api_db_executor.dart';
 import 'supabase_db_executor.dart';
 
 /// Cria um [DbExecutor] a partir do ambiente (`.env`) + client HTTP opcional.
-typedef DbExecutorFactory = DbExecutor Function(
-    Map<String, String> env, http.Client? client);
+typedef DbExecutorFactory =
+    DbExecutor Function(Map<String, String> env, http.Client? client);
 
 /// Registro do backend de banco. Você escolhe por `DB_PROVIDER` (`supabase`,
 /// `firebase`, `rest`, `jsonl`...) e adiciona as credenciais — mesma ideia do
@@ -32,12 +32,16 @@ class DbRegistry {
 
   static List<String> get available => _factories.keys.toList();
 
-  static DbExecutor resolve(String provider, Map<String, String> env,
-      {http.Client? client}) {
+  static DbExecutor resolve(
+    String provider,
+    Map<String, String> env, {
+    http.Client? client,
+  }) {
     final factory = _factories[provider.toLowerCase()];
     if (factory == null) {
       throw ArgumentError(
-          'DB_PROVIDER inválido: "$provider" (use ${available.join(", ")})');
+        'DB_PROVIDER inválido: "$provider" (use ${available.join(", ")})',
+      );
     }
     return factory(env, client);
   }

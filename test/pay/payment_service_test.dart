@@ -30,8 +30,10 @@ void main() {
     });
 
     test('provider inválido lança erro', () {
-      expect(() => PaymentService.fromEnv({'PAYMENT_PROVIDER': 'paypal'}),
-          throwsArgumentError);
+      expect(
+        () => PaymentService.fromEnv({'PAYMENT_PROVIDER': 'paypal'}),
+        throwsArgumentError,
+      );
     });
 
     test('provedor CUSTOM registrado pluga sem alterar a lib', () async {
@@ -52,11 +54,13 @@ void main() {
       final client = MockClient((r) async {
         captured = r;
         return http.Response(
-            jsonEncode({'id': 'pref_9', 'init_point': 'https://mp/checkout/9'}),
-            201);
+          jsonEncode({'id': 'pref_9', 'init_point': 'https://mp/checkout/9'}),
+          201,
+        );
       });
       final s = PaymentService(
-          MercadoPagoGateway(accessToken: 'TOK', client: client));
+        MercadoPagoGateway(accessToken: 'TOK', client: client),
+      );
 
       final res = await s.checkout(req);
 
@@ -80,7 +84,9 @@ void main() {
       final client = MockClient((r) async {
         captured = r;
         return http.Response(
-            jsonEncode({'id': 'pl_1', 'url': 'https://asaas/l/1'}), 200);
+          jsonEncode({'id': 'pl_1', 'url': 'https://asaas/l/1'}),
+          200,
+        );
       });
       final s = PaymentService(AsaasGateway(apiKey: 'KEY', client: client));
 
@@ -93,8 +99,10 @@ void main() {
 
     test('webhook PAYMENT_RECEIVED -> paid', () {
       final g = AsaasGateway(apiKey: 'x');
-      expect(g.statusFromWebhook({'event': 'PAYMENT_RECEIVED'}),
-          PaymentStatus.paid);
+      expect(
+        g.statusFromWebhook({'event': 'PAYMENT_RECEIVED'}),
+        PaymentStatus.paid,
+      );
     });
   });
 

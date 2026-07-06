@@ -17,11 +17,9 @@ void main() {
   final gen = const JsonLdGenerator(config);
 
   test('sempre inclui Organization e WebSite', () {
-    final out = gen.build(const RouteMeta(
-      path: '/',
-      title: 'Home',
-      description: 'd',
-    ));
+    final out = gen.build(
+      const RouteMeta(path: '/', title: 'Home', description: 'd'),
+    );
     final types = out.map((m) => m['@type']).toList();
     expect(types, containsAll(['Organization', 'WebSite', 'WebPage']));
     final website = out.firstWhere((m) => m['@type'] == 'WebSite');
@@ -29,28 +27,31 @@ void main() {
   });
 
   test('gera FAQPage quando há faqs', () {
-    final out = gen.build(const RouteMeta(
-      path: '/',
-      title: 'Home',
-      description: 'd',
-      faqs: [FaqItem(question: 'P?', answer: 'R.')],
-    ));
+    final out = gen.build(
+      const RouteMeta(
+        path: '/',
+        title: 'Home',
+        description: 'd',
+        faqs: [FaqItem(question: 'P?', answer: 'R.')],
+      ),
+    );
     final faq = out.firstWhere((m) => m['@type'] == 'FAQPage');
     expect(faq['mainEntity'], hasLength(1));
     expect(faq['mainEntity'][0]['name'], 'P?');
   });
 
   test('artigo usa headline e author', () {
-    final out = gen.build(const RouteMeta(
-      path: '/blog/x',
-      title: 'Post',
-      description: 'd',
-      kind: PageKind.blogPost,
-      author: 'Maria',
-    ));
+    final out = gen.build(
+      const RouteMeta(
+        path: '/blog/x',
+        title: 'Post',
+        description: 'd',
+        kind: PageKind.blogPost,
+        author: 'Maria',
+      ),
+    );
     final article = out.firstWhere((m) => m['@type'] == 'BlogPosting');
     expect(article['headline'], 'Post');
     expect(article['author']['name'], 'Maria');
   });
 }
-

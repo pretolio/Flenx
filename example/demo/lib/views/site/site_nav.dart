@@ -7,11 +7,14 @@ const siteBrand = SiteBrand(label: 'Flenx', homeHref: '/');
 const siteNavLinks = [
   MenuLink(label: 'Início', href: '/'),
   MenuLink(label: 'Recursos', href: '/#recursos'),
-  MenuLink(label: 'Blog', children: [
-    MenuLink(label: 'Todos os posts', href: '/blog'),
-    MenuLink(label: 'Categorias', href: '/blog/categoria'),
-    MenuLink(label: 'Tags', href: '/blog/tag'),
-  ]),
+  MenuLink(
+    label: 'Blog',
+    children: [
+      MenuLink(label: 'Todos os posts', href: '/blog'),
+      MenuLink(label: 'Categorias', href: '/blog/categoria'),
+      MenuLink(label: 'Tags', href: '/blog/tag'),
+    ],
+  ),
   MenuLink(label: 'Sobre', href: '/about'),
   MenuLink(label: 'Contato', href: '/#contato'),
 ];

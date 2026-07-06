@@ -45,7 +45,10 @@ class SiteLayout extends StatelessComponent {
   @override
   Component build(BuildContext context) {
     return div(classes: 'flenx-site', [
-      Component.element(tag: 'style', children: [RawText(flenxSiteCss + extraCss)]),
+      Component.element(
+        tag: 'style',
+        children: [RawText(flenxSiteCss + extraCss)],
+      ),
       SiteHeader(
         brand: brand,
         links: links,

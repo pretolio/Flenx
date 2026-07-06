@@ -36,9 +36,7 @@ class BlogPostPage extends StatelessComponent {
         ]),
       ]),
       if (post.image != null && post.image!.trim().isNotEmpty)
-        figure(classes: 'cover', [
-          img(src: post.image!, alt: post.title),
-        ]),
+        figure(classes: 'cover', [img(src: post.image!, alt: post.title)]),
       // Corpo markdown renderizado no servidor.
       div(classes: 'content', [RawText(htmlBody)]),
       if (post.tags.isNotEmpty)

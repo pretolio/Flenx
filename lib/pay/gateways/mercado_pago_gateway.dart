@@ -11,12 +11,16 @@ import '../payment_result.dart';
 /// Credencial: `MP_ACCESS_TOKEN` (Bearer).
 class MercadoPagoGateway implements PaymentGateway {
   MercadoPagoGateway({required this.accessToken, http.Client? client})
-      : _client = client ?? http.Client();
+    : _client = client ?? http.Client();
 
   /// Lê a credencial do ambiente (lado servidor, via `.env`).
-  factory MercadoPagoGateway.fromEnv(Map<String, String> env,
-          {http.Client? client}) =>
-      MercadoPagoGateway(accessToken: env['MP_ACCESS_TOKEN'] ?? '', client: client);
+  factory MercadoPagoGateway.fromEnv(
+    Map<String, String> env, {
+    http.Client? client,
+  }) => MercadoPagoGateway(
+    accessToken: env['MP_ACCESS_TOKEN'] ?? '',
+    client: client,
+  );
 
   final String accessToken;
   final http.Client _client;
@@ -38,10 +42,11 @@ class MercadoPagoGateway implements PaymentGateway {
           'quantity': 1,
           'unit_price': req.amount,
           'currency_id': 'BRL',
-        }
+        },
       ],
       'payer': {'email': req.customerEmail},
-      if (req.externalReference != null) 'external_reference': req.externalReference,
+      if (req.externalReference != null)
+        'external_reference': req.externalReference,
       if (req.successUrl != null || req.failureUrl != null)
         'back_urls': {
           if (req.successUrl != null) 'success': req.successUrl,
@@ -70,7 +75,8 @@ class MercadoPagoGateway implements PaymentGateway {
   @override
   PaymentStatus statusFromWebhook(Map<String, dynamic> payload) {
     // MP envia status em data.status quando disponível; senão exige consulta.
-    final status = '${payload['status'] ?? (payload['data'] is Map ? (payload['data'] as Map)['status'] : '')}';
+    final status =
+        '${payload['status'] ?? (payload['data'] is Map ? (payload['data'] as Map)['status'] : '')}';
     return switch (status) {
       'approved' => PaymentStatus.paid,
       'rejected' || 'cancelled' => PaymentStatus.failed,

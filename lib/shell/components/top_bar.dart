@@ -41,7 +41,9 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
         if (onToggleTheme != null)
           IconButton(
             tooltip: isDark ? 'Tema claro' : 'Tema escuro',
-            icon: Icon(isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined),
+            icon: Icon(
+              isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined,
+            ),
             onPressed: onToggleTheme,
           ),
         NotificationButton(notifications: notifications),

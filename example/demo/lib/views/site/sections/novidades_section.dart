@@ -23,22 +23,20 @@ class NovidadesSection extends StatelessComponent {
       id: 'novidades',
       animation: FlenxAnimation.fadeIn,
       child: FlenxColumn(gap: 22, cross: FlenxAlign.stretch, [
-        const FlenxText('Novidades · 0.2.0',
-            color: FlenxPalette.primary,
-            weight: 700,
-            align: FlenxTextAlign.center),
-        const FlenxHeading('Mais poder — e sempre só em Dart',
-            align: FlenxTextAlign.center),
+        const FlenxText('Novidades · 0.2.0', color: FlenxPalette.primary, weight: 700, align: FlenxTextAlign.center),
+        const FlenxHeading('Mais poder — e sempre só em Dart', align: FlenxTextAlign.center),
         FlenxGrid(
           minItemWidth: 250,
           animation: FlenxAnimation.slideUp,
           [
             for (final i in _itens)
-              FlenxCard(FlenxColumn(gap: 8, [
-                FlenxText(i.$1, size: 40),
-                FlenxHeading(i.$2, level: 3),
-                FlenxText(i.$3, color: FlenxPalette.muted),
-              ])),
+              FlenxCard(
+                FlenxColumn(gap: 8, [
+                  FlenxText(i.$1, size: 40),
+                  FlenxHeading(i.$2, level: 3),
+                  FlenxText(i.$3, color: FlenxPalette.muted),
+                ]),
+              ),
           ],
         ),
         const FlenxSpacer(6),

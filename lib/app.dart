@@ -146,15 +146,16 @@ class FlenxApp {
       globalStyles: [
         // Token da marca (--primary) definido cedo para valer em toda a UI.
         if (primaryColor != null)
-          css(':root').styles(raw: {
-            '--primary': primaryColor,
-            if (primaryColorDark != null) '--primary-dark': primaryColorDark,
-          }),
+          css(':root').styles(
+            raw: {
+              '--primary': primaryColor,
+              if (primaryColorDark != null) '--primary-dark': primaryColorDark,
+            },
+          ),
         ...globalStyles,
       ],
       headExtra: [
-        if (faviconUrl != null)
-          link(rel: 'icon', href: faviconUrl),
+        if (faviconUrl != null) link(rel: 'icon', href: faviconUrl),
         if (appleTouchIconUrl != null)
           link(rel: 'apple-touch-icon', href: appleTouchIconUrl),
         if (ads != null && ads.enabled)
@@ -178,8 +179,10 @@ class FlenxApp {
         }
         final route = byPath[path];
         if (route == null) return null;
-        return PageResult(route.builder(RouteContext(path, query)),
-            island: route.island);
+        return PageResult(
+          route.builder(RouteContext(path, query)),
+          island: route.island,
+        );
       },
     ).start(port: port);
   }

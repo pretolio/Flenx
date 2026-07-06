@@ -37,15 +37,24 @@ class MetaTagsBuilder {
       _prop('og:url', canonical),
       _prop('og:site_name', config.siteName),
       _prop('og:locale', config.defaultLocale),
-      if (r.image != null) _prop('og:image', config.url(r.image!)),
+      if ((r.image ?? config.defaultImage ?? config.logoUrl) != null)
+        _prop(
+          'og:image',
+          config.url((r.image ?? config.defaultImage ?? config.logoUrl)!),
+        ),
       // Twitter Cards
       meta(name: 'twitter:card', content: 'summary_large_image'),
       meta(name: 'twitter:title', content: r.title),
       meta(name: 'twitter:description', content: r.description),
       if (config.twitterHandle != null)
         meta(name: 'twitter:site', content: config.twitterHandle),
-      if (r.image != null)
-        meta(name: 'twitter:image', content: config.url(r.image!)),
+      if ((r.image ?? config.defaultImage ?? config.logoUrl) != null)
+        meta(
+          name: 'twitter:image',
+          content: config.url(
+            (r.image ?? config.defaultImage ?? config.logoUrl)!,
+          ),
+        ),
       if (r.author != null) meta(name: 'author', content: r.author),
       // hreflang
       for (final e in r.alternates.entries)

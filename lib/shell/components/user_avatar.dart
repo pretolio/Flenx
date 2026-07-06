@@ -17,8 +17,9 @@ class UserAvatar extends StatelessWidget {
       radius: radius,
       backgroundColor: scheme.primaryContainer,
       foregroundColor: scheme.onPrimaryContainer,
-      backgroundImage:
-          user.avatarUrl != null ? NetworkImage(user.avatarUrl!) : null,
+      backgroundImage: user.avatarUrl != null
+          ? NetworkImage(user.avatarUrl!)
+          : null,
       child: user.avatarUrl == null
           ? Text(user.initials, style: TextStyle(fontSize: radius * 0.8))
           : null,

@@ -19,8 +19,10 @@ void main() {
     });
 
     test('valores padrão quando só o título é informado', () {
-      final md = const BlogScaffold()
-          .markdown(title: 'Post Simples', date: DateTime(2026, 12, 25));
+      final md = const BlogScaffold().markdown(
+        title: 'Post Simples',
+        date: DateTime(2026, 12, 25),
+      );
       expect(md, contains('category: Sem categoria'));
       expect(md, contains('author: Equipe Flenx'));
       expect(md, contains('tags: []'));

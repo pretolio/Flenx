@@ -18,16 +18,17 @@ class FlenxAdminTheme {
   static final Color brand = Color(FlenxPalette.argb(FlenxPalette.primary));
 
   static ThemeData light({Color? seed}) => _build(
-        scheme: ColorScheme.fromSeed(seedColor: seed ?? brand).copyWith(
-          surface: Colors.white,
-          outlineVariant: Color(FlenxPalette.argb(FlenxPalette.border)),
-          onSurface: Color(FlenxPalette.argb(FlenxPalette.ink)),
-        ),
-        scaffold: const Color(0xFFF6F8FB),
-      );
+    scheme: ColorScheme.fromSeed(seedColor: seed ?? brand).copyWith(
+      surface: Colors.white,
+      outlineVariant: Color(FlenxPalette.argb(FlenxPalette.border)),
+      onSurface: Color(FlenxPalette.argb(FlenxPalette.ink)),
+    ),
+    scaffold: const Color(0xFFF6F8FB),
+  );
 
   static ThemeData dark({Color? seed}) => _build(
-        scheme: ColorScheme.fromSeed(
+    scheme:
+        ColorScheme.fromSeed(
           seedColor: seed ?? brand,
           brightness: Brightness.dark,
         ).copyWith(
@@ -35,17 +36,23 @@ class FlenxAdminTheme {
           outlineVariant: Color(FlenxPalette.argb(FlenxPalette.darkBorder)),
           onSurface: Color(FlenxPalette.argb(FlenxPalette.darkInk)),
         ),
-        scaffold: Color(FlenxPalette.argb(FlenxPalette.darkBg)),
-      );
+    scaffold: Color(FlenxPalette.argb(FlenxPalette.darkBg)),
+  );
 
-  static ThemeData _build({required ColorScheme scheme, required Color scaffold}) {
+  static ThemeData _build({
+    required ColorScheme scheme,
+    required Color scaffold,
+  }) {
     return ThemeData(
       useMaterial3: true,
       colorScheme: scheme,
       scaffoldBackgroundColor: scaffold,
       fontFamily: 'system-ui',
-      dividerTheme:
-          DividerThemeData(color: scheme.outlineVariant, space: 1, thickness: 1),
+      dividerTheme: DividerThemeData(
+        color: scheme.outlineVariant,
+        space: 1,
+        thickness: 1,
+      ),
       appBarTheme: AppBarTheme(
         backgroundColor: scheme.surface,
         surfaceTintColor: Colors.transparent,

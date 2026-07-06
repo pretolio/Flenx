@@ -23,9 +23,9 @@ void main() {
       expect(sql, contains('`id` BIGINT NOT NULL AUTO_INCREMENT'));
       // relação (FK)
       expect(
-          sql,
-          contains(
-              'FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`)'));
+        sql,
+        contains('FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`)'),
+      );
     });
   });
 

@@ -44,12 +44,17 @@ class ProfileMenu extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(user.name,
-                        maxLines: 1, overflow: TextOverflow.ellipsis),
-                    Text(user.role,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodySmall),
+                    Text(
+                      user.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      user.role,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
                   ],
                 ),
               ),
@@ -68,10 +73,12 @@ class ProfileMenu extends StatelessWidget {
   PopupMenuItem<String> _item(String value, IconData icon, String label) =>
       PopupMenuItem(
         value: value,
-        child: Row(children: [
-          Icon(icon, size: 20),
-          const SizedBox(width: 12),
-          Text(label),
-        ]),
+        child: Row(
+          children: [
+            Icon(icon, size: 20),
+            const SizedBox(width: 12),
+            Text(label),
+          ],
+        ),
       );
 }

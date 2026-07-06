@@ -54,8 +54,12 @@ class FlenxRive extends StatelessComponent {
   String _esc(String s) => s.replaceAll("'", "\\'");
 
   String get _js {
-    final artboardOpt = artboard != null ? "artboard:'${_esc(artboard!)}'," : '';
-    final smOpt = stateMachine != null ? "stateMachines:'${_esc(stateMachine!)}'," : '';
+    final artboardOpt = artboard != null
+        ? "artboard:'${_esc(artboard!)}',"
+        : '';
+    final smOpt = stateMachine != null
+        ? "stateMachines:'${_esc(stateMachine!)}',"
+        : '';
     return '''
 (function(){
   var id='$_id';
@@ -94,12 +98,14 @@ class FlenxRive extends StatelessComponent {
       Component.element(
         tag: 'canvas',
         id: _id,
-        styles: Styles(raw: {
-          if (_w != null) 'width': '${_w}px',
-          if (_h != null) 'height': '${_h}px',
-          if (_w == null) 'width': '100%',
-          'display': 'block',
-        }),
+        styles: Styles(
+          raw: {
+            if (_w != null) 'width': '${_w}px',
+            if (_h != null) 'height': '${_h}px',
+            if (_w == null) 'width': '100%',
+            'display': 'block',
+          },
+        ),
         attributes: {
           if (_w != null) 'width': '${_w!.toInt()}',
           if (_h != null) 'height': '${_h!.toInt()}',

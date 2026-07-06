@@ -26,9 +26,25 @@ class DbRelation {
   /// Coluna referenciada (normalmente `id`).
   final String localKey;
 
-  factory DbRelation.belongsTo(String name, {required String table, required String foreignKey}) =>
-      DbRelation(kind: RelationKind.belongsTo, name: name, table: table, foreignKey: foreignKey);
+  factory DbRelation.belongsTo(
+    String name, {
+    required String table,
+    required String foreignKey,
+  }) => DbRelation(
+    kind: RelationKind.belongsTo,
+    name: name,
+    table: table,
+    foreignKey: foreignKey,
+  );
 
-  factory DbRelation.hasMany(String name, {required String table, required String foreignKey}) =>
-      DbRelation(kind: RelationKind.hasMany, name: name, table: table, foreignKey: foreignKey);
+  factory DbRelation.hasMany(
+    String name, {
+    required String table,
+    required String foreignKey,
+  }) => DbRelation(
+    kind: RelationKind.hasMany,
+    name: name,
+    table: table,
+    foreignKey: foreignKey,
+  );
 }

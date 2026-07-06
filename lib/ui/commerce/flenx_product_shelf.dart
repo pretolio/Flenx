@@ -28,10 +28,14 @@ class FlenxProductShelf extends StatelessComponent {
           if (countdown != null)
             div(classes: 'fxz-clock', [
               for (final part in _parts(countdown!)) ...[
-                if (part == ':') Component.text(':') else b([Component.text(part)]),
+                if (part == ':')
+                  Component.text(':')
+                else
+                  b([Component.text(part)]),
               ],
             ]),
-          if (subtitle != null) span(classes: 'sub', [Component.text(subtitle!)]),
+          if (subtitle != null)
+            span(classes: 'sub', [Component.text(subtitle!)]),
         ]),
         div(classes: 'fxz-carousel', products),
       ]),
@@ -89,7 +93,8 @@ class FlenxProductGrid extends StatelessComponent {
   @override
   Component build(BuildContext context) {
     return div(classes: 'fxz-wrap', [
-      if (title != null) div(classes: 'fxz-sec-title', [Component.text(title!)]),
+      if (title != null)
+        div(classes: 'fxz-sec-title', [Component.text(title!)]),
       div(classes: 'fxz-grid', products),
     ]);
   }

@@ -27,19 +27,25 @@ class StatCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconChip(icon: stat.icon),
-              Text(stat.trend,
-                  style: const TextStyle(
-                      color: Color(0xFF10B981),
-                      fontWeight: FontWeight.w700,
-                      fontSize: 12.5)),
+              Text(
+                stat.trend,
+                style: const TextStyle(
+                  color: Color(0xFF10B981),
+                  fontWeight: FontWeight.w700,
+                  fontSize: 12.5,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 14),
-          Text(stat.value,
-              style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.w800,
-                  color: scheme.onSurface)),
+          Text(
+            stat.value,
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.w800,
+              color: scheme.onSurface,
+            ),
+          ),
           Text(stat.label, style: TextStyle(color: scheme.onSurfaceVariant)),
         ],
       ),

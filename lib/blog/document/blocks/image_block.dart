@@ -21,19 +21,24 @@ class ImageBlock extends PostBlock {
       if (credit != null && credit!.trim().isNotEmpty)
         '<span class="credit">${credit!.trim()}</span>',
     ].join(' — ');
-    final figcaption =
-        legend.isEmpty ? '' : '\n  <figcaption>$legend</figcaption>';
+    final figcaption = legend.isEmpty
+        ? ''
+        : '\n  <figcaption>$legend</figcaption>';
     return '<figure>\n  <img src="$url" alt="$altText" />$figcaption\n</figure>';
   }
 
   @override
-  Map<String, Object?> data() =>
-      {'url': url, 'caption': caption, 'credit': credit, 'alt': alt};
+  Map<String, Object?> data() => {
+    'url': url,
+    'caption': caption,
+    'credit': credit,
+    'alt': alt,
+  };
 
   factory ImageBlock.fromJson(Map<String, Object?> j) => ImageBlock(
-        (j['url'] as String?) ?? '',
-        caption: j['caption'] as String?,
-        credit: j['credit'] as String?,
-        alt: j['alt'] as String?,
-      );
+    (j['url'] as String?) ?? '',
+    caption: j['caption'] as String?,
+    credit: j['credit'] as String?,
+    alt: j['alt'] as String?,
+  );
 }

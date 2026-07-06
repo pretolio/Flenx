@@ -20,8 +20,8 @@ import 'site/page_result.dart';
 export 'site/page_result.dart';
 
 /// Resolve um caminho no conteúdo a renderizar. Retorna `null` para 404.
-typedef PageResolver = FutureOr<PageResult?> Function(
-    String path, Map<String, String> query);
+typedef PageResolver =
+    FutureOr<PageResult?> Function(String path, Map<String, String> query);
 
 /// Servidor SSR pronto do Flenx.
 class FlenxServer {
@@ -74,55 +74,76 @@ class FlenxServer {
 
     // APIs declarativas (envelope/validação/paginação/auth padrão).
     if (apis.isNotEmpty && db != null) {
-      FlenxApi(apis, db!, onEmail: onEmail, tokenVerifier: tokenVerifier)
-          .mountOn(router);
+      FlenxApi(
+        apis,
+        db!,
+        onEmail: onEmail,
+        tokenVerifier: tokenVerifier,
+      ).mountOn(router);
     }
 
-    router.mount('/', serveApp((request, render) async {
-      final path = request.requestedUri.path.isEmpty
-          ? '/'
-          : request.requestedUri.path;
-      final result = await resolvePage(path, request.requestedUri.queryParameters);
-      final known = result != null;
+    router.mount(
+      '/',
+      serveApp((request, render) async {
+        final path = request.requestedUri.path.isEmpty
+            ? '/'
+            : request.requestedUri.path;
+        final result = await resolvePage(
+          path,
+          request.requestedUri.queryParameters,
+        );
+        final known = result != null;
 
-      final routeMeta = await registry.find(path) ??
-          (known
-              ? RouteMeta(
-                  path: path, title: seo.siteName, description: seo.description)
-              : const RouteMeta(
-                  path: '/404',
-                  title: '404 — Página não encontrada',
-                  description: 'A página que você procura não existe.',
-                  noindex: true,
-                ));
+        final routeMeta =
+            await registry.find(path) ??
+            (known
+                ? RouteMeta(
+                    path: path,
+                    title: seo.siteName,
+                    description: seo.description,
+                  )
+                : const RouteMeta(
+                    path: '/404',
+                    title: '404 — Página não encontrada',
+                    description: 'A página que você procura não existe.',
+                    noindex: true,
+                  ));
 
-      final document = Document(
-        title: routeMeta.title,
-        lang: lang,
-        styles: [..._resetStyles, ...globalStyles],
-        head: [
-          ...meta.build(routeMeta),
-          ...headExtra,
-          if (result?.island ?? false)
-            script(src: flutterBootstrap, defer: true),
-        ],
-        body: result?.body ?? notFound,
-      );
+        final document = Document(
+          title: routeMeta.title,
+          lang: lang,
+          styles: [..._resetStyles, ...globalStyles],
+          head: [
+            ...meta.build(routeMeta),
+            ...headExtra,
+            if (result?.island ?? false)
+              script(src: flutterBootstrap, defer: true),
+          ],
+          body: result?.body ?? notFound,
+        );
 
-      final response = await render(document);
-      if (known) return response;
-      final html = await response.readAsString();
-      return Response.notFound(html,
-          headers: {'content-type': 'text/html; charset=utf-8'});
-    }));
+        final response = await render(document);
+        if (known) return response;
+        final html = await response.readAsString();
+        return Response.notFound(
+          html,
+          headers: {'content-type': 'text/html; charset=utf-8'},
+        );
+      }),
+    );
 
-    final handler =
-        const Pipeline().addMiddleware(logRequests()).addHandler(router.call);
+    final handler = const Pipeline()
+        .addMiddleware(logRequests())
+        .addHandler(router.call);
 
     // Controle de hot-reload do jaspr: fecha o servidor anterior ao recarregar.
     final reloadLock = _activeReloadLock = Object();
-    final server =
-        await serve(handler, InternetAddress.anyIPv4, resolvedPort, shared: true);
+    final server = await serve(
+      handler,
+      InternetAddress.anyIPv4,
+      resolvedPort,
+      shared: true,
+    );
     if (reloadLock != _activeReloadLock) {
       await server.close();
       return server;
@@ -148,12 +169,12 @@ class FlenxServer {
   static Object? _activeReloadLock;
 
   static List<StyleRule> get _resetStyles => [
-        css('html, body').styles(
-          width: 100.percent,
-          minHeight: 100.vh,
-          padding: .zero,
-          margin: .zero,
-        ),
-        css('h1').styles(margin: .unset),
-      ];
+    css('html, body').styles(
+      width: 100.percent,
+      minHeight: 100.vh,
+      padding: .zero,
+      margin: .zero,
+    ),
+    css('h1').styles(margin: .unset),
+  ];
 }

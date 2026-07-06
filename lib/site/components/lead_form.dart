@@ -29,29 +29,33 @@ class LeadForm extends StatelessComponent {
   };
 
   Component _label(String text) => Component.element(
-        tag: 'label',
-        styles: Styles(raw: {
-          'display': 'block',
-          'font-weight': '600',
-          'font-size': '14px',
-          'margin-bottom': '6px',
-          'color': FlenxPalette.ink,
-        }),
-        children: [.text(text)],
-      );
+    tag: 'label',
+    styles: Styles(
+      raw: {
+        'display': 'block',
+        'font-weight': '600',
+        'font-size': '14px',
+        'margin-bottom': '6px',
+        'color': FlenxPalette.ink,
+      },
+    ),
+    children: [.text(text)],
+  );
 
-  Component _field(String name, String label, String type, String hint) => div(
-        styles: Styles(raw: {'flex': '1 1 200px'}),
-        [
-          _label(label),
-          Component.element(tag: 'input', attributes: {
+  Component _field(String name, String label, String type, String hint) =>
+      div(styles: Styles(raw: {'flex': '1 1 200px'}), [
+        _label(label),
+        Component.element(
+          tag: 'input',
+          attributes: {
             'name': name,
             'type': type,
             'placeholder': hint,
             'required': 'required',
-          }, styles: Styles(raw: _fld)),
-        ],
-      );
+          },
+          styles: Styles(raw: _fld),
+        ),
+      ]);
 
   @override
   Component build(BuildContext context) {
@@ -60,7 +64,8 @@ class LeadForm extends StatelessComponent {
         styles: Styles(raw: {'text-align': 'center', 'padding': '12px 0'}),
         [
           div(
-              styles: Styles(raw: {
+            styles: Styles(
+              raw: {
                 'width': '52px',
                 'height': '52px',
                 'margin': '0 auto 12px',
@@ -71,15 +76,18 @@ class LeadForm extends StatelessComponent {
                 'align-items': 'center',
                 'justify-content': 'center',
                 'font-size': '26px',
-              }),
-              [.text('✓')]),
+              },
+            ),
+            [.text('✓')],
+          ),
           Component.element(
-              tag: 'h3',
-              styles: Styles(raw: {'margin': '0 0 4px'}),
-              children: [.text('Recebemos seu contato!')]),
-          p(
-              styles: Styles(raw: {'margin': '0', 'color': FlenxPalette.muted}),
-              [.text('Em breve a equipe retorna no seu e-mail.')]),
+            tag: 'h3',
+            styles: Styles(raw: {'margin': '0 0 4px'}),
+            children: [.text('Recebemos seu contato!')],
+          ),
+          p(styles: Styles(raw: {'margin': '0', 'color': FlenxPalette.muted}), [
+            .text('Em breve a equipe retorna no seu e-mail.'),
+          ]),
         ],
       );
     }
@@ -87,12 +95,14 @@ class LeadForm extends StatelessComponent {
     return form(
       [
         div(
-          styles: Styles(raw: {
-            'display': 'flex',
-            'gap': '12px',
-            'flex-wrap': 'wrap',
-            'margin-bottom': '14px',
-          }),
+          styles: Styles(
+            raw: {
+              'display': 'flex',
+              'gap': '12px',
+              'flex-wrap': 'wrap',
+              'margin-bottom': '14px',
+            },
+          ),
           [
             _field('name', 'Nome', 'text', 'Seu nome'),
             _field('email', 'E-mail', 'email', 'voce@email.com'),
@@ -106,22 +116,26 @@ class LeadForm extends StatelessComponent {
             'rows': '4',
             'placeholder': 'Como podemos ajudar? (opcional)',
           },
-          styles: Styles(raw: {..._fld, 'margin-bottom': '14px', 'resize': 'vertical'}),
+          styles: Styles(
+            raw: {..._fld, 'margin-bottom': '14px', 'resize': 'vertical'},
+          ),
         ),
         button(
           [.text(submitLabel)],
           attributes: const {'type': 'submit'},
-          styles: Styles(raw: {
-            'width': '100%',
-            'padding': '14px',
-            'border': '0',
-            'border-radius': '10px',
-            'background': FlenxPalette.primary,
-            'color': '#fff',
-            'font-weight': '700',
-            'font-size': '15px',
-            'cursor': 'pointer',
-          }),
+          styles: Styles(
+            raw: {
+              'width': '100%',
+              'padding': '14px',
+              'border': '0',
+              'border-radius': '10px',
+              'background': FlenxPalette.primary,
+              'color': '#fff',
+              'font-weight': '700',
+              'font-size': '15px',
+              'cursor': 'pointer',
+            },
+          ),
         ),
       ],
       action: action,

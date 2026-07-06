@@ -17,24 +17,25 @@ import '../../api/db_executor.dart';
 /// Credenciais: `API_BASE_URL` e (opcional) `API_TOKEN` (Bearer).
 class RestApiDbExecutor implements DbExecutor {
   RestApiDbExecutor({required this.baseUrl, this.token, http.Client? client})
-      : _client = client ?? http.Client();
+    : _client = client ?? http.Client();
 
-  factory RestApiDbExecutor.fromEnv(Map<String, String> env,
-          {http.Client? client}) =>
-      RestApiDbExecutor(
-        baseUrl: env['API_BASE_URL'] ?? '',
-        token: env['API_TOKEN'],
-        client: client,
-      );
+  factory RestApiDbExecutor.fromEnv(
+    Map<String, String> env, {
+    http.Client? client,
+  }) => RestApiDbExecutor(
+    baseUrl: env['API_BASE_URL'] ?? '',
+    token: env['API_TOKEN'],
+    client: client,
+  );
 
   final String baseUrl;
   final String? token;
   final http.Client _client;
 
   Map<String, String> get _headers => {
-        'content-type': 'application/json',
-        if (token != null && token!.isNotEmpty) 'authorization': 'Bearer $token',
-      };
+    'content-type': 'application/json',
+    if (token != null && token!.isNotEmpty) 'authorization': 'Bearer $token',
+  };
 
   Uri _u(String path) => Uri.parse('$baseUrl/$path');
 
@@ -46,8 +47,11 @@ class RestApiDbExecutor implements DbExecutor {
 
   @override
   Future<int> insert(String table, Map<String, Object?> values) async {
-    final r = await _client.post(_u(table),
-        headers: _headers, body: jsonEncode(values));
+    final r = await _client.post(
+      _u(table),
+      headers: _headers,
+      body: jsonEncode(values),
+    );
     final data = _decode(r)['data'];
     if (data is Map && data['id'] != null) {
       return (data['id'] as num).toInt();
@@ -77,7 +81,10 @@ class RestApiDbExecutor implements DbExecutor {
 
   @override
   Future<int> count(String table) async {
-    final r = await _client.get(_u('$table?page=1&perPage=1'), headers: _headers);
+    final r = await _client.get(
+      _u('$table?page=1&perPage=1'),
+      headers: _headers,
+    );
     final meta = _decode(r)['meta'];
     if (meta is Map && meta['total'] != null) {
       return (meta['total'] as num).toInt();
@@ -95,9 +102,15 @@ class RestApiDbExecutor implements DbExecutor {
 
   @override
   Future<bool> updateById(
-      String table, Object id, Map<String, Object?> values) async {
-    final r = await _client.put(_u('$table/$id'),
-        headers: _headers, body: jsonEncode(values));
+    String table,
+    Object id,
+    Map<String, Object?> values,
+  ) async {
+    final r = await _client.put(
+      _u('$table/$id'),
+      headers: _headers,
+      body: jsonEncode(values),
+    );
     return r.statusCode < 400 && _decode(r)['success'] == true;
   }
 

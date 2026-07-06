@@ -29,29 +29,29 @@ class FlenxAlert extends StatelessComponent {
   ({String icon, String bg, String textColor, String border}) get _config =>
       switch (variant) {
         FlenxAlertVariant.info => (
-            icon: 'ℹ️',
-            bg: '#EFF6FF',
-            textColor: '#1D4ED8',
-            border: '#BFDBFE',
-          ),
+          icon: 'ℹ️',
+          bg: '#EFF6FF',
+          textColor: '#1D4ED8',
+          border: '#BFDBFE',
+        ),
         FlenxAlertVariant.success => (
-            icon: '✅',
-            bg: '#F0FDF4',
-            textColor: '#15803D',
-            border: '#BBF7D0',
-          ),
+          icon: '✅',
+          bg: '#F0FDF4',
+          textColor: '#15803D',
+          border: '#BBF7D0',
+        ),
         FlenxAlertVariant.warning => (
-            icon: '⚠️',
-            bg: '#FFFBEB',
-            textColor: '#92400E',
-            border: '#FDE68A',
-          ),
+          icon: '⚠️',
+          bg: '#FFFBEB',
+          textColor: '#92400E',
+          border: '#FDE68A',
+        ),
         FlenxAlertVariant.error => (
-            icon: '❌',
-            bg: '#FEF2F2',
-            textColor: '#B91C1C',
-            border: '#FECACA',
-          ),
+          icon: '❌',
+          bg: '#FEF2F2',
+          textColor: '#B91C1C',
+          border: '#FECACA',
+        ),
       };
 
   @override
@@ -59,26 +59,24 @@ class FlenxAlert extends StatelessComponent {
     final c = _config;
     return Component.element(
       tag: 'div',
-      styles: Styles(raw: {
-        'display': 'flex',
-        'gap': '12px',
-        'align-items': 'flex-start',
-        'background': c.bg,
-        'border': '1px solid ${c.border}',
-        'border-left': '4px solid ${c.textColor}',
-        'border-radius': '8px',
-        'padding': '14px 16px',
-      }),
+      styles: Styles(
+        raw: {
+          'display': 'flex',
+          'gap': '12px',
+          'align-items': 'flex-start',
+          'background': c.bg,
+          'border': '1px solid ${c.border}',
+          'border-left': '4px solid ${c.textColor}',
+          'border-radius': '8px',
+          'padding': '14px 16px',
+        },
+      ),
       children: [
         FlenxText(c.icon, size: 18),
-        FlenxColumn(
-          gap: 4,
-          [
-            if (title != null)
-              FlenxText(title!, weight: 700, color: c.textColor),
-            FlenxText(message, color: c.textColor, size: 14),
-          ],
-        ),
+        FlenxColumn(gap: 4, [
+          if (title != null) FlenxText(title!, weight: 700, color: c.textColor),
+          FlenxText(message, color: c.textColor, size: 14),
+        ]),
       ],
     );
   }

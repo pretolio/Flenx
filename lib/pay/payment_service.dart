@@ -14,10 +14,14 @@ class PaymentService {
 
   /// Seleciona o gateway pelo ambiente (lado servidor) via [PaymentRegistry].
   /// Provedores novos entram com `PaymentRegistry.register(...)`.
-  factory PaymentService.fromEnv(Map<String, String> env, {http.Client? client}) {
+  factory PaymentService.fromEnv(
+    Map<String, String> env, {
+    http.Client? client,
+  }) {
     final provider = env['PAYMENT_PROVIDER'] ?? '';
     return PaymentService(
-        PaymentRegistry.resolve(provider, env, client: client));
+      PaymentRegistry.resolve(provider, env, client: client),
+    );
   }
 
   String get provider => gateway.name;

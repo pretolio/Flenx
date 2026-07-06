@@ -25,7 +25,8 @@ void main() {
       final center = NotificationCenter([ativo, inativo]);
 
       final res = await center.notifyAll(
-          const NotificationMessage(title: 'Oi', body: 'teste'));
+        const NotificationMessage(title: 'Oi', body: 'teste'),
+      );
 
       expect(ativo.sent, 1);
       expect(inativo.sent, 0); // inativo não dispara
@@ -40,7 +41,8 @@ void main() {
       final center = NotificationCenter([ruim, ok]);
 
       final res = await center.notifyAll(
-          const NotificationMessage(title: 't', body: 'b'));
+        const NotificationMessage(title: 't', body: 'b'),
+      );
 
       expect(ok.sent, 1); // o outro canal ainda envia
       final ruimRes = res.firstWhere((r) => r.channel == 'ruim');

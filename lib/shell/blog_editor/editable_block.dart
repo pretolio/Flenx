@@ -38,9 +38,11 @@ class EditableBlock {
       case BlockType.heading:
         return HeadingBlock(text, level: level);
       case BlockType.image:
-        return ImageBlock(url,
-            caption: text.isEmpty ? null : text,
-            credit: secondary.isEmpty ? null : secondary);
+        return ImageBlock(
+          url,
+          caption: text.isEmpty ? null : text,
+          credit: secondary.isEmpty ? null : secondary,
+        );
       case BlockType.quote:
         return QuoteBlock(text, cite: secondary.isEmpty ? null : secondary);
       case BlockType.list:
@@ -80,12 +82,12 @@ class EditableBlock {
   }
 
   static BlockType _typeOf(PostBlock b) => switch (b) {
-        HeadingBlock() => BlockType.heading,
-        ImageBlock() => BlockType.image,
-        QuoteBlock() => BlockType.quote,
-        ListBlock() => BlockType.list,
-        EmbedBlock() => BlockType.embed,
-        DividerBlock() => BlockType.divider,
-        _ => BlockType.paragraph,
-      };
+    HeadingBlock() => BlockType.heading,
+    ImageBlock() => BlockType.image,
+    QuoteBlock() => BlockType.quote,
+    ListBlock() => BlockType.list,
+    EmbedBlock() => BlockType.embed,
+    DividerBlock() => BlockType.divider,
+    _ => BlockType.paragraph,
+  };
 }

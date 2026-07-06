@@ -43,12 +43,12 @@ void main() {
 
   group('SitemapIndexGenerator', () {
     test('gera sitemapindex com os shards', () {
-      final xml = const SitemapIndexGenerator(config)
-          .generate(['/sitemap-0.xml', '/sitemap-1.xml']);
+      final xml = const SitemapIndexGenerator(
+        config,
+      ).generate(['/sitemap-0.xml', '/sitemap-1.xml']);
       expect(xml, contains('<sitemapindex'));
       expect(xml, contains('<loc>https://exemplo.com/sitemap-0.xml</loc>'));
       expect(xml, contains('<loc>https://exemplo.com/sitemap-1.xml</loc>'));
     });
   });
 }
-

@@ -57,11 +57,10 @@ class _BlogAdminPageState extends State<BlogAdminPage> {
     }
   }
 
-  void _openEditor({Map<String, Object?>? row}) =>
-      setState(() {
-        _current = row;
-        _editing = true;
-      });
+  void _openEditor({Map<String, Object?>? row}) => setState(() {
+    _current = row;
+    _editing = true;
+  });
 
   void _closeEditor() {
     setState(() => _editing = false);
@@ -76,11 +75,13 @@ class _BlogAdminPageState extends State<BlogAdminPage> {
         content: Text('"${row['title']}" será removido do blog.'),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancelar')),
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancelar'),
+          ),
           FilledButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: const Text('Excluir')),
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Excluir'),
+          ),
         ],
       ),
     );
@@ -90,8 +91,9 @@ class _BlogAdminPageState extends State<BlogAdminPage> {
       await _load();
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Erro: $e')));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Erro: $e')));
       }
     }
   }
@@ -114,22 +116,29 @@ class _BlogAdminPageState extends State<BlogAdminPage> {
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(24, 24, 24, 8),
-          child: Row(children: [
-            Expanded(
-              child: Text(widget.title,
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  widget.title,
                   style: const TextStyle(
-                      fontSize: 24, fontWeight: FontWeight.w800)),
-            ),
-            IconButton(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+              IconButton(
                 onPressed: _load,
                 tooltip: 'Recarregar',
-                icon: const Icon(Icons.refresh)),
-            FilledButton.icon(
-              onPressed: () => _openEditor(),
-              icon: const Icon(Icons.add),
-              label: const Text('Novo post'),
-            ),
-          ]),
+                icon: const Icon(Icons.refresh),
+              ),
+              FilledButton.icon(
+                onPressed: () => _openEditor(),
+                icon: const Icon(Icons.add),
+                label: const Text('Novo post'),
+              ),
+            ],
+          ),
         ),
         Expanded(child: _body(scheme)),
       ],
@@ -138,15 +147,20 @@ class _BlogAdminPageState extends State<BlogAdminPage> {
 
   Widget _body(ColorScheme scheme) {
     if (_error != null) {
-      return Center(child: Text(_error!, style: TextStyle(color: scheme.error)));
+      return Center(
+        child: Text(_error!, style: TextStyle(color: scheme.error)),
+      );
     }
     if (_rows == null) {
       return const Center(child: CircularProgressIndicator());
     }
     if (_rows!.isEmpty) {
       return Center(
-          child: Text('Nenhum post no banco ainda. Crie o primeiro!',
-              style: TextStyle(color: scheme.onSurfaceVariant)));
+        child: Text(
+          'Nenhum post no banco ainda. Crie o primeiro!',
+          style: TextStyle(color: scheme.onSurfaceVariant),
+        ),
+      );
     }
     return ListView.separated(
       padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
@@ -156,18 +170,26 @@ class _BlogAdminPageState extends State<BlogAdminPage> {
         final row = _rows![i];
         final draft = '${row['draft']}' == '1';
         return ListTile(
-          title: Text('${row['title'] ?? '(sem título)'}',
-              style: const TextStyle(fontWeight: FontWeight.w600)),
+          title: Text(
+            '${row['title'] ?? '(sem título)'}',
+            style: const TextStyle(fontWeight: FontWeight.w600),
+          ),
           subtitle: Text(
-              '${row['category'] ?? ''}${draft ? '  ·  RASCUNHO' : ''}'),
-          trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-            IconButton(
+            '${row['category'] ?? ''}${draft ? '  ·  RASCUNHO' : ''}',
+          ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
                 icon: const Icon(Icons.edit_outlined),
-                onPressed: () => _openEditor(row: row)),
-            IconButton(
+                onPressed: () => _openEditor(row: row),
+              ),
+              IconButton(
                 icon: Icon(Icons.delete_outline, color: scheme.error),
-                onPressed: () => _delete(row)),
-          ]),
+                onPressed: () => _delete(row),
+              ),
+            ],
+          ),
         );
       },
     );

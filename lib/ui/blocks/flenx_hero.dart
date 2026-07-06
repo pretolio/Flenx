@@ -40,20 +40,14 @@ class FlenxHero extends StatelessComponent {
         cross: FlenxAlign.center,
         main: FlenxAlign.spaceBetween,
         [
-          FlenxColumn(
-            gap: 18,
-            maxWidthPx: 560,
-            [
-              if (eyebrow != null)
-                FlenxText(eyebrow!, color: '#7dd3fc', weight: 700),
-              FlenxHeading(title, level: 1, color: '#ffffff', size: 46),
-              if (subtitle != null)
-                FlenxText(subtitle!,
-                    size: 18, color: '#dbeafe', lineHeight: 1.6),
-              if (actions.isNotEmpty)
-                FlenxRow(gap: 12, wrap: true, actions),
-            ],
-          ),
+          FlenxColumn(gap: 18, maxWidthPx: 560, [
+            if (eyebrow != null)
+              FlenxText(eyebrow!, color: '#7dd3fc', weight: 700),
+            FlenxHeading(title, level: 1, color: '#ffffff', size: 46),
+            if (subtitle != null)
+              FlenxText(subtitle!, size: 18, color: '#dbeafe', lineHeight: 1.6),
+            if (actions.isNotEmpty) FlenxRow(gap: 12, wrap: true, actions),
+          ]),
           if (aside != null) aside!,
         ],
       ),

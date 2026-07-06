@@ -36,12 +36,14 @@ class FlenxBanner extends StatelessComponent {
   Component build(BuildContext context) {
     return Component.element(
       tag: 'div',
-      styles: Styles(raw: {
-        'background': background,
-        'color': textColor,
-        'padding': '10px 24px',
-        'text-align': 'center',
-      }),
+      styles: Styles(
+        raw: {
+          'background': background,
+          'color': textColor,
+          'padding': '10px 24px',
+          'text-align': 'center',
+        },
+      ),
       children: [
         FlenxRow(
           gap: 16,

@@ -2,7 +2,6 @@ import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
 
 import 'flenx_animated.dart';
-import 'flenx_animation.dart';
 import 'flenx_ui_enums.dart';
 
 /// Título — como um `Text` de destaque. [level] 1–3 vira `<h1>..<h3>` (bom para
@@ -39,17 +38,24 @@ class FlenxHeading extends StatelessComponent {
   Component build(BuildContext context) {
     final elem = Component.element(
       tag: 'h${level.clamp(1, 6)}',
-      styles: Styles(raw: {
-        'margin': '0',
-        'font-size': '${_size}px',
-        'font-weight': '$weight',
-        'line-height': '1.15',
-        if (color != null) 'color': color!,
-        if (align != null) 'text-align': align!.name,
-      }),
+      styles: Styles(
+        raw: {
+          'margin': '0',
+          'font-size': '${_size}px',
+          'font-weight': '$weight',
+          'line-height': '1.15',
+          if (color != null) 'color': color!,
+          if (align != null) 'text-align': align!.name,
+        },
+      ),
       children: [.text(data)],
     );
     if (animation == null) return elem;
-    return FlenxAnimated(elem, animation: animation!, delay: animationDelay, duration: animationDuration);
+    return FlenxAnimated(
+      elem,
+      animation: animation!,
+      delay: animationDelay,
+      duration: animationDuration,
+    );
   }
 }

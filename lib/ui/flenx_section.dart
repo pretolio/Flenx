@@ -52,16 +52,23 @@ class FlenxSection extends StatelessComponent {
   @override
   Component build(BuildContext context) {
     final content = animation != null
-        ? FlenxAnimated(child, animation: animation!, delay: animationDelay, duration: animationDuration)
+        ? FlenxAnimated(
+            child,
+            animation: animation!,
+            delay: animationDelay,
+            duration: animationDuration,
+          )
         : child;
 
     final innerDiv = div(
-      styles: Styles(raw: {
-        'max-width': '${maxWidthPx}px',
-        'margin': '0 auto',
-        if (backgroundImage != null) 'position': 'relative',
-        if (backgroundImage != null) 'z-index': '1',
-      }),
+      styles: Styles(
+        raw: {
+          'max-width': '${maxWidthPx}px',
+          'margin': '0 auto',
+          if (backgroundImage != null) 'position': 'relative',
+          if (backgroundImage != null) 'z-index': '1',
+        },
+      ),
       [content],
     );
 
@@ -69,10 +76,12 @@ class FlenxSection extends StatelessComponent {
       return Component.element(
         tag: 'section',
         id: id,
-        styles: Styles(raw: {
-          'padding': '${paddingY}px 24px',
-          if (background != null) 'background': background!,
-        }),
+        styles: Styles(
+          raw: {
+            'padding': '${paddingY}px 24px',
+            if (background != null) 'background': background!,
+          },
+        ),
         children: [innerDiv],
       );
     }
@@ -80,32 +89,38 @@ class FlenxSection extends StatelessComponent {
     return Component.element(
       tag: 'section',
       id: id,
-      styles: Styles(raw: {
-        'padding': '${paddingY}px 24px',
-        'position': 'relative',
-        'overflow': 'hidden',
-      }),
+      styles: Styles(
+        raw: {
+          'padding': '${paddingY}px 24px',
+          'position': 'relative',
+          'overflow': 'hidden',
+        },
+      ),
       children: [
         // Camada da imagem
         div(
-          styles: Styles(raw: {
-            'position': 'absolute',
-            'inset': '0',
-            'background-image': 'url($backgroundImage)',
-            'background-size': 'cover',
-            'background-position': 'center',
-            'opacity': '$backgroundImageOpacity',
-          }),
+          styles: Styles(
+            raw: {
+              'position': 'absolute',
+              'inset': '0',
+              'background-image': 'url($backgroundImage)',
+              'background-size': 'cover',
+              'background-position': 'center',
+              'opacity': '$backgroundImageOpacity',
+            },
+          ),
           [],
         ),
         // Overlay de cor (opcional — ex.: 'rgba(0,0,0,0.6)' para escurecer)
         if (background != null)
           div(
-            styles: Styles(raw: {
-              'position': 'absolute',
-              'inset': '0',
-              'background': background!,
-            }),
+            styles: Styles(
+              raw: {
+                'position': 'absolute',
+                'inset': '0',
+                'background': background!,
+              },
+            ),
             [],
           ),
         // Conteúdo

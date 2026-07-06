@@ -32,10 +32,13 @@ class _ResourceFormDialogState extends State<ResourceFormDialog> {
         case FieldKind.boolean:
           _bools[f.key] = v == true || v == 1 || v == '1' || v == 'true';
         case FieldKind.select:
-          _selects[f.key] =
-              (v?.toString().isNotEmpty ?? false) ? v.toString() : f.options.first;
+          _selects[f.key] = (v?.toString().isNotEmpty ?? false)
+              ? v.toString()
+              : f.options.first;
         default:
-          _controllers[f.key] = TextEditingController(text: v?.toString() ?? '');
+          _controllers[f.key] = TextEditingController(
+            text: v?.toString() ?? '',
+          );
       }
     }
   }
@@ -49,20 +52,19 @@ class _ResourceFormDialogState extends State<ResourceFormDialog> {
   }
 
   Map<String, Object?> _collect() => {
-        if (widget.initial?[widget.config.idKey] != null)
-          widget.config.idKey: widget.initial![widget.config.idKey],
-        for (final f in widget.config.fields)
-          f.key: switch (f.kind) {
-            FieldKind.boolean => _bools[f.key]! ? '1' : '0',
-            FieldKind.select => _selects[f.key],
-            _ => _controllers[f.key]!.text.trim(),
-          },
-      };
+    if (widget.initial?[widget.config.idKey] != null)
+      widget.config.idKey: widget.initial![widget.config.idKey],
+    for (final f in widget.config.fields)
+      f.key: switch (f.kind) {
+        FieldKind.boolean => _bools[f.key]! ? '1' : '0',
+        FieldKind.select => _selects[f.key],
+        _ => _controllers[f.key]!.text.trim(),
+      },
+  };
 
   String? _validate() {
     for (final f in widget.config.fields) {
-      if (f.required &&
-          (_controllers[f.key]?.text.trim().isEmpty ?? false)) {
+      if (f.required && (_controllers[f.key]?.text.trim().isEmpty ?? false)) {
         return 'Preencha "${f.label}".';
       }
     }
@@ -79,22 +81,22 @@ class _ResourceFormDialogState extends State<ResourceFormDialog> {
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: [
-              for (final f in widget.config.fields) _field(f),
-            ],
+            children: [for (final f in widget.config.fields) _field(f)],
           ),
         ),
       ),
       actions: [
         TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar')),
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Cancelar'),
+        ),
         FilledButton(
           onPressed: () {
             final err = _validate();
             if (err != null) {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text(err)));
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(err)));
               return;
             }
             Navigator.pop(context, _collect());
@@ -124,12 +126,15 @@ class _ResourceFormDialogState extends State<ResourceFormDialog> {
         child: DropdownButtonFormField<String>(
           initialValue: _selects[f.key],
           decoration: InputDecoration(
-              labelText: f.label, border: const OutlineInputBorder()),
+            labelText: f.label,
+            border: const OutlineInputBorder(),
+          ),
           items: [
             for (final o in f.options)
               DropdownMenuItem(value: o, child: Text(o)),
           ],
-          onChanged: (v) => setState(() => _selects[f.key] = v ?? f.options.first),
+          onChanged: (v) =>
+              setState(() => _selects[f.key] = v ?? f.options.first),
         ),
       );
     }
@@ -140,8 +145,7 @@ class _ResourceFormDialogState extends State<ResourceFormDialog> {
         controller: _controllers[f.key],
         minLines: lines,
         maxLines: lines == 1 ? 1 : lines + 3,
-        keyboardType:
-            f.kind == FieldKind.number ? TextInputType.number : null,
+        keyboardType: f.kind == FieldKind.number ? TextInputType.number : null,
         decoration: InputDecoration(
           labelText: f.label,
           hintText: f.hint,

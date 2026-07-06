@@ -3,11 +3,14 @@ import 'package:flenx/ads/ads_config.dart';
 import 'package:jaspr_test/jaspr_test.dart';
 
 void main() {
-  const ads = AdsConfig(clientId: 'ca-pub-123', placements: [
-    AdPlacement(slot: 'home', paths: ['/']),
-    AdPlacement(slot: 'tech', categories: ['Tecnologia']),
-    AdPlacement(slot: 'todas'), // sem restrição
-  ]);
+  const ads = AdsConfig(
+    clientId: 'ca-pub-123',
+    placements: [
+      AdPlacement(slot: 'home', paths: ['/']),
+      AdPlacement(slot: 'tech', categories: ['Tecnologia']),
+      AdPlacement(slot: 'todas'), // sem restrição
+    ],
+  );
 
   group('AdsConfig.placementsFor', () {
     test('home: mostra slot da home + o sem restrição', () {
@@ -24,7 +27,10 @@ void main() {
 
     test('desativado não mostra nada', () {
       const off = AdsConfig(
-          clientId: 'x', enabled: false, placements: [AdPlacement(slot: 'a')]);
+        clientId: 'x',
+        enabled: false,
+        placements: [AdPlacement(slot: 'a')],
+      );
       expect(off.placementsFor(path: '/'), isEmpty);
     });
 
@@ -34,8 +40,9 @@ void main() {
   });
 
   group('FlenxAds', () {
-    testComponents('renderiza as unidades do AdSense (ins.adsbygoogle)',
-        (tester) async {
+    testComponents('renderiza as unidades do AdSense (ins.adsbygoogle)', (
+      tester,
+    ) async {
       tester.pumpComponent(const FlenxAds(ads, path: '/'));
       expect(find.tag('ins'), findsNComponents(2)); // home + todas
     });

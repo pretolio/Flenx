@@ -15,10 +15,10 @@ import 'sources/route_registry.dart';
 /// adicionada ao registry aparece automaticamente em todos eles.
 class SeoEndpoints {
   SeoEndpoints({required this.config, required this.registry})
-      : _sitemap = SitemapXmlGenerator(config),
-        _robots = RobotsTxtGenerator(config),
-        _llms = LlmsTxtGenerator(config),
-        _llmsFull = LlmsFullGenerator(config);
+    : _sitemap = SitemapXmlGenerator(config),
+      _robots = RobotsTxtGenerator(config),
+      _llms = LlmsTxtGenerator(config),
+      _llmsFull = LlmsFullGenerator(config);
 
   final SeoConfig config;
   final RouteRegistry registry;
@@ -50,12 +50,10 @@ class SeoEndpoints {
   }
 
   Response _xml(String body) => Response.ok(
-        body,
-        headers: {'content-type': 'application/xml; charset=utf-8'},
-      );
+    body,
+    headers: {'content-type': 'application/xml; charset=utf-8'},
+  );
 
-  Response _text(String body) => Response.ok(
-        body,
-        headers: {'content-type': 'text/plain; charset=utf-8'},
-      );
+  Response _text(String body) =>
+      Response.ok(body, headers: {'content-type': 'text/plain; charset=utf-8'});
 }

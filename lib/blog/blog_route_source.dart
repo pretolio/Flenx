@@ -20,35 +20,42 @@ class BlogRouteSource implements IRouteSource {
     return [
       _index(),
       if (taxonomy.categories.isNotEmpty)
-        _taxonomyIndex('/blog/categoria', 'Categorias',
-            'Todas as categorias do blog.'),
+        _taxonomyIndex(
+          '/blog/categoria',
+          'Categorias',
+          'Todas as categorias do blog.',
+        ),
       if (taxonomy.tags.isNotEmpty)
         _taxonomyIndex('/blog/tag', 'Tags', 'Todas as tags do blog.'),
       ...posts.where((p) => !p.draft).map(_post),
-      ...taxonomy.categories.map((c) => _archive(
-            path: c.category.path,
-            title: 'Categoria: ${c.category.name}',
-            count: c.posts.length,
-            section: 'Categorias',
-          )),
-      ...taxonomy.tags.map((t) => _archive(
-            path: t.tag.path,
-            title: 'Tag: ${t.tag.name}',
-            count: t.posts.length,
-            section: 'Tags',
-          )),
+      ...taxonomy.categories.map(
+        (c) => _archive(
+          path: c.category.path,
+          title: 'Categoria: ${c.category.name}',
+          count: c.posts.length,
+          section: 'Categorias',
+        ),
+      ),
+      ...taxonomy.tags.map(
+        (t) => _archive(
+          path: t.tag.path,
+          title: 'Tag: ${t.tag.name}',
+          count: t.posts.length,
+          section: 'Tags',
+        ),
+      ),
     ];
   }
 
   RouteMeta _index() => const RouteMeta(
-        path: '/blog',
-        title: 'Blog',
-        description: 'Artigos, tutoriais e novidades.',
-        kind: PageKind.collection,
-        section: 'Blog',
-        priority: 0.7,
-        changeFreq: ChangeFreq.daily,
-      );
+    path: '/blog',
+    title: 'Blog',
+    description: 'Artigos, tutoriais e novidades.',
+    kind: PageKind.collection,
+    section: 'Blog',
+    priority: 0.7,
+    changeFreq: ChangeFreq.daily,
+  );
 
   RouteMeta _taxonomyIndex(String path, String title, String description) =>
       RouteMeta(
@@ -62,45 +69,44 @@ class BlogRouteSource implements IRouteSource {
       );
 
   RouteMeta _post(BlogPost p) => RouteMeta(
-        path: p.path,
-        title: p.title,
-        description: p.description,
-        kind: PageKind.blogPost,
-        section: 'Blog',
-        image: p.image,
-        author: p.author,
-        datePublished: p.date,
-        lastmod: p.date,
-        priority: 0.8,
-        changeFreq: ChangeFreq.weekly,
-        keywords: p.tags.map((t) => t.name).toList(),
-        breadcrumbs: [
-          const Breadcrumb(name: 'Início', path: '/'),
-          const Breadcrumb(name: 'Blog', path: '/blog'),
-          if (p.category != null)
-            Breadcrumb(name: p.category!.name, path: p.category!.path),
-          Breadcrumb(name: p.title),
-        ],
-      );
+    path: p.path,
+    title: p.title,
+    description: p.description,
+    kind: PageKind.blogPost,
+    section: 'Blog',
+    image: p.image,
+    author: p.author,
+    datePublished: p.date,
+    lastmod: p.date,
+    priority: 0.8,
+    changeFreq: ChangeFreq.weekly,
+    keywords: p.tags.map((t) => t.name).toList(),
+    breadcrumbs: [
+      const Breadcrumb(name: 'Início', path: '/'),
+      const Breadcrumb(name: 'Blog', path: '/blog'),
+      if (p.category != null)
+        Breadcrumb(name: p.category!.name, path: p.category!.path),
+      Breadcrumb(name: p.title),
+    ],
+  );
 
   RouteMeta _archive({
     required String path,
     required String title,
     required int count,
     required String section,
-  }) =>
-      RouteMeta(
-        path: path,
-        title: title,
-        description: '$count ${count == 1 ? 'artigo' : 'artigos'} em $title.',
-        kind: PageKind.collection,
-        section: section,
-        priority: 0.5,
-        changeFreq: ChangeFreq.weekly,
-        breadcrumbs: [
-          const Breadcrumb(name: 'Início', path: '/'),
-          const Breadcrumb(name: 'Blog', path: '/blog'),
-          Breadcrumb(name: title),
-        ],
-      );
+  }) => RouteMeta(
+    path: path,
+    title: title,
+    description: '$count ${count == 1 ? 'artigo' : 'artigos'} em $title.',
+    kind: PageKind.collection,
+    section: section,
+    priority: 0.5,
+    changeFreq: ChangeFreq.weekly,
+    breadcrumbs: [
+      const Breadcrumb(name: 'Início', path: '/'),
+      const Breadcrumb(name: 'Blog', path: '/blog'),
+      Breadcrumb(name: title),
+    ],
+  );
 }

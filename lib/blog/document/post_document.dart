@@ -24,11 +24,11 @@ class PostDocument {
   String toJsonString() => jsonEncode(toJson());
 
   factory PostDocument.fromJson(List<dynamic> json) => PostDocument(
-        json
-            .whereType<Map>()
-            .map((m) => _factory.fromJson(m.cast<String, Object?>()))
-            .toList(growable: false),
-      );
+    json
+        .whereType<Map>()
+        .map((m) => _factory.fromJson(m.cast<String, Object?>()))
+        .toList(growable: false),
+  );
 
   /// Aceita uma String JSON (lista de blocos). Vazio/ inválido → documento vazio.
   factory PostDocument.parse(String? raw) {
@@ -36,7 +36,9 @@ class PostDocument {
     try {
       final decoded = jsonDecode(raw);
       if (decoded is List) return PostDocument.fromJson(decoded);
-    } catch (_) {/* não é JSON de blocos */}
+    } catch (_) {
+      /* não é JSON de blocos */
+    }
     return const PostDocument([]);
   }
 }

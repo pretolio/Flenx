@@ -80,7 +80,8 @@ class FlenxAudioPlayer extends StatelessComponent {
       '.fap-bar-$_id{background:$accentColor}'
       '.fap-live-$_id{background:$accentColor}';
 
-  String get _js => '''
+  String get _js =>
+      '''
 (function(){
   var id='$_id';
   var audio=document.getElementById(id+'-a');
@@ -143,11 +144,9 @@ class FlenxAudioPlayer extends StatelessComponent {
     final progressArea = isRadio
         ? null
         : div(classes: 'fap-info-progress', [
-            div(
-              id: '$_id-bw',
-              classes: 'fap-bw',
-              [div(id: '$_id-bar', classes: 'fap-bar fap-bar-$_id', [])],
-            ),
+            div(id: '$_id-bw', classes: 'fap-bw', [
+              div(id: '$_id-bar', classes: 'fap-bar fap-bar-$_id', []),
+            ]),
             div(classes: 'fap-times', [
               span(id: '$_id-t', [.text('0:00')]),
               span(id: '$_id-d', [.text('--:--')]),
@@ -157,10 +156,16 @@ class FlenxAudioPlayer extends StatelessComponent {
     final info = div(classes: 'fap-info', [
       if (title != null || liveChip != null)
         div(
-          styles: Styles(raw: {'display': 'flex', 'align-items': 'center', 'gap': '8px', 'min-width': '0'}),
+          styles: Styles(
+            raw: {
+              'display': 'flex',
+              'align-items': 'center',
+              'gap': '8px',
+              'min-width': '0',
+            },
+          ),
           [
-            if (title != null)
-              span(classes: 'fap-title', [.text(title!)]),
+            if (title != null) span(classes: 'fap-title', [.text(title!)]),
             if (liveChip != null) liveChip,
           ],
         ),
@@ -170,11 +175,11 @@ class FlenxAudioPlayer extends StatelessComponent {
 
     return span(styles: Styles(raw: {'display': 'contents'}), [
       Component.element(tag: 'style', children: [RawText('$_css$_accentCss')]),
-      div(
-        classes: 'fap',
-        styles: Styles(raw: {'background': background}),
-        [audioEl, playBtn, info],
-      ),
+      div(classes: 'fap', styles: Styles(raw: {'background': background}), [
+        audioEl,
+        playBtn,
+        info,
+      ]),
       // Script DEPOIS do div para que os elementos já estejam no DOM
       Component.element(tag: 'script', children: [RawText(_js)]),
     ]);

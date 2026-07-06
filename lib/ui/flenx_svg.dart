@@ -64,13 +64,15 @@ class FlenxSvg extends StatelessComponent {
     final svgContent = _svgContent;
     if (_inline && svgContent != null) {
       return span(
-        styles: Styles(raw: {
-          'display': 'inline-flex',
-          'align-items': 'center',
-          'justify-content': 'center',
-          if (_w != null) 'width': '${_w}px',
-          if (_h != null) 'height': '${_h}px',
-        }),
+        styles: Styles(
+          raw: {
+            'display': 'inline-flex',
+            'align-items': 'center',
+            'justify-content': 'center',
+            if (_w != null) 'width': '${_w}px',
+            if (_h != null) 'height': '${_h}px',
+          },
+        ),
         [RawText(svgContent)],
       );
     }
@@ -78,13 +80,15 @@ class FlenxSvg extends StatelessComponent {
     return img(
       src: src,
       alt: alt,
-      styles: Styles(raw: {
-        'display': 'block',
-        'object-fit': fit,
-        if (_w != null) 'width': '${_w}px',
-        if (_h != null) 'height': '${_h}px',
-        if (_w == null && _h == null) 'max-width': '100%',
-      }),
+      styles: Styles(
+        raw: {
+          'display': 'block',
+          'object-fit': fit,
+          if (_w != null) 'width': '${_w}px',
+          if (_h != null) 'height': '${_h}px',
+          if (_w == null && _h == null) 'max-width': '100%',
+        },
+      ),
     );
   }
 }

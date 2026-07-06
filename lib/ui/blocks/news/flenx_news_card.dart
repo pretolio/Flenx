@@ -37,12 +37,14 @@ class FlenxNewsCard extends StatelessComponent {
         ),
         if (description != null)
           p(
-            styles: Styles(raw: {
-              'color': FlenxPalette.muted,
-              'font-size': '14px',
-              'line-height': '1.4',
-              'margin': '6px 0 0',
-            }),
+            styles: Styles(
+              raw: {
+                'color': FlenxPalette.muted,
+                'font-size': '14px',
+                'line-height': '1.4',
+                'margin': '6px 0 0',
+              },
+            ),
             [Component.text(description!)],
           ),
       ]),

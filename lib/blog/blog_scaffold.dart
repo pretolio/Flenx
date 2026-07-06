@@ -19,7 +19,8 @@ class BlogScaffold {
     List<String> tags = const [],
     DateTime? date,
     String author = 'Equipe Flenx',
-    String description = 'TODO — resumo curto e atraente (até ~155 caracteres).',
+    String description =
+        'TODO — resumo curto e atraente (até ~155 caracteres).',
     bool draft = true,
     String body = 'Escreva o conteúdo aqui em **Markdown**.',
   }) {
@@ -48,7 +49,8 @@ $body
     List<String> tags = const [],
     DateTime? date,
     String author = 'Equipe Flenx',
-    String description = 'TODO — resumo curto e atraente (até ~155 caracteres).',
+    String description =
+        'TODO — resumo curto e atraente (até ~155 caracteres).',
     bool draft = true,
     String body = 'Escreva o conteúdo aqui em **Markdown**.',
   }) {
@@ -58,16 +60,18 @@ $body
       throw FileSystemException('Já existe', file.path);
     }
     file.parent.createSync(recursive: true);
-    file.writeAsStringSync(markdown(
-      title: title,
-      category: category,
-      tags: tags,
-      date: date,
-      author: author,
-      description: description,
-      draft: draft,
-      body: body,
-    ));
+    file.writeAsStringSync(
+      markdown(
+        title: title,
+        category: category,
+        tags: tags,
+        date: date,
+        author: author,
+        description: description,
+        draft: draft,
+        body: body,
+      ),
+    );
     return file;
   }
 
@@ -83,7 +87,8 @@ $body
       description:
           'Seu blog em Flutter/Dart com SSR, SEO automático e Markdown.',
       draft: false,
-      body: 'Este é o seu primeiro post. Crie outros com '
+      body:
+          'Este é o seu primeiro post. Crie outros com '
           '`dart run flenx:new_post "Título"` e edite os arquivos em '
           '`content/blog/`.\n\n'
           'O frontmatter controla **título**, **categoria**, **tags** e '

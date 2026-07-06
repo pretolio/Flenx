@@ -42,19 +42,16 @@ class FlenxButton extends StatelessComponent {
   Map<String, String> get _variantStyles {
     final accent = color ?? 'var(--primary, ${FlenxPalette.primary})';
     return switch (variant) {
-      FlenxButtonVariant.primary => {
-          'background': accent,
-          'color': '#ffffff',
-        },
+      FlenxButtonVariant.primary => {'background': accent, 'color': '#ffffff'},
       FlenxButtonVariant.ghost => {
-          'background': 'transparent',
-          'color': accent,
-          'box-shadow': 'inset 0 0 0 1.5px $accent',
-        },
+        'background': 'transparent',
+        'color': accent,
+        'box-shadow': 'inset 0 0 0 1.5px $accent',
+      },
       FlenxButtonVariant.soft => {
-          'background': FlenxPalette.surface,
-          'color': accent,
-        },
+        'background': FlenxPalette.surface,
+        'color': accent,
+      },
     };
   }
 
@@ -67,28 +64,40 @@ class FlenxButton extends StatelessComponent {
       classes: hover ? cls : null,
       target: newTab ? Target.blank : null,
       attributes: newTab ? {'rel': 'noopener noreferrer'} : null,
-      styles: Styles(raw: {
-        'display': 'inline-block',
-        'padding': '12px 22px',
-        'border-radius': '10px',
-        'font-weight': '700',
-        'text-decoration': 'none',
-        'cursor': 'pointer',
-        'transition': 'filter .15s ease, transform .15s ease',
-        ..._variantStyles,
-      }),
+      styles: Styles(
+        raw: {
+          'display': 'inline-block',
+          'padding': '12px 22px',
+          'border-radius': '10px',
+          'font-weight': '700',
+          'text-decoration': 'none',
+          'cursor': 'pointer',
+          'transition': 'filter .15s ease, transform .15s ease',
+          ..._variantStyles,
+        },
+      ),
     );
     Component result = link;
     if (hover) {
       result = span(styles: Styles(raw: {'display': 'inline-block'}), [
-        Component.element(tag: 'style', children: [
-          RawText('.$cls:hover{filter:brightness(1.06);transform:translateY(-1px)}'),
-        ]),
+        Component.element(
+          tag: 'style',
+          children: [
+            RawText(
+              '.$cls:hover{filter:brightness(1.06);transform:translateY(-1px)}',
+            ),
+          ],
+        ),
         link,
       ]);
     }
     if (animation != null) {
-      return FlenxAnimated(result, animation: animation!, delay: animationDelay, duration: animationDuration);
+      return FlenxAnimated(
+        result,
+        animation: animation!,
+        delay: animationDelay,
+        duration: animationDuration,
+      );
     }
     return result;
   }

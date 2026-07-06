@@ -45,24 +45,23 @@ class JsonLdGenerator {
   }
 
   Map<String, dynamic> _website() => {
-        '@context': 'https://schema.org',
-        '@type': 'WebSite',
-        'name': config.siteName,
-        'url': config.baseUrl,
-        if (config.searchUrlTemplate != null)
-          'potentialAction': {
-            '@type': 'SearchAction',
-            'target': {
-              '@type': 'EntryPoint',
-              'urlTemplate': config.url(config.searchUrlTemplate!),
-            },
-            'query-input': 'required name=search_term_string',
-          },
-      };
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    'name': config.siteName,
+    'url': config.baseUrl,
+    if (config.searchUrlTemplate != null)
+      'potentialAction': {
+        '@type': 'SearchAction',
+        'target': {
+          '@type': 'EntryPoint',
+          'urlTemplate': config.url(config.searchUrlTemplate!),
+        },
+        'query-input': 'required name=search_term_string',
+      },
+  };
 
   Map<String, dynamic> _page(RouteMeta r) {
-    final isArticle =
-        r.kind == PageKind.article || r.kind == PageKind.blogPost;
+    final isArticle = r.kind == PageKind.article || r.kind == PageKind.blogPost;
     return {
       '@context': 'https://schema.org',
       '@type': r.kind.schemaType,
@@ -89,30 +88,30 @@ class JsonLdGenerator {
   }
 
   Map<String, dynamic> _faq(RouteMeta r) => {
-        '@context': 'https://schema.org',
-        '@type': 'FAQPage',
-        'mainEntity': [
-          for (final f in r.faqs)
-            {
-              '@type': 'Question',
-              'name': f.question,
-              'acceptedAnswer': {'@type': 'Answer', 'text': f.answer},
-            },
-        ],
-      };
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    'mainEntity': [
+      for (final f in r.faqs)
+        {
+          '@type': 'Question',
+          'name': f.question,
+          'acceptedAnswer': {'@type': 'Answer', 'text': f.answer},
+        },
+    ],
+  };
 
   Map<String, dynamic> _breadcrumbs(RouteMeta r) => {
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        'itemListElement': [
-          for (var i = 0; i < r.breadcrumbs.length; i++)
-            {
-              '@type': 'ListItem',
-              'position': i + 1,
-              'name': r.breadcrumbs[i].name,
-              if (r.breadcrumbs[i].path != null)
-                'item': config.url(r.breadcrumbs[i].path!),
-            },
-        ],
-      };
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    'itemListElement': [
+      for (var i = 0; i < r.breadcrumbs.length; i++)
+        {
+          '@type': 'ListItem',
+          'position': i + 1,
+          'name': r.breadcrumbs[i].name,
+          if (r.breadcrumbs[i].path != null)
+            'item': config.url(r.breadcrumbs[i].path!),
+        },
+    ],
+  };
 }

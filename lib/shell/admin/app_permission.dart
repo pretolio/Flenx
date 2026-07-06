@@ -13,7 +13,10 @@ class AppRole {
     return permissions.contains('*') || permissions.contains(permission);
   }
 
-  static AppRole byName(String? name, {AppRole fallback = AdminPermissions.viewer}) {
+  static AppRole byName(
+    String? name, {
+    AppRole fallback = AdminPermissions.viewer,
+  }) {
     for (final r in AdminPermissions.all) {
       if (r.name.toLowerCase() == name?.toLowerCase()) return r;
     }

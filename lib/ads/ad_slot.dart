@@ -15,23 +15,31 @@ class AdSlot extends StatelessComponent {
   @override
   Component build(BuildContext context) {
     if (placement.html != null) {
-      return div(styles: Styles(raw: {'margin': '16px 0'}),
-          [RawText(placement.html!)]);
+      return div(styles: Styles(raw: {'margin': '16px 0'}), [
+        RawText(placement.html!),
+      ]);
     }
     return div(
       styles: Styles(raw: {'margin': '16px 0', 'text-align': 'center'}),
       [
-        Component.element(tag: 'ins', attributes: {
-          'class': 'adsbygoogle',
-          'style': 'display:block',
-          'data-ad-client': clientId,
-          'data-ad-slot': placement.slot,
-          'data-ad-format': placement.format,
-          'data-full-width-responsive': 'true',
-        }, children: const []),
-        Component.element(tag: 'script', children: const [
-          RawText('(adsbygoogle = window.adsbygoogle || []).push({});'),
-        ]),
+        Component.element(
+          tag: 'ins',
+          attributes: {
+            'class': 'adsbygoogle',
+            'style': 'display:block',
+            'data-ad-client': clientId,
+            'data-ad-slot': placement.slot,
+            'data-ad-format': placement.format,
+            'data-full-width-responsive': 'true',
+          },
+          children: const [],
+        ),
+        Component.element(
+          tag: 'script',
+          children: const [
+            RawText('(adsbygoogle = window.adsbygoogle || []).push({});'),
+          ],
+        ),
       ],
     );
   }
@@ -57,13 +65,12 @@ class FlenxAds extends StatelessComponent {
   @override
   Component build(BuildContext context) {
     final units = config.placementsFor(
-        path: path, category: category, position: position);
-    return div(
-      styles: Styles(raw: {if (units.isEmpty) 'display': 'none'}),
-      [
-        for (final p in units)
-          AdSlot(clientId: config.clientId, placement: p),
-      ],
+      path: path,
+      category: category,
+      position: position,
     );
+    return div(styles: Styles(raw: {if (units.isEmpty) 'display': 'none'}), [
+      for (final p in units) AdSlot(clientId: config.clientId, placement: p),
+    ]);
   }
 }

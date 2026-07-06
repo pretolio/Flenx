@@ -10,26 +10,24 @@ import '../payment_result.dart';
 ///
 /// Credenciais: `ASAAS_API_KEY` e `ASAAS_ENV` (`sandbox` ou `production`).
 class AsaasGateway implements PaymentGateway {
-  AsaasGateway({
-    required this.apiKey,
-    this.sandbox = true,
-    http.Client? client,
-  }) : _client = client ?? http.Client();
+  AsaasGateway({required this.apiKey, this.sandbox = true, http.Client? client})
+    : _client = client ?? http.Client();
 
-  factory AsaasGateway.fromEnv(Map<String, String> env, {http.Client? client}) =>
-      AsaasGateway(
-        apiKey: env['ASAAS_API_KEY'] ?? '',
-        sandbox: (env['ASAAS_ENV'] ?? 'sandbox') != 'production',
-        client: client,
-      );
+  factory AsaasGateway.fromEnv(
+    Map<String, String> env, {
+    http.Client? client,
+  }) => AsaasGateway(
+    apiKey: env['ASAAS_API_KEY'] ?? '',
+    sandbox: (env['ASAAS_ENV'] ?? 'sandbox') != 'production',
+    client: client,
+  );
 
   final String apiKey;
   final bool sandbox;
   final http.Client _client;
 
-  String get _base => sandbox
-      ? 'https://sandbox.asaas.com/api/v3'
-      : 'https://api.asaas.com/v3';
+  String get _base =>
+      sandbox ? 'https://sandbox.asaas.com/api/v3' : 'https://api.asaas.com/v3';
 
   @override
   String get name => 'asaas';
@@ -44,7 +42,8 @@ class AsaasGateway implements PaymentGateway {
       'billingType': 'UNDEFINED', // cliente escolhe Pix/cartão/boleto
       'chargeType': 'DETACHED',
       'value': req.amount,
-      if (req.externalReference != null) 'externalReference': req.externalReference,
+      if (req.externalReference != null)
+        'externalReference': req.externalReference,
     };
     final res = await _client.post(
       Uri.parse('$_base/paymentLinks'),
@@ -69,8 +68,8 @@ class AsaasGateway implements PaymentGateway {
       'PAYMENT_CONFIRMED' || 'PAYMENT_RECEIVED' => PaymentStatus.paid,
       'PAYMENT_REFUNDED' => PaymentStatus.refunded,
       'PAYMENT_DELETED' || 'PAYMENT_OVERDUE' => PaymentStatus.canceled,
-      'PAYMENT_CREATED' || 'PAYMENT_AWAITING_RISK_ANALYSIS' =>
-        PaymentStatus.pending,
+      'PAYMENT_CREATED' ||
+      'PAYMENT_AWAITING_RISK_ANALYSIS' => PaymentStatus.pending,
       _ => PaymentStatus.unknown,
     };
   }

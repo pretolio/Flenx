@@ -4,17 +4,21 @@ import 'package:flenx/blog/models/category.dart';
 import 'package:flenx/blog/models/tag.dart';
 import 'package:flenx/blog/taxonomy_builder.dart';
 
-BlogPost _post(String slug, {Category? cat, List<String> tags = const [], bool draft = false}) =>
-    BlogPost(
-      slug: slug,
-      title: slug,
-      description: 'd',
-      date: DateTime(2026, 1, 1),
-      bodyMarkdown: '',
-      category: cat,
-      tags: tags.map(Tag.new).toList(),
-      draft: draft,
-    );
+BlogPost _post(
+  String slug, {
+  Category? cat,
+  List<String> tags = const [],
+  bool draft = false,
+}) => BlogPost(
+  slug: slug,
+  title: slug,
+  description: 'd',
+  date: DateTime(2026, 1, 1),
+  bodyMarkdown: '',
+  category: cat,
+  tags: tags.map(Tag.new).toList(),
+  draft: draft,
+);
 
 void main() {
   group('TaxonomyBuilder', () {
@@ -39,4 +43,3 @@ void main() {
     });
   });
 }
-

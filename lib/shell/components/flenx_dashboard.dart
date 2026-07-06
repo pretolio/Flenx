@@ -32,9 +32,13 @@ class FlenxDashboard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(greeting,
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w800, color: scheme.onSurface)),
+          Text(
+            greeting,
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.w800,
+              color: scheme.onSurface,
+            ),
+          ),
           const SizedBox(height: 4),
           Text(subtitle, style: TextStyle(color: scheme.onSurfaceVariant)),
           const SizedBox(height: 24),
@@ -52,12 +56,17 @@ class FlenxDashboard extends StatelessWidget {
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     leading: IconChip(icon: a.icon),
-                    title: Text(a.title,
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: scheme.onSurface)),
-                    subtitle: Text(a.subtitle,
-                        style: TextStyle(color: scheme.onSurfaceVariant)),
+                    title: Text(
+                      a.title,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: scheme.onSurface,
+                      ),
+                    ),
+                    subtitle: Text(
+                      a.subtitle,
+                      style: TextStyle(color: scheme.onSurfaceVariant),
+                    ),
                   ),
               ],
             ),

@@ -42,57 +42,64 @@ class FlenxSteps extends StatelessComponent {
   final String? id;
 
   Component _badge(int n) => div(
-        styles: Styles(raw: {
-          'width': '38px',
-          'height': '38px',
-          'border-radius': '10px',
-          'background': badgeColor,
-          'color': '#fff',
-          'display': 'flex',
-          'align-items': 'center',
-          'justify-content': 'center',
-          'font-weight': '800',
-        }),
-        [.text('$n')],
-      );
+    styles: Styles(
+      raw: {
+        'width': '38px',
+        'height': '38px',
+        'border-radius': '10px',
+        'background': badgeColor,
+        'color': '#fff',
+        'display': 'flex',
+        'align-items': 'center',
+        'justify-content': 'center',
+        'font-weight': '800',
+      },
+    ),
+    [.text('$n')],
+  );
 
-  Component _a(Component child, FlenxAnimation anim, int delay) => animate
-      ? FlenxAnimated(child, animation: anim, delay: delay)
-      : child;
+  Component _a(Component child, FlenxAnimation anim, int delay) =>
+      animate ? FlenxAnimated(child, animation: anim, delay: delay) : child;
 
   @override
   Component build(BuildContext context) {
     return FlenxSection(
       id: id,
       background: background,
-      child: FlenxColumn(
-        gap: 36,
-        cross: FlenxAlign.stretch,
-        [
-          if (eyebrow != null)
-            _a(FlenxText(eyebrow!, align: FlenxTextAlign.center, color: 'var(--primary, ${FlenxPalette.primary})', weight: 700), FlenxAnimation.slideUp, 0),
-          if (title != null)
-            _a(FlenxHeading(title!, align: FlenxTextAlign.center), FlenxAnimation.slideUp, 100),
-          FlenxGrid(
-            minItemWidth: 260,
-            [
-              for (var i = 0; i < steps.length; i++)
-                _a(
-                  FlenxCard(
-                    FlenxColumn(gap: 10, [
-                      _badge(i + 1),
-                      FlenxHeading(steps[i].title, level: 3),
-                      FlenxText(steps[i].description, color: FlenxPalette.muted),
-                    ]),
-                    background: FlenxPalette.surface,
-                  ),
-                  FlenxAnimation.slideUp,
-                  100 + i * 120,
-                ),
-            ],
+      child: FlenxColumn(gap: 36, cross: FlenxAlign.stretch, [
+        if (eyebrow != null)
+          _a(
+            FlenxText(
+              eyebrow!,
+              align: FlenxTextAlign.center,
+              color: 'var(--primary, ${FlenxPalette.primary})',
+              weight: 700,
+            ),
+            FlenxAnimation.slideUp,
+            0,
           ),
-        ],
-      ),
+        if (title != null)
+          _a(
+            FlenxHeading(title!, align: FlenxTextAlign.center),
+            FlenxAnimation.slideUp,
+            100,
+          ),
+        FlenxGrid(minItemWidth: 260, [
+          for (var i = 0; i < steps.length; i++)
+            _a(
+              FlenxCard(
+                FlenxColumn(gap: 10, [
+                  _badge(i + 1),
+                  FlenxHeading(steps[i].title, level: 3),
+                  FlenxText(steps[i].description, color: FlenxPalette.muted),
+                ]),
+                background: FlenxPalette.surface,
+              ),
+              FlenxAnimation.slideUp,
+              100 + i * 120,
+            ),
+        ]),
+      ]),
     );
   }
 }

@@ -38,8 +38,9 @@ class NavTile extends StatelessWidget {
             fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
           ),
         ),
-        trailing:
-            item.badge != null ? Badge(label: Text('${item.badge}')) : null,
+        trailing: item.badge != null
+            ? Badge(label: Text('${item.badge}'))
+            : null,
         onTap: () {
           onSelect(item);
           item.onTap?.call();

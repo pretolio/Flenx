@@ -15,13 +15,14 @@ class SupabaseDbExecutor implements DbExecutor {
     http.Client? client,
   }) : _client = client ?? http.Client();
 
-  factory SupabaseDbExecutor.fromEnv(Map<String, String> env,
-          {http.Client? client}) =>
-      SupabaseDbExecutor(
-        url: env['SUPABASE_URL'] ?? '',
-        apiKey: env['SUPABASE_KEY'] ?? '',
-        client: client,
-      );
+  factory SupabaseDbExecutor.fromEnv(
+    Map<String, String> env, {
+    http.Client? client,
+  }) => SupabaseDbExecutor(
+    url: env['SUPABASE_URL'] ?? '',
+    apiKey: env['SUPABASE_KEY'] ?? '',
+    client: client,
+  );
 
   final String url;
   final String apiKey;
@@ -29,10 +30,10 @@ class SupabaseDbExecutor implements DbExecutor {
 
   String get _base => '$url/rest/v1';
   Map<String, String> get _headers => {
-        'apikey': apiKey,
-        'authorization': 'Bearer $apiKey',
-        'content-type': 'application/json',
-      };
+    'apikey': apiKey,
+    'authorization': 'Bearer $apiKey',
+    'content-type': 'application/json',
+  };
 
   @override
   Future<int> insert(String table, Map<String, Object?> values) async {
@@ -56,8 +57,10 @@ class SupabaseDbExecutor implements DbExecutor {
     String orderBy = 'id',
     bool desc = true,
   }) async {
-    final uri = Uri.parse('$_base/$table'
-        '?order=$orderBy.${desc ? 'desc' : 'asc'}&limit=$limit&offset=$offset');
+    final uri = Uri.parse(
+      '$_base/$table'
+      '?order=$orderBy.${desc ? 'desc' : 'asc'}&limit=$limit&offset=$offset',
+    );
     final r = await _client.get(uri, headers: _headers);
     if (r.statusCode >= 400) {
       throw Exception('Supabase list ${r.statusCode}: ${r.body}');
@@ -92,7 +95,10 @@ class SupabaseDbExecutor implements DbExecutor {
 
   @override
   Future<bool> updateById(
-      String table, Object id, Map<String, Object?> values) async {
+    String table,
+    Object id,
+    Map<String, Object?> values,
+  ) async {
     final r = await _client.patch(
       Uri.parse('$_base/$table?id=eq.$id'),
       headers: {..._headers, 'prefer': 'return=representation'},

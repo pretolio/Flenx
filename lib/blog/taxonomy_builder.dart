@@ -12,10 +12,7 @@ class TaxonomyBuilder {
 
   Taxonomy build(List<BlogPost> posts) {
     final published = posts.where((p) => !p.draft).toList();
-    return Taxonomy(
-      categories: _categories(published),
-      tags: _tags(published),
-    );
+    return Taxonomy(categories: _categories(published), tags: _tags(published));
   }
 
   List<CategoryArchive> _categories(List<BlogPost> posts) {

@@ -5,7 +5,8 @@ import 'package:flenx/blog/utils/slugify.dart';
 void main() {
   group('FrontmatterParser', () {
     test('separa frontmatter YAML do corpo', () {
-      const raw = '---\n'
+      const raw =
+          '---\n'
           'title: Olá Mundo\n'
           'tags: [a, b]\n'
           '---\n'
@@ -31,4 +32,3 @@ void main() {
     });
   });
 }
-

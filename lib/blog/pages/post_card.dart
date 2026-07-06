@@ -13,7 +13,9 @@ class PostCard extends StatelessComponent {
   @override
   Component build(BuildContext context) {
     return article(classes: 'post-card', [
-      a(href: post.path, [h2([.text(post.title)])]),
+      a(href: post.path, [
+        h2([.text(post.title)]),
+      ]),
       p(classes: 'excerpt', [.text(post.description)]),
       div(classes: 'meta', [
         if (post.author != null) span([.text(post.author!)]),

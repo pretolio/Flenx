@@ -24,7 +24,7 @@ class CrawlerRule {
 
   /// Bloqueia todo o site para este agente (construtor const).
   const CrawlerRule.block(this.userAgent)
-      : allow = const [],
-        disallow = const ['/'],
-        crawlDelay = null;
+    : allow = const [],
+      disallow = const ['/'],
+      crawlDelay = null;
 }

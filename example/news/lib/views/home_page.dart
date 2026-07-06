@@ -18,9 +18,9 @@ class HomePage extends StatelessComponent {
       p.image ?? 'https://picsum.photos/seed/${p.slug}/1200/675';
 
   String _meta(BlogPost p) => [
-        if (p.author != null) 'Por ${p.author}',
-        DateFormatBr.short(p.date),
-      ].join(' · ');
+    if (p.author != null) 'Por ${p.author}',
+    DateFormatBr.short(p.date),
+  ].join(' · ');
 
   @override
   Component build(BuildContext context) {
@@ -29,8 +29,7 @@ class HomePage extends StatelessComponent {
     final destaque = published.isNotEmpty ? published.first : null;
     final restante = published.skip(1).toList();
     final maisLidas = [
-      for (final p in published.take(5))
-        MenuLink(label: p.title, href: p.path),
+      for (final p in published.take(5)) MenuLink(label: p.title, href: p.path),
     ];
 
     return FlenxPage(

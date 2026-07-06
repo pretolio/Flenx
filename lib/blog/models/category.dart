@@ -4,7 +4,7 @@ import '../utils/slugify.dart';
 /// O [segments] guarda os nomes; [slugPath] os slugs correspondentes.
 class Category {
   Category(this.segments)
-      : slugPath = segments.map(Slugify.call).toList(growable: false);
+    : slugPath = segments.map(Slugify.call).toList(growable: false);
 
   /// Nomes legíveis da hierarquia (ex.: `['Tutoriais', 'Flutter']`).
   final List<String> segments;
@@ -29,6 +29,6 @@ class Category {
 
   /// Cria a categoria a partir de uma string `A/B/C` do frontmatter.
   factory Category.parse(String raw) => Category(
-        raw.split('/').map((e) => e.trim()).where((e) => e.isNotEmpty).toList(),
-      );
+    raw.split('/').map((e) => e.trim()).where((e) => e.isNotEmpty).toList(),
+  );
 }

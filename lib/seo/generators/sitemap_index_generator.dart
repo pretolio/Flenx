@@ -14,7 +14,8 @@ class SitemapIndexGenerator {
     final buffer = StringBuffer()
       ..writeln('<?xml version="1.0" encoding="UTF-8"?>')
       ..writeln(
-          '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">');
+        '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+      );
     for (final path in shardPaths) {
       buffer
         ..writeln('  <sitemap>')

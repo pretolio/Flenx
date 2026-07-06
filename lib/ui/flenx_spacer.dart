@@ -19,7 +19,7 @@ class FlenxSpacer extends StatelessComponent {
 
   @override
   Component build(BuildContext context) => div(
-        styles: Styles(raw: {'height': '${height}px', 'flex-shrink': '0'}),
-        [],
-      );
+    styles: Styles(raw: {'height': '${height}px', 'flex-shrink': '0'}),
+    [],
+  );
 }

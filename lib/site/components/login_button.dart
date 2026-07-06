@@ -28,7 +28,10 @@ class LoginButton extends StatelessComponent {
         span(classes: 'caret', [.text('▾')]),
       ]),
       ul(classes: 'dropdown dropdown-right', [
-        for (final o in options) li([a([.text(o.label)], href: o.href)]),
+        for (final o in options)
+          li([
+            a([.text(o.label)], href: o.href),
+          ]),
       ]),
     ]);
   }

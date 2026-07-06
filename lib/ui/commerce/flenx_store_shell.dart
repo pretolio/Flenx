@@ -53,9 +53,11 @@ class FlenxStoreShell extends StatelessComponent {
       div(classes: 'fxz-nav', [
         nav(classes: 'fxz-wrap fxz-nav-in', [
           for (final c in categories)
-            a([Component.text(c.label)],
-                href: c.href ?? '#',
-                classes: c.label.toLowerCase().contains('oferta') ? 'sale' : null),
+            a(
+              [Component.text(c.label)],
+              href: c.href ?? '#',
+              classes: c.label.toLowerCase().contains('oferta') ? 'sale' : null,
+            ),
         ]),
       ]),
       if (promo != null) div(classes: 'fxz-promo', [Component.text(promo!)]),
@@ -65,59 +67,78 @@ class FlenxStoreShell extends StatelessComponent {
   }
 
   Component _topBar() => div(classes: 'fxz-top', [
-        div(classes: 'fxz-wrap fxz-top-in', [
-          a([Component.text(brand)], href: '/', classes: 'fxz-logo'),
-          if (cep != null)
-            div(classes: 'fxz-cep', [
-              span(classes: 'ic', [Component.text('\u{1F4CD}')]),
-              span([
-                Component.text('Enviar para'),
-                Component.element(tag: 'strong', children: [Component.text(cep!)]),
-              ]),
-            ]),
-          form(classes: 'fxz-search',
-              attributes: {'action': searchAction, 'method': 'get'}, [
-            Component.element(tag: 'input', attributes: {
+    div(classes: 'fxz-wrap fxz-top-in', [
+      a([Component.text(brand)], href: '/', classes: 'fxz-logo'),
+      if (cep != null)
+        div(classes: 'fxz-cep', [
+          span(classes: 'ic', [Component.text('\u{1F4CD}')]),
+          span([
+            Component.text('Enviar para'),
+            Component.element(tag: 'strong', children: [Component.text(cep!)]),
+          ]),
+        ]),
+      form(
+        classes: 'fxz-search',
+        attributes: {'action': searchAction, 'method': 'get'},
+        [
+          Component.element(
+            tag: 'input',
+            attributes: {
               'name': 'q',
               'type': 'text',
               'placeholder': searchPlaceholder,
-            }),
-            button([Component.text('\u{1F50D}')]),
-          ]),
-          div(classes: 'fxz-acts', [
-            a([
-              span(classes: 'ic', [Component.text('♡')]),
-              span([Component.text('Desejos')]),
-            ], href: wishlistHref, classes: 'fxz-act'),
-            a([
-              span(classes: 'ic', [Component.text('\u{1F464}')]),
-              span([Component.text(accountLabel)]),
-            ], href: accountHref, classes: 'fxz-act'),
-            a([
-              span(classes: 'ic', [Component.text('\u{1F6D2}')]),
-              if (cartCount > 0)
-                span(classes: 'badge', [Component.text('$cartCount')]),
-            ], href: cartHref, classes: 'fxz-act fxz-cart'),
-          ]),
-        ]),
-      ]);
+            },
+          ),
+          button([Component.text('\u{1F50D}')]),
+        ],
+      ),
+      div(classes: 'fxz-acts', [
+        a(
+          [
+            span(classes: 'ic', [Component.text('♡')]),
+            span([Component.text('Desejos')]),
+          ],
+          href: wishlistHref,
+          classes: 'fxz-act',
+        ),
+        a(
+          [
+            span(classes: 'ic', [Component.text('\u{1F464}')]),
+            span([Component.text(accountLabel)]),
+          ],
+          href: accountHref,
+          classes: 'fxz-act',
+        ),
+        a(
+          [
+            span(classes: 'ic', [Component.text('\u{1F6D2}')]),
+            if (cartCount > 0)
+              span(classes: 'badge', [Component.text('$cartCount')]),
+          ],
+          href: cartHref,
+          classes: 'fxz-act fxz-cart',
+        ),
+      ]),
+    ]),
+  ]);
 
   Component _footer() => footer(classes: 'fxz-foot', [
-        div(classes: 'fxz-foot-cols', [
-          for (final col in footerColumns)
-            div([
-              Component.element(tag: 'h4', children: [Component.text(col.title)]),
-              for (final l in col.links) a([Component.text(l.label)], href: l.href ?? '#'),
-            ]),
-          if (payments.isNotEmpty)
-            div([
-              Component.element(tag: 'h4', children: [Component.text('Pagamento')]),
-              div(classes: 'fxz-pay', [
-                for (final p in payments) span([Component.text(p)]),
-              ]),
-            ]),
+    div(classes: 'fxz-foot-cols', [
+      for (final col in footerColumns)
+        div([
+          Component.element(tag: 'h4', children: [Component.text(col.title)]),
+          for (final l in col.links)
+            a([Component.text(l.label)], href: l.href ?? '#'),
         ]),
-        if (copyright != null)
-          div(classes: 'fxz-foot-bottom', [Component.text(copyright!)]),
-      ]);
+      if (payments.isNotEmpty)
+        div([
+          Component.element(tag: 'h4', children: [Component.text('Pagamento')]),
+          div(classes: 'fxz-pay', [
+            for (final p in payments) span([Component.text(p)]),
+          ]),
+        ]),
+    ]),
+    if (copyright != null)
+      div(classes: 'fxz-foot-bottom', [Component.text(copyright!)]),
+  ]);
 }

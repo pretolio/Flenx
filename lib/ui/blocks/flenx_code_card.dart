@@ -13,38 +13,47 @@ class FlenxCodeCard extends StatelessComponent {
   @override
   Component build(BuildContext context) {
     Component dot(String color) => div(
-        styles: Styles(raw: {
+      styles: Styles(
+        raw: {
           'width': '11px',
           'height': '11px',
           'border-radius': '50%',
           'background': color,
-        }),
-        const []);
+        },
+      ),
+      const [],
+    );
 
     return div(
-      styles: Styles(raw: {
-        'background': FlenxPalette.darkBg,
-        'border-radius': '14px',
-        'padding': '16px',
-        'box-shadow': '0 20px 50px rgba(0,0,0,.35)',
-        'max-width': '460px',
-        'width': '100%',
-      }),
+      styles: Styles(
+        raw: {
+          'background': FlenxPalette.darkBg,
+          'border-radius': '14px',
+          'padding': '16px',
+          'box-shadow': '0 20px 50px rgba(0,0,0,.35)',
+          'max-width': '460px',
+          'width': '100%',
+        },
+      ),
       [
         div(
-          styles: Styles(raw: {'display': 'flex', 'gap': '8px', 'margin-bottom': '12px'}),
+          styles: Styles(
+            raw: {'display': 'flex', 'gap': '8px', 'margin-bottom': '12px'},
+          ),
           [dot('#ff5f56'), dot('#ffbd2e'), dot('#27c93f')],
         ),
         Component.element(
           tag: 'pre',
-          styles: Styles(raw: {
-            'margin': '0',
-            'color': '#cbd5e1',
-            'font-family': 'ui-monospace, SFMono-Regular, Menlo, monospace',
-            'font-size': '13px',
-            'line-height': '1.6',
-            'white-space': 'pre-wrap',
-          }),
+          styles: Styles(
+            raw: {
+              'margin': '0',
+              'color': '#cbd5e1',
+              'font-family': 'ui-monospace, SFMono-Regular, Menlo, monospace',
+              'font-size': '13px',
+              'line-height': '1.6',
+              'white-space': 'pre-wrap',
+            },
+          ),
           children: [.text(code)],
         ),
       ],

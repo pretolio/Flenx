@@ -38,9 +38,13 @@ class FlenxBlogLayout extends StatelessComponent {
       footer: footer,
       config: config,
       extraCss: blogCss,
-      child: Component.element(tag: 'main', classes: 'blog-main', children: [
-        div(classes: 'container', [child]),
-      ]),
+      child: Component.element(
+        tag: 'main',
+        classes: 'blog-main',
+        children: [
+          div(classes: 'container', [child]),
+        ],
+      ),
     );
   }
 }

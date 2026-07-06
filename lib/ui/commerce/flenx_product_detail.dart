@@ -47,8 +47,9 @@ class FlenxProductDetail extends StatelessComponent {
         div(classes: 'fxz-crumb', [
           for (var i = 0; i < breadcrumb.length; i++) ...[
             if (i > 0) Component.text(' / '),
-            a([Component.text(breadcrumb[i].label)],
-                href: breadcrumb[i].href ?? '#'),
+            a([
+              Component.text(breadcrumb[i].label),
+            ], href: breadcrumb[i].href ?? '#'),
           ],
           Component.text(' / $name'),
         ]),
@@ -63,7 +64,8 @@ class FlenxProductDetail extends StatelessComponent {
         div(classes: 'fxz-pd-info', [
           if (brand != null) span(classes: 'brand', [Component.text(brand!)]),
           Component.element(tag: 'h1', children: [Component.text(name)]),
-          if (oldPrice != null) div(classes: 'old', [Component.text(oldPrice!)]),
+          if (oldPrice != null)
+            div(classes: 'old', [Component.text(oldPrice!)]),
           div(classes: 'price', [Component.text(price)]),
           if (installment != null)
             div(classes: 'inst', [Component.text(installment!)]),
@@ -72,8 +74,11 @@ class FlenxProductDetail extends StatelessComponent {
           div(classes: 'fxz-pd-buys', [
             a([Component.text(buyLabel)], href: buyHref, classes: 'buy'),
             if (secondaryHref != null && secondaryLabel != null)
-              a([Component.text(secondaryLabel!)],
-                  href: secondaryHref!, classes: 'ghost'),
+              a(
+                [Component.text(secondaryLabel!)],
+                href: secondaryHref!,
+                classes: 'ghost',
+              ),
           ]),
         ]),
       ]),

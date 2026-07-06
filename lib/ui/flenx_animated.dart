@@ -48,22 +48,22 @@ class FlenxAnimated extends StatelessComponent {
   bool get _isReveal => _revealSet.contains(animation);
 
   String get _revealClass => switch (animation) {
-        FlenxAnimation.fadeIn => '',
-        FlenxAnimation.slideUp => 'fa-up',
-        FlenxAnimation.slideDown => 'fa-down',
-        FlenxAnimation.slideLeft => 'fa-left',
-        FlenxAnimation.slideRight => 'fa-right',
-        FlenxAnimation.zoomIn => 'fa-zoom',
-        _ => '',
-      };
+    FlenxAnimation.fadeIn => '',
+    FlenxAnimation.slideUp => 'fa-up',
+    FlenxAnimation.slideDown => 'fa-down',
+    FlenxAnimation.slideLeft => 'fa-left',
+    FlenxAnimation.slideRight => 'fa-right',
+    FlenxAnimation.zoomIn => 'fa-zoom',
+    _ => '',
+  };
 
   String get _loopClass => switch (animation) {
-        FlenxAnimation.pulse => 'fa-pulse',
-        FlenxAnimation.bounce => 'fa-bounce',
-        FlenxAnimation.float => 'fa-float',
-        FlenxAnimation.spin => 'fa-spin',
-        _ => '',
-      };
+    FlenxAnimation.pulse => 'fa-pulse',
+    FlenxAnimation.bounce => 'fa-bounce',
+    FlenxAnimation.float => 'fa-float',
+    FlenxAnimation.spin => 'fa-spin',
+    _ => '',
+  };
 
   // ── CSS scroll-reveal ────────────────────────────────────────────────────
   static const _revealCss = '''
@@ -111,10 +111,12 @@ window.__faObs=o;
         Component.element(tag: 'script', children: [RawText(_observerJs)]),
         div(
           classes: cls,
-          styles: Styles(raw: {
-            'transition-duration': '${duration}ms',
-            if (delay > 0) 'transition-delay': '${delay}ms',
-          }),
+          styles: Styles(
+            raw: {
+              'transition-duration': '${duration}ms',
+              if (delay > 0) 'transition-delay': '${delay}ms',
+            },
+          ),
           [child],
         ),
       ]);
@@ -124,10 +126,12 @@ window.__faObs=o;
       Component.element(tag: 'style', children: [RawText(_loopCss)]),
       div(
         classes: _loopClass,
-        styles: Styles(raw: {
-          '--fa-dur': '${duration}ms',
-          if (delay > 0) 'animation-delay': '${delay}ms',
-        }),
+        styles: Styles(
+          raw: {
+            '--fa-dur': '${duration}ms',
+            if (delay > 0) 'animation-delay': '${delay}ms',
+          },
+        ),
         [child],
       ),
     ]);

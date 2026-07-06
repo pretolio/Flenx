@@ -19,15 +19,15 @@ const buildPhp = true;
 
 /// Sobe o site Flenx. Chamado pelo entrypoint gerado do servidor.
 Future<void> runSite(ServerOptions options) => FlenxApp.run(
-      options: options,
-      seo: seoConfig,
-      routes: siteRoutes,
-      // Duas formas de criar posts, combinadas: arquivos `.md` (abaixo)
-      // E posts salvos no banco (`blogFromDb`). Ambos aparecem no mesmo blog.
-      blog: 'lib/content/blog',
-      blogFromDb: true,
-      blogLayout: (page) => BlogLayout(child: page),
-      apis: apis,
-      db: const JsonlDbExecutor(directory: 'lib/content/db'),
-      notFound: const NotFoundPage(),
-    );
+  options: options,
+  seo: seoConfig,
+  routes: siteRoutes,
+  // Duas formas de criar posts, combinadas: arquivos `.md` (abaixo)
+  // E posts salvos no banco (`blogFromDb`). Ambos aparecem no mesmo blog.
+  blog: 'lib/content/blog',
+  blogFromDb: true,
+  blogLayout: (page) => BlogLayout(child: page),
+  apis: apis,
+  db: const JsonlDbExecutor(directory: 'lib/content/db'),
+  notFound: const NotFoundPage(),
+);

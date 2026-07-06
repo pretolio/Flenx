@@ -12,41 +12,46 @@ const _notifications = [
 
 const _items = [
   NavItem(label: 'Dashboard', icon: Icons.dashboard, route: '/'),
-  NavItem(label: 'Conteúdo', icon: Icons.folder, children: [
-    NavItem(label: 'Categorias', icon: Icons.label, route: '/cats'),
-    NavItem(label: 'Tags', icon: Icons.tag, route: '/tags'),
-  ]),
+  NavItem(
+    label: 'Conteúdo',
+    icon: Icons.folder,
+    children: [
+      NavItem(label: 'Categorias', icon: Icons.label, route: '/cats'),
+      NavItem(label: 'Tags', icon: Icons.tag, route: '/tags'),
+    ],
+  ),
 ];
 
 Widget _app({VoidCallback? onLogout}) => MaterialApp(
-      home: AppShell(
-        title: 'Admin',
-        user: _user,
-        notifications: _notifications,
-        navItems: _items,
-        initialRoute: '/',
-        onLogout: onLogout,
-        body: const Text('CORPO'),
-      ),
-    );
+  home: AppShell(
+    title: 'Admin',
+    user: _user,
+    notifications: _notifications,
+    navItems: _items,
+    initialRoute: '/',
+    onLogout: onLogout,
+    body: const Text('CORPO'),
+  ),
+);
 
 Widget _appWithPages() => MaterialApp(
-      home: AppShell(
-        title: 'Admin',
-        user: _user,
-        navItems: _items,
-        initialRoute: '/',
-        pages: {
-          '/': (c) => const Text('CONTEUDO DASHBOARD'),
-          '/cats': (c) => const Text('CONTEUDO CATEGORIAS'),
-        },
-      ),
-    );
+  home: AppShell(
+    title: 'Admin',
+    user: _user,
+    navItems: _items,
+    initialRoute: '/',
+    pages: {
+      '/': (c) => const Text('CONTEUDO DASHBOARD'),
+      '/cats': (c) => const Text('CONTEUDO CATEGORIAS'),
+    },
+  ),
+);
 
 void main() {
   group('AppShell responsivo', () {
-    testWidgets('desktop: sidebar fixa visível, sem hambúrguer',
-        (tester) async {
+    testWidgets('desktop: sidebar fixa visível, sem hambúrguer', (
+      tester,
+    ) async {
       await tester.binding.setSurfaceSize(const Size(1300, 800));
       addTearDown(() => tester.binding.setSurfaceSize(null));
 
@@ -57,8 +62,9 @@ void main() {
       expect(find.byTooltip('Open navigation menu'), findsNothing);
     });
 
-    testWidgets('mobile: vira drawer, hambúrguer abre a sidebar',
-        (tester) async {
+    testWidgets('mobile: vira drawer, hambúrguer abre a sidebar', (
+      tester,
+    ) async {
       await tester.binding.setSurfaceSize(const Size(400, 800));
       addTearDown(() => tester.binding.setSurfaceSize(null));
 
@@ -91,8 +97,9 @@ void main() {
       expect(find.text('Tags'), findsOneWidget);
     });
 
-    testWidgets('troca o conteúdo mantendo o esqueleto (layout persistente)',
-        (tester) async {
+    testWidgets('troca o conteúdo mantendo o esqueleto (layout persistente)', (
+      tester,
+    ) async {
       await tester.binding.setSurfaceSize(const Size(1300, 800));
       addTearDown(() => tester.binding.setSurfaceSize(null));
 
@@ -130,8 +137,9 @@ void main() {
   });
 
   group('Top bar', () {
-    testWidgets('badge de notificações mostra a contagem não lida',
-        (tester) async {
+    testWidgets('badge de notificações mostra a contagem não lida', (
+      tester,
+    ) async {
       await tester.binding.setSurfaceSize(const Size(400, 800));
       addTearDown(() => tester.binding.setSurfaceSize(null));
 
@@ -159,4 +167,3 @@ void main() {
     });
   });
 }
-

@@ -50,7 +50,8 @@ class FlenxLottie extends StatelessComponent {
 
   String get _id => 'flottie-${src.hashCode.abs().toRadixString(16)}';
 
-  String get _js => '''
+  String get _js =>
+      '''
 (function(){
   var id='$_id';
   var opts={container:null,renderer:'$renderer',loop:${loop ? 'true' : 'false'},autoplay:${autoplay ? 'true' : 'false'},path:'${src.replaceAll("'", "\\'")}' };
@@ -80,12 +81,14 @@ class FlenxLottie extends StatelessComponent {
       Component.element(tag: 'script', children: [RawText(_js)]),
       div(
         id: _id,
-        styles: Styles(raw: {
-          if (_w != null) 'width': '${_w}px',
-          if (_h != null) 'height': '${_h}px',
-          if (_w == null && _h == null) 'width': '100%',
-          'overflow': 'hidden',
-        }),
+        styles: Styles(
+          raw: {
+            if (_w != null) 'width': '${_w}px',
+            if (_h != null) 'height': '${_h}px',
+            if (_w == null && _h == null) 'width': '100%',
+            'overflow': 'hidden',
+          },
+        ),
         [],
       ),
     ]);

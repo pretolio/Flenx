@@ -47,7 +47,8 @@ class _FlenxAdminAppState extends State<FlenxAdminApp> {
   ThemeMode _mode = ThemeMode.light;
 
   void _toggle() => setState(
-      () => _mode = _mode == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark);
+    () => _mode = _mode == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark,
+  );
 
   /// Filtra os itens (e subitens) que o papel atual pode acessar.
   List<NavItem> get _visibleNav {
@@ -57,8 +58,9 @@ class _FlenxAdminAppState extends State<FlenxAdminApp> {
     for (final item in widget.navItems) {
       if (!role.can(item.permission)) continue;
       if (item.isExpandable) {
-        final kids =
-            item.children.where((c) => role.can(c.permission)).toList();
+        final kids = item.children
+            .where((c) => role.can(c.permission))
+            .toList();
         if (kids.isEmpty && item.route == null) continue;
         out.add(item.withChildren(kids));
       } else {

@@ -13,10 +13,14 @@ class FlenxPricePills extends StatelessComponent {
     return div(classes: 'fxz-wrap', [
       div(classes: 'fxz-pills', [
         for (final p in items)
-          a([
-            Component.text(p.label),
-            b([Component.text(p.value)]),
-          ], href: p.href, classes: 'fxz-pill'),
+          a(
+            [
+              Component.text(p.label),
+              b([Component.text(p.value)]),
+            ],
+            href: p.href,
+            classes: 'fxz-pill',
+          ),
       ]),
     ]);
   }
@@ -24,7 +28,11 @@ class FlenxPricePills extends StatelessComponent {
 
 /// Tira de marcas/departamentos com botão "Confira".
 class FlenxBrandStrip extends StatelessComponent {
-  const FlenxBrandStrip({required this.items, this.action = 'Confira', super.key});
+  const FlenxBrandStrip({
+    required this.items,
+    this.action = 'Confira',
+    super.key,
+  });
   final List<FlenxBrandItem> items;
   final String action;
 

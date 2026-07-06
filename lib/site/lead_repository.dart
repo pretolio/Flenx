@@ -20,8 +20,11 @@ class FileLeadStore implements ILeadStore {
   Future<void> add(Lead lead) async {
     final file = File(path);
     await file.parent.create(recursive: true);
-    await file.writeAsString('${lead.toJsonLine()}\n',
-        mode: FileMode.append, flush: true);
+    await file.writeAsString(
+      '${lead.toJsonLine()}\n',
+      mode: FileMode.append,
+      flush: true,
+    );
   }
 
   @override

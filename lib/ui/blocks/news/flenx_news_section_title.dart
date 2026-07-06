@@ -13,25 +13,37 @@ class FlenxNewsSectionTitle extends StatelessComponent {
   @override
   Component build(BuildContext context) {
     return div(
-      styles: Styles(raw: {
-        'display': 'flex',
-        'align-items': 'center',
-        'gap': '10px',
-        'margin': '0 0 16px',
-      }),
+      styles: Styles(
+        raw: {
+          'display': 'flex',
+          'align-items': 'center',
+          'gap': '10px',
+          'margin': '0 0 16px',
+        },
+      ),
       [
-        span(styles: Styles(raw: {
-          'width': '5px',
-          'height': '22px',
-          'background': 'var(--primary)',
-          'border-radius': '2px',
-          'display': 'inline-block',
-        }), []),
-        span(styles: Styles(raw: {
-          'font-size': '20px',
-          'font-weight': '800',
-          'color': FlenxPalette.ink,
-        }), [Component.text(label)]),
+        span(
+          styles: Styles(
+            raw: {
+              'width': '5px',
+              'height': '22px',
+              'background': 'var(--primary)',
+              'border-radius': '2px',
+              'display': 'inline-block',
+            },
+          ),
+          [],
+        ),
+        span(
+          styles: Styles(
+            raw: {
+              'font-size': '20px',
+              'font-weight': '800',
+              'color': FlenxPalette.ink,
+            },
+          ),
+          [Component.text(label)],
+        ),
       ],
     );
   }

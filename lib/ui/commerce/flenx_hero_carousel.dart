@@ -7,7 +7,11 @@ import 'commerce_models.dart';
 /// automaticamente** (fade), com indicadores. Cada slide tem eyebrow, título,
 /// subtítulo, preço de chamada e botão. Só Dart — o HTML/JS fica aqui na lib.
 class FlenxHeroCarousel extends StatelessComponent {
-  const FlenxHeroCarousel({required this.slides, this.intervalMs = 5000, super.key});
+  const FlenxHeroCarousel({
+    required this.slides,
+    this.intervalMs = 5000,
+    super.key,
+  });
 
   final List<FlenxHeroSlide> slides;
   final int intervalMs;
@@ -16,12 +20,16 @@ class FlenxHeroCarousel extends StatelessComponent {
   Component build(BuildContext context) {
     return div(classes: 'fxz-hero', [
       for (var i = 0; i < slides.length; i++) _slide(slides[i], i == 0),
-      a([Component.text('‹')],
-          href: slides.isNotEmpty ? slides.first.ctaHref : '#',
-          classes: 'fxz-arrow l'),
-      a([Component.text('›')],
-          href: slides.isNotEmpty ? slides.first.ctaHref : '#',
-          classes: 'fxz-arrow r'),
+      a(
+        [Component.text('‹')],
+        href: slides.isNotEmpty ? slides.first.ctaHref : '#',
+        classes: 'fxz-arrow l',
+      ),
+      a(
+        [Component.text('›')],
+        href: slides.isNotEmpty ? slides.first.ctaHref : '#',
+        classes: 'fxz-arrow r',
+      ),
       div(classes: 'fxz-dots', [
         for (var i = 0; i < slides.length; i++)
           span(classes: i == 0 ? 'on' : null, []),
@@ -34,29 +42,26 @@ class FlenxHeroCarousel extends StatelessComponent {
     final styles = s.backgroundImage != null
         ? Styles(raw: {'background-image': "url('${s.backgroundImage}')"})
         : null;
-    return div(
-      classes: active ? 'fxz-slide on' : 'fxz-slide',
-      styles: styles,
-      [
-        div(classes: 'fxz-hero-in', [
-          div([
-            if (s.eyebrow != null)
-              span(classes: 'eyebrow', [Component.text(s.eyebrow!)]),
-            h2([Component.text(s.title)]),
-            if (s.subtitle != null) p([Component.text(s.subtitle!)]),
-            a([Component.text(s.ctaLabel)], href: s.ctaHref, classes: 'cta'),
-          ]),
-          if (s.priceValue != null)
-            div(classes: 'price', [
-              if (s.priceFrom != null) span([Component.text(s.priceFrom!)]),
-              span(classes: 'big', [Component.text(s.priceValue!)]),
-            ]),
+    return div(classes: active ? 'fxz-slide on' : 'fxz-slide', styles: styles, [
+      div(classes: 'fxz-hero-in', [
+        div([
+          if (s.eyebrow != null)
+            span(classes: 'eyebrow', [Component.text(s.eyebrow!)]),
+          h2([Component.text(s.title)]),
+          if (s.subtitle != null) p([Component.text(s.subtitle!)]),
+          a([Component.text(s.ctaLabel)], href: s.ctaHref, classes: 'cta'),
         ]),
-      ],
-    );
+        if (s.priceValue != null)
+          div(classes: 'price', [
+            if (s.priceFrom != null) span([Component.text(s.priceFrom!)]),
+            span(classes: 'big', [Component.text(s.priceValue!)]),
+          ]),
+      ]),
+    ]);
   }
 
-  static String _js(int ms) => '''
+  static String _js(int ms) =>
+      '''
 (function(){
   if(window.__fxzHero)return;window.__fxzHero=1;
   function init(){

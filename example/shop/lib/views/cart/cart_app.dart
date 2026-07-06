@@ -48,10 +48,14 @@ class _CartAppState extends State<CartApp> {
     if (add != null) {
       try {
         final products = await widget.client.list('/api/products/list');
-        final row = products.firstWhere((p) => '${p['slug']}' == add,
-            orElse: () => const {});
+        final row = products.firstWhere(
+          (p) => '${p['slug']}' == add,
+          orElse: () => const {},
+        );
         if (row.isNotEmpty) _addRow(row);
-      } catch (_) {/* sem rede: ignora */}
+      } catch (_) {
+        /* sem rede: ignora */
+      }
     }
     if (mounted) setState(() => _loading = false);
   }
@@ -62,12 +66,14 @@ class _CartAppState extends State<CartApp> {
     if (existing.isNotEmpty) {
       existing.first.qty++;
     } else {
-      _items.add(CartItem(
-        slug: slug,
-        name: '${row['name'] ?? ''}',
-        price: double.tryParse('${row['price']}'.replaceAll(',', '.')) ?? 0,
-        emoji: '${row['emoji'] ?? '🛍️'}',
-      ));
+      _items.add(
+        CartItem(
+          slug: slug,
+          name: '${row['name'] ?? ''}',
+          price: double.tryParse('${row['price']}'.replaceAll(',', '.')) ?? 0,
+          emoji: '${row['emoji'] ?? '🛍️'}',
+        ),
+      );
     }
     CartStorage.save(_items);
   }
@@ -127,8 +133,8 @@ class _CartAppState extends State<CartApp> {
             child: _loading
                 ? const Center(child: CircularProgressIndicator())
                 : _done
-                    ? _success()
-                    : _content(),
+                ? _success()
+                : _content(),
           ),
         ),
       ),
@@ -136,66 +142,93 @@ class _CartAppState extends State<CartApp> {
   }
 
   Widget _success() => Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.check_circle, color: Colors.green, size: 64),
-            const SizedBox(height: 16),
-            const Text('Pedido recebido!',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800)),
-            const SizedBox(height: 8),
-            const Text('Você receberá a confirmação por e-mail.'),
-            const SizedBox(height: 24),
-            FilledButton(
-                onPressed: () => CartStorage.go('/produtos'),
-                child: const Text('Continuar comprando')),
-          ],
+    padding: const EdgeInsets.all(32),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Icon(Icons.check_circle, color: Colors.green, size: 64),
+        const SizedBox(height: 16),
+        const Text(
+          'Pedido recebido!',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
         ),
-      );
+        const SizedBox(height: 8),
+        const Text('Você receberá a confirmação por e-mail.'),
+        const SizedBox(height: 24),
+        FilledButton(
+          onPressed: () => CartStorage.go('/produtos'),
+          child: const Text('Continuar comprando'),
+        ),
+      ],
+    ),
+  );
 
   Widget _content() {
     if (_items.isEmpty) {
       return Padding(
         padding: const EdgeInsets.all(32),
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-          const Icon(Icons.shopping_cart_outlined, size: 64),
-          const SizedBox(height: 12),
-          const Text('Seu carrinho está vazio.', style: TextStyle(fontSize: 18)),
-          const SizedBox(height: 20),
-          FilledButton(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.shopping_cart_outlined, size: 64),
+            const SizedBox(height: 12),
+            const Text(
+              'Seu carrinho está vazio.',
+              style: TextStyle(fontSize: 18),
+            ),
+            const SizedBox(height: 20),
+            FilledButton(
               onPressed: () => CartStorage.go('/produtos'),
-              child: const Text('Ver produtos')),
-        ]),
+              child: const Text('Ver produtos'),
+            ),
+          ],
+        ),
       );
     }
     return ListView(
       padding: const EdgeInsets.all(24),
       children: [
-        const Text('Seu carrinho',
-            style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800)),
+        const Text(
+          'Seu carrinho',
+          style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800),
+        ),
         const SizedBox(height: 16),
         for (final item in _items) _tile(item),
         const Divider(height: 32),
-        Row(children: [
-          const Expanded(
-              child: Text('Total',
-                  style:
-                      TextStyle(fontSize: 18, fontWeight: FontWeight.w700))),
-          Text(_money(_total),
+        Row(
+          children: [
+            const Expanded(
+              child: Text(
+                'Total',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+              ),
+            ),
+            Text(
+              _money(_total),
               style: const TextStyle(
-                  fontSize: 20, fontWeight: FontWeight.w800, color: _brand)),
-        ]),
+                fontSize: 20,
+                fontWeight: FontWeight.w800,
+                color: _brand,
+              ),
+            ),
+          ],
+        ),
         const SizedBox(height: 24),
         TextField(
-            controller: _name,
-            decoration: const InputDecoration(
-                labelText: 'Seu nome', border: OutlineInputBorder())),
+          controller: _name,
+          decoration: const InputDecoration(
+            labelText: 'Seu nome',
+            border: OutlineInputBorder(),
+          ),
+        ),
         const SizedBox(height: 12),
         TextField(
-            controller: _email,
-            decoration: const InputDecoration(
-                labelText: 'Seu e-mail', border: OutlineInputBorder())),
+          controller: _email,
+          decoration: const InputDecoration(
+            labelText: 'Seu e-mail',
+            border: OutlineInputBorder(),
+          ),
+        ),
         const SizedBox(height: 16),
         FilledButton.icon(
           onPressed: _sending ? null : _checkout,
@@ -203,32 +236,40 @@ class _CartAppState extends State<CartApp> {
               ? const SizedBox(
                   width: 16,
                   height: 16,
-                  child: CircularProgressIndicator(strokeWidth: 2))
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
               : const Icon(Icons.payment),
           label: Text('Finalizar pedido • ${_money(_total)}'),
         ),
         const SizedBox(height: 8),
         TextButton(
-            onPressed: () => CartStorage.go('/produtos'),
-            child: const Text('Continuar comprando')),
+          onPressed: () => CartStorage.go('/produtos'),
+          child: const Text('Continuar comprando'),
+        ),
       ],
     );
   }
 
   Widget _tile(CartItem item) => ListTile(
-        leading: Text(item.emoji, style: const TextStyle(fontSize: 30)),
-        title: Text(item.name,
-            style: const TextStyle(fontWeight: FontWeight.w600)),
-        subtitle: Text(_money(item.price)),
-        trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-          IconButton(
-              icon: const Icon(Icons.remove_circle_outline),
-              onPressed: () => _qty(item, -1)),
-          Text('${item.qty}',
-              style: const TextStyle(fontWeight: FontWeight.w700)),
-          IconButton(
-              icon: const Icon(Icons.add_circle_outline),
-              onPressed: () => _qty(item, 1)),
-        ]),
-      );
+    leading: Text(item.emoji, style: const TextStyle(fontSize: 30)),
+    title: Text(item.name, style: const TextStyle(fontWeight: FontWeight.w600)),
+    subtitle: Text(_money(item.price)),
+    trailing: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        IconButton(
+          icon: const Icon(Icons.remove_circle_outline),
+          onPressed: () => _qty(item, -1),
+        ),
+        Text(
+          '${item.qty}',
+          style: const TextStyle(fontWeight: FontWeight.w700),
+        ),
+        IconButton(
+          icon: const Icon(Icons.add_circle_outline),
+          onPressed: () => _qty(item, 1),
+        ),
+      ],
+    ),
+  );
 }

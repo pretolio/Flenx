@@ -60,10 +60,13 @@ class FlenxProductCard extends StatelessComponent {
         ]),
       ], href: href),
       if (brand != null) span(classes: 'brand', [Component.text(brand!)]),
-      a([div(classes: 'name', [Component.text(name)])], href: href),
+      a([
+        div(classes: 'name', [Component.text(name)]),
+      ], href: href),
       if (oldPrice != null) span(classes: 'old', [Component.text(oldPrice!)]),
       div(classes: 'price', [Component.text(price)]),
-      if (installment != null) div(classes: 'inst', [Component.text(installment!)]),
+      if (installment != null)
+        div(classes: 'inst', [Component.text(installment!)]),
       a([Component.text(buyLabel)], href: buyHref ?? href, classes: 'buy'),
     ]);
   }

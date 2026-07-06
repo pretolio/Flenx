@@ -82,20 +82,22 @@ class IframeEmbed extends StatelessComponent {
       sandbox: sandbox,
       classes: responsive ? null : classes,
       attributes: {'title': title},
-      styles: Styles(raw: {
-        'border': '0',
-        if (rounded) 'border-radius': '12px',
-        if (responsive) ...{
-          'position': 'absolute',
-          'inset': '0',
-          'width': '100%',
-          'height': '100%',
-        } else ...{
-          'display': 'block',
-          'width': '100%',
-          'height': cssHeight ?? '${height}px',
+      styles: Styles(
+        raw: {
+          'border': '0',
+          if (rounded) 'border-radius': '12px',
+          if (responsive) ...{
+            'position': 'absolute',
+            'inset': '0',
+            'width': '100%',
+            'height': '100%',
+          } else ...{
+            'display': 'block',
+            'width': '100%',
+            'height': cssHeight ?? '${height}px',
+          },
         },
-      }),
+      ),
     );
 
     if (!responsive) return frame;
@@ -103,11 +105,9 @@ class IframeEmbed extends StatelessComponent {
     // Wrapper que mantém a proporção (responsivo).
     return div(
       classes: classes,
-      styles: Styles(raw: {
-        'position': 'relative',
-        'width': '100%',
-        'aspect-ratio': ratio!,
-      }),
+      styles: Styles(
+        raw: {'position': 'relative', 'width': '100%', 'aspect-ratio': ratio!},
+      ),
       [frame],
     );
   }

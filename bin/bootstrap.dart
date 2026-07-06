@@ -28,15 +28,19 @@ void main() => runFlenxClient(defaultClientOptions);
 ''';
 
   if (!File('lib/main.dart').existsSync()) {
-    stderr.writeln('Erro: lib/main.dart não encontrado. Crie seu main.dart '
-        'expondo `Future<void> runSite(ServerOptions options)` primeiro.');
+    stderr.writeln(
+      'Erro: lib/main.dart não encontrado. Crie seu main.dart '
+      'expondo `Future<void> runSite(ServerOptions options)` primeiro.',
+    );
     exitCode = 64;
     return;
   }
 
   File('lib/main.server.dart').writeAsStringSync(server);
   File('lib/main.client.dart').writeAsStringSync(client);
-  stdout.writeln('Entrypoints gerados: lib/main.server.dart, lib/main.client.dart');
+  stdout.writeln(
+    'Entrypoints gerados: lib/main.server.dart, lib/main.client.dart',
+  );
 
   // Admin (opcional): se existir a config em lib/views/admin/admin_app.dart
   // (uma classe Flutter `AdminApp` usando FlenxAdminApp), gera o wiring
@@ -72,6 +76,8 @@ class AdminPage extends StatelessComponent {
     stdout.writeln('Admin gerado: lib/views/admin/admin_page.dart');
   }
 
-  stdout.writeln('Pronto. Rode `jaspr serve`. (Edite só o conteúdo: main.dart, '
-      'config/, views/, e admin_app.dart.)');
+  stdout.writeln(
+    'Pronto. Rode `jaspr serve`. (Edite só o conteúdo: main.dart, '
+    'config/, views/, e admin_app.dart.)',
+  );
 }

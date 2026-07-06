@@ -56,7 +56,9 @@ class InMemoryDbExecutor implements DbExecutor {
     final rows = [..._t(table)];
     rows.sort((a, b) {
       final cmp = Comparable.compare(
-          (a[orderBy] ?? 0) as Comparable, (b[orderBy] ?? 0) as Comparable);
+        (a[orderBy] ?? 0) as Comparable,
+        (b[orderBy] ?? 0) as Comparable,
+      );
       return desc ? -cmp : cmp;
     });
     return rows.skip(offset).take(limit).toList();
@@ -72,7 +74,10 @@ class InMemoryDbExecutor implements DbExecutor {
 
   @override
   Future<bool> updateById(
-      String table, Object id, Map<String, Object?> values) async {
+    String table,
+    Object id,
+    Map<String, Object?> values,
+  ) async {
     for (final r in _t(table)) {
       if ('${r['id']}' == '$id') {
         r.addAll(values);

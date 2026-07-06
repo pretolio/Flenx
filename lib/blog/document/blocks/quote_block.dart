@@ -22,8 +22,6 @@ class QuoteBlock extends PostBlock {
   @override
   Map<String, Object?> data() => {'text': text, 'cite': cite};
 
-  factory QuoteBlock.fromJson(Map<String, Object?> j) => QuoteBlock(
-        (j['text'] as String?) ?? '',
-        cite: j['cite'] as String?,
-      );
+  factory QuoteBlock.fromJson(Map<String, Object?> j) =>
+      QuoteBlock((j['text'] as String?) ?? '', cite: j['cite'] as String?);
 }

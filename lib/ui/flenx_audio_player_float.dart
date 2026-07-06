@@ -86,7 +86,8 @@ class FlenxAudioPlayerFloat extends StatelessComponent {
       '.fapfl-bar-$_id{background:$accentColor}'
       '.fapfl-live-$_id{background:$accentColor}';
 
-  String get _js => '''
+  String get _js =>
+      '''
 (function(){
   var id='$_id';
   var root=document.getElementById(id);

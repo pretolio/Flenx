@@ -1,10 +1,6 @@
 /// Identidade da marca no header: logo (imagem ou texto) com link para a home.
 class SiteBrand {
-  const SiteBrand({
-    required this.label,
-    this.homeHref = '/',
-    this.logoSrc,
-  });
+  const SiteBrand({required this.label, this.homeHref = '/', this.logoSrc});
 
   /// Texto exibido (e usado como alt do logo).
   final String label;

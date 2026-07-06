@@ -21,7 +21,9 @@ class CartStorage {
             .map((m) => CartItem.fromJson(m.cast<String, Object?>()))
             .toList();
       }
-    } catch (_) {/* carrinho inválido → vazio */}
+    } catch (_) {
+      /* carrinho inválido → vazio */
+    }
     return [];
   }
 
@@ -42,7 +44,8 @@ class CartStorage {
     final search = web.window.location.search;
     if (search.isEmpty) return null;
     final query = Uri.splitQueryString(
-        search.startsWith('?') ? search.substring(1) : search);
+      search.startsWith('?') ? search.substring(1) : search,
+    );
     final add = query['add'];
     if (add != null && add.isNotEmpty) {
       web.window.history.replaceState(null, '', '/carrinho');

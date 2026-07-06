@@ -37,22 +37,31 @@ class SiteHeader extends StatelessComponent {
 
   @override
   Component build(BuildContext context) {
-    final innerClass =
-        align == NavAlign.center ? 'header-inner nav-center' : 'header-inner';
+    final innerClass = align == NavAlign.center
+        ? 'header-inner nav-center'
+        : 'header-inner';
     return header(classes: 'site-header', [
       Component.element(tag: 'style', children: [RawText(siteHeaderCss)]),
       div(classes: innerClass, [
         BrandLogo(brand),
         // Checkbox-hack: o label (hambúrguer) alterna o checkbox, e o CSS
         // mostra a .nav-wrap no mobile via `:checked ~`. Sem JavaScript.
-        Component.element(tag: 'input', attributes: {
-          'type': 'checkbox',
-          'id': 'flenx-nav-toggle',
-          'class': 'nav-toggle',
-          'aria-label': 'Abrir menu',
-        }),
-        label([span([.text('☰')])],
-            htmlFor: 'flenx-nav-toggle', classes: 'hamburger'),
+        Component.element(
+          tag: 'input',
+          attributes: {
+            'type': 'checkbox',
+            'id': 'flenx-nav-toggle',
+            'class': 'nav-toggle',
+            'aria-label': 'Abrir menu',
+          },
+        ),
+        label(
+          [
+            span([.text('☰')]),
+          ],
+          htmlFor: 'flenx-nav-toggle',
+          classes: 'hamburger',
+        ),
         div(classes: 'nav-wrap', [
           NavLinks(links),
           LoginButton(

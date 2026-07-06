@@ -5,12 +5,7 @@ import 'pagination.dart';
 ///
 /// JSON: `{ "success": bool, "data": ..., "error": str?, "meta": {...}? }`
 class ApiResponse {
-  const ApiResponse({
-    required this.success,
-    this.data,
-    this.error,
-    this.meta,
-  });
+  const ApiResponse({required this.success, this.data, this.error, this.meta});
 
   final bool success;
   final Object? data;
@@ -18,7 +13,8 @@ class ApiResponse {
   final PageMeta? meta;
 
   /// Sucesso simples (objeto/valor).
-  factory ApiResponse.ok(Object? data) => ApiResponse(success: true, data: data);
+  factory ApiResponse.ok(Object? data) =>
+      ApiResponse(success: true, data: data);
 
   /// Sucesso de listagem paginada.
   factory ApiResponse.page(List<Object?> items, PageMeta meta) =>
@@ -29,9 +25,9 @@ class ApiResponse {
       ApiResponse(success: false, error: error);
 
   Map<String, dynamic> toJson() => {
-        'success': success,
-        'data': data,
-        'error': error,
-        if (meta != null) 'meta': meta!.toJson(),
-      };
+    'success': success,
+    'data': data,
+    'error': error,
+    if (meta != null) 'meta': meta!.toJson(),
+  };
 }

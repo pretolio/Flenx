@@ -58,24 +58,24 @@ class FlenxCard extends StatelessComponent {
   final int animationDuration;
 
   String get _cls => switch (hover) {
-        FlenxCardHover.lift => 'fcard-lift',
-        FlenxCardHover.glow => 'fcard-glow-$_colorKey',
-        FlenxCardHover.scale => 'fcard-scale',
-        null => '',
-      };
+    FlenxCardHover.lift => 'fcard-lift',
+    FlenxCardHover.glow => 'fcard-glow-$_colorKey',
+    FlenxCardHover.scale => 'fcard-scale',
+    null => '',
+  };
 
   String get _css => switch (hover) {
-        FlenxCardHover.lift =>
-          '.fcard-lift{transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}'
+    FlenxCardHover.lift =>
+      '.fcard-lift{transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}'
           '.fcard-lift:hover{transform:translateY(-4px);box-shadow:0 8px 28px rgba(0,0,0,.10);border-color:#c8d8ea}',
-        FlenxCardHover.glow =>
-          '.fcard-glow-${_colorKey}{transition:box-shadow .3s ease}'
+    FlenxCardHover.glow =>
+      '.fcard-glow-${_colorKey}{transition:box-shadow .3s ease}'
           '.fcard-glow-${_colorKey}:hover{box-shadow:0 0 18px 4px $_glowRgba,0 0 40px 10px ${_glowRgbaFaint}}',
-        FlenxCardHover.scale =>
-          '.fcard-scale{transition:transform .2s ease,box-shadow .2s ease}'
+    FlenxCardHover.scale =>
+      '.fcard-scale{transition:transform .2s ease,box-shadow .2s ease}'
           '.fcard-scale:hover{transform:scale(1.03);box-shadow:0 6px 22px rgba(0,0,0,.09)}',
-        null => '',
-      };
+    null => '',
+  };
 
   /// Chave única da cor para o nome da classe CSS (evita conflito entre cores).
   String get _colorKey => glowColor.replaceAll('#', '').toLowerCase();
@@ -112,41 +112,49 @@ class FlenxCard extends StatelessComponent {
       // Card com imagem de fundo: outer div (position relative) + layers
       card = div(
         classes: hover != null ? _cls : null,
-        styles: Styles(raw: {
-          'position': 'relative',
-          'overflow': 'hidden',
-          'border-radius': '${radius}px',
-          if (bordered) 'border': '1px solid $borderColor',
-        }),
+        styles: Styles(
+          raw: {
+            'position': 'relative',
+            'overflow': 'hidden',
+            'border-radius': '${radius}px',
+            if (bordered) 'border': '1px solid $borderColor',
+          },
+        ),
         [
           // Camada da imagem
           div(
-            styles: Styles(raw: {
-              'position': 'absolute',
-              'inset': '0',
-              'background-image': 'url($backgroundImage)',
-              'background-size': 'cover',
-              'background-position': 'center',
-              'opacity': '$backgroundImageOpacity',
-            }),
+            styles: Styles(
+              raw: {
+                'position': 'absolute',
+                'inset': '0',
+                'background-image': 'url($backgroundImage)',
+                'background-size': 'cover',
+                'background-position': 'center',
+                'opacity': '$backgroundImageOpacity',
+              },
+            ),
             [],
           ),
           // Overlay de cor
           div(
-            styles: Styles(raw: {
-              'position': 'absolute',
-              'inset': '0',
-              'background': background,
-            }),
+            styles: Styles(
+              raw: {
+                'position': 'absolute',
+                'inset': '0',
+                'background': background,
+              },
+            ),
             [],
           ),
           // Conteúdo
           div(
-            styles: Styles(raw: {
-              'position': 'relative',
-              'z-index': '1',
-              'padding': '${padding}px',
-            }),
+            styles: Styles(
+              raw: {
+                'position': 'relative',
+                'z-index': '1',
+                'padding': '${padding}px',
+              },
+            ),
             [child],
           ),
         ],
@@ -154,12 +162,14 @@ class FlenxCard extends StatelessComponent {
     } else {
       card = div(
         classes: hover != null ? _cls : null,
-        styles: Styles(raw: {
-          'background': background,
-          'padding': '${padding}px',
-          'border-radius': '${radius}px',
-          if (bordered) 'border': '1px solid $borderColor',
-        }),
+        styles: Styles(
+          raw: {
+            'background': background,
+            'padding': '${padding}px',
+            'border-radius': '${radius}px',
+            if (bordered) 'border': '1px solid $borderColor',
+          },
+        ),
         [child],
       );
     }
@@ -172,7 +182,12 @@ class FlenxCard extends StatelessComponent {
       ]);
     }
     if (animation != null) {
-      return FlenxAnimated(result, animation: animation!, delay: animationDelay, duration: animationDuration);
+      return FlenxAnimated(
+        result,
+        animation: animation!,
+        delay: animationDelay,
+        duration: animationDuration,
+      );
     }
     return result;
   }

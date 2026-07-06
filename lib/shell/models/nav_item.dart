@@ -36,12 +36,12 @@ class NavItem {
 
   /// Cópia com novos [children] (usado ao filtrar submenus por permissão).
   NavItem withChildren(List<NavItem> items) => NavItem(
-        label: label,
-        icon: icon,
-        route: route,
-        onTap: onTap,
-        children: items,
-        badge: badge,
-        permission: permission,
-      );
+    label: label,
+    icon: icon,
+    route: route,
+    onTap: onTap,
+    children: items,
+    badge: badge,
+    permission: permission,
+  );
 }

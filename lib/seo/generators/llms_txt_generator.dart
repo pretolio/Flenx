@@ -26,19 +26,26 @@ class LlmsTxtGenerator {
       ..writeln();
 
     // Bloco de identidade da empresa (contato, endereço)
-    final hasContact = config.telephone != null ||
+    final hasContact =
+        config.telephone != null ||
         config.email != null ||
         config.address != null ||
         config.sameAs.isNotEmpty;
     if (hasContact) {
       b.writeln('## Informações da empresa');
       b.writeln();
-      if (config.telephone != null) b.writeln('- **Telefone:** ${config.telephone}');
+      if (config.telephone != null) {
+        b.writeln('- **Telefone:** ${config.telephone}');
+      }
       if (config.email != null) b.writeln('- **E-mail:** ${config.email}');
       if (config.address != null) {
         final a = config.address!;
-        b.writeln('- **Endereço:** ${a.streetAddress}, ${a.addressLocality}${a.addressRegion != null ? " – ${a.addressRegion}" : ""}, ${a.postalCode}, ${a.addressCountry}');
-        if (a.hasGeo) b.writeln('- **Coordenadas:** ${a.latitude}, ${a.longitude}');
+        b.writeln(
+          '- **Endereço:** ${a.streetAddress}, ${a.addressLocality}${a.addressRegion != null ? " – ${a.addressRegion}" : ""}, ${a.postalCode}, ${a.addressCountry}',
+        );
+        if (a.hasGeo) {
+          b.writeln('- **Coordenadas:** ${a.latitude}, ${a.longitude}');
+        }
       }
       for (final s in config.sameAs) {
         b.writeln('- **Perfil:** $s');
@@ -59,7 +66,9 @@ class LlmsTxtGenerator {
         ..writeln('## ${entry.key}')
         ..writeln();
       for (final r in entry.value) {
-        b.writeln('- [${r.title}](${config.url(r.path)}): ${r.effectiveSummary}');
+        b.writeln(
+          '- [${r.title}](${config.url(r.path)}): ${r.effectiveSummary}',
+        );
       }
       b.writeln();
     }

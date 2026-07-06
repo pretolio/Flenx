@@ -19,21 +19,27 @@ class JsonlDbExecutor implements DbExecutor {
     final lines = await f.readAsLines();
     return [
       for (final l in lines)
-        if (l.trim().isNotEmpty)
-          (jsonDecode(l) as Map).cast<String, Object?>(),
+        if (l.trim().isNotEmpty) (jsonDecode(l) as Map).cast<String, Object?>(),
     ];
   }
 
   Future<void> _writeAll(String table, List<Map<String, Object?>> rows) async {
     final f = _file(table);
     await f.parent.create(recursive: true);
-    await f.writeAsString(rows.map(jsonEncode).join('\n') + (rows.isEmpty ? '' : '\n'));
+    await f.writeAsString(
+      rows.map(jsonEncode).join('\n') + (rows.isEmpty ? '' : '\n'),
+    );
   }
 
   @override
   Future<int> insert(String table, Map<String, Object?> values) async {
     final rows = await _readAll(table);
-    final id = rows.fold<int>(0, (m, r) => (r['id'] as int? ?? 0) > m ? r['id'] as int : m) + 1;
+    final id =
+        rows.fold<int>(
+          0,
+          (m, r) => (r['id'] as int? ?? 0) > m ? r['id'] as int : m,
+        ) +
+        1;
     rows.add({'id': id, ...values});
     await _writeAll(table, rows);
     return id;
@@ -53,7 +59,9 @@ class JsonlDbExecutor implements DbExecutor {
     final rows = await _readAll(table);
     rows.sort((a, b) {
       final cmp = Comparable.compare(
-          (a[orderBy] ?? 0) as Comparable, (b[orderBy] ?? 0) as Comparable);
+        (a[orderBy] ?? 0) as Comparable,
+        (b[orderBy] ?? 0) as Comparable,
+      );
       return desc ? -cmp : cmp;
     });
     return rows.skip(offset).take(limit).toList();
@@ -69,7 +77,10 @@ class JsonlDbExecutor implements DbExecutor {
 
   @override
   Future<bool> updateById(
-      String table, Object id, Map<String, Object?> values) async {
+    String table,
+    Object id,
+    Map<String, Object?> values,
+  ) async {
     final rows = await _readAll(table);
     var changed = false;
     for (final r in rows) {

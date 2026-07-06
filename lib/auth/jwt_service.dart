@@ -12,7 +12,10 @@ class JwtService {
   final String? issuer;
 
   /// Emite um token assinado com [claims] (ex.: `{sub, email, role}`).
-  String sign(Map<String, Object?> claims, {Duration expiresIn = const Duration(days: 7)}) {
+  String sign(
+    Map<String, Object?> claims, {
+    Duration expiresIn = const Duration(days: 7),
+  }) {
     final now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     final payload = <String, Object?>{
       ...claims,
@@ -40,8 +43,9 @@ class JwtService {
     return claims;
   }
 
-  String _sign(String data) =>
-      _b64Bytes(Hmac(sha256, utf8.encode(secret)).convert(utf8.encode(data)).bytes);
+  String _sign(String data) => _b64Bytes(
+    Hmac(sha256, utf8.encode(secret)).convert(utf8.encode(data)).bytes,
+  );
 
   String _b64(String s) => _b64Bytes(utf8.encode(s));
   String _b64Bytes(List<int> b) => base64Url.encode(b).replaceAll('=', '');

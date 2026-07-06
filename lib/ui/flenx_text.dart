@@ -38,18 +38,25 @@ class FlenxText extends StatelessComponent {
   @override
   Component build(BuildContext context) {
     final elem = p(
-      styles: Styles(raw: {
-        'margin': '0',
-        'font-size': '${size}px',
-        'font-weight': '$weight',
-        if (color != null) 'color': color!,
-        if (align != null) 'text-align': align!.name,
-        if (maxWidthPx != null) 'max-width': '${maxWidthPx}px',
-        if (lineHeight != null) 'line-height': '$lineHeight',
-      }),
+      styles: Styles(
+        raw: {
+          'margin': '0',
+          'font-size': '${size}px',
+          'font-weight': '$weight',
+          if (color != null) 'color': color!,
+          if (align != null) 'text-align': align!.name,
+          if (maxWidthPx != null) 'max-width': '${maxWidthPx}px',
+          if (lineHeight != null) 'line-height': '$lineHeight',
+        },
+      ),
       [.text(data)],
     );
     if (animation == null) return elem;
-    return FlenxAnimated(elem, animation: animation!, delay: animationDelay, duration: animationDuration);
+    return FlenxAnimated(
+      elem,
+      animation: animation!,
+      delay: animationDelay,
+      duration: animationDuration,
+    );
   }
 }

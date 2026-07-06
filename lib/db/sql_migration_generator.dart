@@ -29,8 +29,10 @@ class SqlMigrationGenerator {
     if (pk != null) lines.add('  PRIMARY KEY (`${pk.name}`)');
     for (final fk in model.foreignKeys) {
       final ref = fk.references!.split('.');
-      lines.add('  FOREIGN KEY (`${fk.name}`) '
-          'REFERENCES `${ref[0]}` (`${ref[1]}`)');
+      lines.add(
+        '  FOREIGN KEY (`${fk.name}`) '
+        'REFERENCES `${ref[0]}` (`${ref[1]}`)',
+      );
     }
     return 'CREATE TABLE IF NOT EXISTS `${model.table}` (\n'
         '${lines.join(',\n')}\n'

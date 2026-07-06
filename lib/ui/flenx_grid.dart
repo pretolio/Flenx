@@ -2,7 +2,6 @@ import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
 
 import 'flenx_animated.dart';
-import 'flenx_animation.dart';
 import 'flenx_ui_enums.dart';
 
 /// Grade responsiva — coloca os filhos lado a lado e quebra a linha sozinha
@@ -53,20 +52,21 @@ class FlenxGrid extends StatelessComponent {
   @override
   Component build(BuildContext context) {
     return div(
-      styles: Styles(raw: {
-        'display': 'flex',
-        'flex-wrap': 'wrap',
-        'gap': '${gap}px',
-        'justify-content': main.css,
-        'align-items': 'stretch',
-      }),
+      styles: Styles(
+        raw: {
+          'display': 'flex',
+          'flex-wrap': 'wrap',
+          'gap': '${gap}px',
+          'justify-content': main.css,
+          'align-items': 'stretch',
+        },
+      ),
       [
         for (var i = 0; i < children.length; i++)
           div(
-            styles: Styles(raw: {
-              'flex': '1 1 ${minItemWidth}px',
-              'max-width': '100%',
-            }),
+            styles: Styles(
+              raw: {'flex': '1 1 ${minItemWidth}px', 'max-width': '100%'},
+            ),
             [_wrap(children[i], i)],
           ),
       ],

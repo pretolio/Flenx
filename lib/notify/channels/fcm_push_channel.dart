@@ -14,8 +14,9 @@ class FcmPushChannel implements NotificationChannel {
   final String serverKey;
   final http.Client? client;
 
-  factory FcmPushChannel.fromEnv([Map<String, String>? env]) =>
-      FcmPushChannel(serverKey: (env ?? Platform.environment)['FCM_SERVER_KEY'] ?? '');
+  factory FcmPushChannel.fromEnv([Map<String, String>? env]) => FcmPushChannel(
+    serverKey: (env ?? Platform.environment)['FCM_SERVER_KEY'] ?? '',
+  );
 
   @override
   String get name => 'fcm';

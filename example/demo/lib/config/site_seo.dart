@@ -18,7 +18,8 @@ const seoConfig = SeoConfig(
   globalDisallow: ['/api/private/'],
   telephone: '+55 11 99999-9999',
   email: 'contato@flenx.dev',
-  about: 'Flenx é um framework Flutter/Dart para a web (SSR, SEO automático, '
+  about:
+      'Flenx é um framework Flutter/Dart para a web (SSR, SEO automático, '
       'blog, admin e APIs) que roda em qualquer hospedagem — PHP/MySQL ou Dart.',
   address: SeoAddress(
     streetAddress: 'Av. Paulista, 1000',

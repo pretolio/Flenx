@@ -5,7 +5,8 @@ import '../flenx_palette.dart';
 String get flenxSiteCss => '${_rootVars}\n$_flenxSiteBody';
 
 /// `:root` gerado a partir da paleta central (fonte única de cores).
-String get _rootVars => ':root{'
+String get _rootVars =>
+    ':root{'
     '--ink:${FlenxPalette.ink};--muted:${FlenxPalette.muted};'
     '--primary:${FlenxPalette.primary};--primary-d:${FlenxPalette.primaryDark};'
     '--accent:${FlenxPalette.accent};--surface:${FlenxPalette.surface};'

@@ -30,9 +30,9 @@ class NavLinks extends StatelessComponent {
   }
 
   Component _anchor(MenuLink l, {String? cls}) => a(
-        [.text(l.label)],
-        href: l.href ?? '#',
-        classes: cls,
-        target: l.external ? Target.blank : null,
-      );
+    [.text(l.label)],
+    href: l.href ?? '#',
+    classes: cls,
+    target: l.external ? Target.blank : null,
+  );
 }

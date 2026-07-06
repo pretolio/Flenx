@@ -11,11 +11,7 @@ class FlenxFullscreen extends StatelessComponent {
   @override
   Component build(BuildContext context) {
     return div(
-      styles: Styles(raw: {
-        'width': '100%',
-        'height': '100vh',
-        'margin': '0',
-      }),
+      styles: Styles(raw: {'width': '100%', 'height': '100vh', 'margin': '0'}),
       [child],
     );
   }

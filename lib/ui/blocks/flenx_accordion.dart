@@ -54,10 +54,7 @@ class FlenxAccordion extends StatelessComponent {
           tag: 'details',
           attributes: item.open ? {'open': ''} : {},
           children: [
-            Component.element(
-              tag: 'summary',
-              children: [.text(item.title)],
-            ),
+            Component.element(tag: 'summary', children: [.text(item.title)]),
             div(classes: 'facc-body', [
               div(classes: 'facc-inner', [
                 div(classes: 'facc-text', [.text(item.body)]),

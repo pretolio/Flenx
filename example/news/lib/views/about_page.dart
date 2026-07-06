@@ -15,10 +15,11 @@ class AboutPage extends StatelessComponent {
           const FlenxText('Sobre', color: FlenxPalette.primary, weight: 700),
           const FlenxHeading('O Flenx News', level: 1),
           const FlenxText(
-              'Portal de notícias de exemplo do Flenx: artigos em Markdown, '
-              'categorias e tags, busca e SEO/llms.txt automáticos — tudo em Dart.',
-              color: FlenxPalette.muted,
-              lineHeight: 1.6),
+            'Portal de notícias de exemplo do Flenx: artigos em Markdown, '
+            'categorias e tags, busca e SEO/llms.txt automáticos — tudo em Dart.',
+            color: FlenxPalette.muted,
+            lineHeight: 1.6,
+          ),
         ]),
       ),
       const NewsFooter(),

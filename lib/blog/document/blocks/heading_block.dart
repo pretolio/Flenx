@@ -20,7 +20,7 @@ class HeadingBlock extends PostBlock {
   Map<String, Object?> data() => {'text': text, 'level': level};
 
   factory HeadingBlock.fromJson(Map<String, Object?> j) => HeadingBlock(
-        (j['text'] as String?) ?? '',
-        level: (j['level'] as num?)?.toInt() ?? 2,
-      );
+    (j['text'] as String?) ?? '',
+    level: (j['level'] as num?)?.toInt() ?? 2,
+  );
 }

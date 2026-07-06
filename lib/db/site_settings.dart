@@ -17,8 +17,11 @@ class SiteSettings {
   }
 
   /// Carrega o registro [id]; devolve configurações vazias se não existir.
-  static Future<SiteSettings> load(DbExecutor db,
-      {String table = 'site_settings', Object id = 1}) async {
+  static Future<SiteSettings> load(
+    DbExecutor db, {
+    String table = 'site_settings',
+    Object id = 1,
+  }) async {
     final row = await db.findById(table, id);
     return SiteSettings(_decode(row?['data']));
   }
@@ -45,7 +48,9 @@ class SiteSettings {
       try {
         final d = jsonDecode(raw);
         if (d is Map) return d.cast<String, Object?>();
-      } catch (_) {/* ignora JSON inválido */}
+      } catch (_) {
+        /* ignora JSON inválido */
+      }
     }
     return {};
   }

@@ -46,20 +46,21 @@ class FlenxNewsHighlight extends StatelessComponent {
         ),
         if (subtitle != null)
           p(
-            styles: Styles(raw: {
-              'color': FlenxPalette.ink,
-              'font-size': '17px',
-              'line-height': '1.45',
-              'margin': '0 0 8px',
-            }),
+            styles: Styles(
+              raw: {
+                'color': FlenxPalette.ink,
+                'font-size': '17px',
+                'line-height': '1.45',
+                'margin': '0 0 8px',
+              },
+            ),
             [Component.text(subtitle!)],
           ),
         if (meta != null)
           span(
-            styles: Styles(raw: {
-              'color': FlenxPalette.muted,
-              'font-size': '13px',
-            }),
+            styles: Styles(
+              raw: {'color': FlenxPalette.muted, 'font-size': '13px'},
+            ),
             [Component.text(meta!)],
           ),
       ]),

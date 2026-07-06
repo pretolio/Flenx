@@ -23,6 +23,8 @@ void main(List<String> argv) {
     return;
   }
   stdout.writeln('Criado: ${file.path}');
-  stdout.writeln('Adicione `blog: \'$dir\'` no FlenxApp.run e acesse /blog. '
-      'Novos posts: dart run flenx:new_post "Título".');
+  stdout.writeln(
+    'Adicione `blog: \'$dir\'` no FlenxApp.run e acesse /blog. '
+    'Novos posts: dart run flenx:new_post "Título".',
+  );
 }

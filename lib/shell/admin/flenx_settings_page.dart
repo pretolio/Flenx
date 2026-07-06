@@ -79,7 +79,9 @@ class _FlenxSettingsPageState extends State<FlenxSettingsPage> {
       try {
         final d = jsonDecode(raw);
         if (d is Map) return d.cast<String, Object?>();
-      } catch (_) {/* ignora */}
+      } catch (_) {
+        /* ignora */
+      }
     }
     return {};
   }
@@ -110,28 +112,37 @@ class _FlenxSettingsPageState extends State<FlenxSettingsPage> {
     final scheme = Theme.of(context).colorScheme;
     if (_loading) return const Center(child: CircularProgressIndicator());
     if (_error != null) {
-      return Center(child: Text(_error!, style: TextStyle(color: scheme.error)));
+      return Center(
+        child: Text(_error!, style: TextStyle(color: scheme.error)),
+      );
     }
     return ListView(
       padding: const EdgeInsets.all(24),
       children: [
-        Row(children: [
-          Expanded(
-            child: Text(widget.title,
-                style:
-                    const TextStyle(fontSize: 24, fontWeight: FontWeight.w800)),
-          ),
-          FilledButton.icon(
-            onPressed: _saving ? null : _save,
-            icon: _saving
-                ? const SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: CircularProgressIndicator(strokeWidth: 2))
-                : const Icon(Icons.save_outlined),
-            label: const Text('Salvar'),
-          ),
-        ]),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                widget.title,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ),
+            FilledButton.icon(
+              onPressed: _saving ? null : _save,
+              icon: _saving
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(Icons.save_outlined),
+              label: const Text('Salvar'),
+            ),
+          ],
+        ),
         const SizedBox(height: 6),
         Text(widget.intro, style: TextStyle(color: scheme.onSurfaceVariant)),
         const SizedBox(height: 20),

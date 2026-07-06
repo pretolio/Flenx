@@ -24,9 +24,9 @@ class ListBlock extends PostBlock {
   Map<String, Object?> data() => {'items': items, 'ordered': ordered};
 
   factory ListBlock.fromJson(Map<String, Object?> j) => ListBlock(
-        ((j['items'] as List?) ?? const [])
-            .map((e) => e.toString())
-            .toList(growable: false),
-        ordered: j['ordered'] == true,
-      );
+    ((j['items'] as List?) ?? const [])
+        .map((e) => e.toString())
+        .toList(growable: false),
+    ordered: j['ordered'] == true,
+  );
 }

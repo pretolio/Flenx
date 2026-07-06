@@ -22,7 +22,9 @@ void main() {
     });
 
     test('rejeita token expirado', () {
-      final token = jwt.sign({'sub': '1'}, expiresIn: const Duration(seconds: -5));
+      final token = jwt.sign({
+        'sub': '1',
+      }, expiresIn: const Duration(seconds: -5));
       expect(jwt.verify(token), isNull);
     });
 

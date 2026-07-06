@@ -35,7 +35,8 @@ class FlenxPage extends StatelessComponent {
   String? get _overrideVars {
     if (primaryColor == null && secondaryColor == null) return null;
     final pri = primaryColor;
-    final priD = primaryDarkColor ?? _darken(primaryColor ?? FlenxPalette.primary);
+    final priD =
+        primaryDarkColor ?? _darken(primaryColor ?? FlenxPalette.primary);
     final sec = secondaryColor;
     return ':root{'
         '${pri != null ? "--primary:$pri;--primary-d:$priD;" : ""}'
