@@ -14,9 +14,14 @@
 ### UI / só-Dart (sem HTML/CSS no app)
 - **`FlenxHeroCover`** — hero de tela cheia com imagem de fundo (Ken Burns), logo
   flutuando e conteúdo animado, 100% via parâmetros (o CSS fica dentro do componente).
+- **`FlenxFloatingButton`** — botão flutuante genérico para qualquer chat/ação
+  (presets `.whatsapp`/`.telegram`/`.messenger` + configurável: ícone, cor, canto).
+- **`FlenxApp.run(floatingButtons:)`** — botões flutuantes globais (todas as páginas).
+- **`FlenxApp.run(globalScripts:)`** — injeta `<script src defer>` global (ex.: analytics).
 - **`SiteBrand(logoHeight:)`** — altura do logo no header sem escrever CSS.
-- **`FlenxApp.run(globalStyles:)` → `rawGlobalStyles:`** — renomeado para deixar
-  claro que é o escape hatch de CSS puro; prefira os parâmetros tipados.
+- **`FlenxApp.run`: `globalStyles` (tipado) + `rawGlobalStyles` (novo)** — `globalStyles`
+  recebe estilos tipados em Dart (`css('.x').styles(color: ..., padding: ...)`); use
+  `rawGlobalStyles` só como escape hatch de CSS puro (`.styles(raw: {...})`).
 
 ### Tema / marca
 - **`FlenxApp.run(primaryColor:, primaryColorDark:)`** — define os tokens CSS

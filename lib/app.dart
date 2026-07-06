@@ -24,7 +24,7 @@ import 'site_server.dart';
 // Reexporta o barrel principal para o app importar só `package:flenx/app.dart`
 // e ter SeoConfig, RouteMeta, JsonlDbExecutor, ApiEndpoint, modelos, etc.
 export 'package:jaspr/server.dart' show ServerOptions;
-// Estilos (css/Styles/StyleRule) — para o app customizar rawGlobalStyles sem
+// Estilos (css/Styles/StyleRule) — para o app customizar globalStyles/rawGlobalStyles sem
 // precisar importar jaspr diretamente (ex.: css(':root'), css.keyframes(...)).
 export 'package:jaspr/dom.dart' show css, Styles, StyleRule;
 export 'flenx.dart';
@@ -83,8 +83,10 @@ class FlenxApp {
     DbExecutor? db,
     EmailSender? onEmail,
     TokenVerifier? tokenVerifier,
-    // Escape hatch de CSS puro (StyleRule). Prefira os parâmetros tipados
-    // (primaryColor, etc.) — use isto só para casos não cobertos pela API.
+    // Estilos globais TIPADOS (Dart) — ex.: `css('.x').styles(color: ..., padding: ...)`.
+    List<StyleRule> globalStyles = const [],
+    // Escape hatch de CSS puro (só quando a API tipada não cobre) —
+    // ex.: `css('.x').styles(raw: {'height': '48px'})`.
     List<StyleRule> rawGlobalStyles = const [],
     AdsConfig? ads,
     String lang = 'pt-BR',
@@ -96,6 +98,12 @@ class FlenxApp {
     // Favicon: emite <link rel="icon"> e <link rel="apple-touch-icon"> no <head>.
     String? faviconUrl,
     String? appleTouchIconUrl,
+    // Scripts globais (URLs) injetados em toda página com `defer`
+    // (ex.: analytics: `['/assets/js/gtag.js']`).
+    List<String> globalScripts = const [],
+    // Botões flutuantes globais (aparecem em todas as páginas) — ex.:
+    // `[FlenxFloatingButton.whatsapp(href: ...)]`.
+    List<Component> floatingButtons = const [],
   }) async {
     Jaspr.initializeApp(options: options);
 
@@ -145,7 +153,7 @@ class FlenxApp {
       onEmail: onEmail,
       tokenVerifier: tokenVerifier,
       notFound: notFound,
-      rawGlobalStyles: [
+      globalStyles: [
         // Token da marca (--primary) definido cedo para valer em toda a UI.
         if (primaryColor != null)
           css(':root').styles(
@@ -154,12 +162,14 @@ class FlenxApp {
               if (primaryColorDark != null) '--primary-dark': primaryColorDark,
             },
           ),
+        ...globalStyles,
         ...rawGlobalStyles,
       ],
       headExtra: [
         if (faviconUrl != null) link(rel: 'icon', href: faviconUrl),
         if (appleTouchIconUrl != null)
           link(rel: 'apple-touch-icon', href: appleTouchIconUrl),
+        for (final src in globalScripts) script(src: src, defer: true),
         if (ads != null && ads.enabled)
           script(
             src: ads.loaderUrl,
@@ -167,6 +177,7 @@ class FlenxApp {
             attributes: const {'crossorigin': 'anonymous'},
           ),
       ],
+      floatingButtons: floatingButtons,
       lang: lang,
       resolvePage: (path, query) async {
         final blogNow = await blogFor(path);

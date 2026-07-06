@@ -75,6 +75,7 @@ export 'site/site_styles.dart';
 export 'site/blog_styles.dart';
 export 'site/components/flenx_blog_layout.dart';
 export 'site/components/flenx_not_found.dart';
+export 'site/components/flenx_floating_button.dart';
 export 'site/components/iframe_embed.dart';
 export 'site/components/lead_form.dart';
 export 'site/components/whatsapp_button.dart';

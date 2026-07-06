@@ -34,8 +34,9 @@ class FlenxServer {
     this.db,
     this.onEmail,
     this.tokenVerifier,
-    this.rawGlobalStyles = const [],
+    this.globalStyles = const [],
     this.headExtra = const [],
+    this.floatingButtons = const [],
     this.lang = 'pt-BR',
     this.flutterBootstrap = 'flutter_bootstrap.js?cb=1',
   });
@@ -53,11 +54,15 @@ class FlenxServer {
   final TokenVerifier? tokenVerifier;
 
   /// Estilos globais extra (somados ao reset padrão).
-  final List<StyleRule> rawGlobalStyles;
+  final List<StyleRule> globalStyles;
 
   /// Tags extra para o `<head>` de toda página (ex.: loader de anúncios,
   /// scripts de analytics).
   final List<Component> headExtra;
+
+  /// Botões flutuantes globais (fixos), renderizados ao fim do body de toda
+  /// página — ex.: `FlenxFloatingButton.whatsapp(...)`.
+  final List<Component> floatingButtons;
   final String lang;
   final String flutterBootstrap;
 
@@ -114,14 +119,19 @@ class FlenxServer {
         final document = Document(
           title: routeMeta.title,
           lang: lang,
-          styles: [..._resetStyles, ...rawGlobalStyles],
+          styles: [..._resetStyles, ...globalStyles],
           head: [
             ...meta.build(routeMeta),
             ...headExtra,
             if (result?.island ?? false)
               script(src: flutterBootstrap, defer: true),
           ],
-          body: result?.body ?? notFound,
+          body: floatingButtons.isEmpty
+              ? (result?.body ?? notFound)
+              : Component.fragment([
+                  result?.body ?? notFound,
+                  ...floatingButtons,
+                ]),
         );
 
         final response = await render(document);
