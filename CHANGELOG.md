@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.3.0
+
+### Deploy / geração estática
+- **`jaspr build` em `mode: static` agora funciona** — a flenx passou a reportar
+  todas as suas rotas ao proxy do `jaspr_cli` no modo generate (`ServerApp.requestRouteGeneration`).
+  Antes o build travava em "Starting server app..." porque a flenx usa servidor
+  próprio (shelf) e não a `ServerApp` do jaspr, então nenhuma rota era reportada.
+
+### Tema / marca
+- **`FlenxApp.run(primaryColor:, primaryColorDark:)`** — define os tokens CSS
+  `--primary`/`--primary-dark` (usados por botões, links e destaques) sem precisar
+  setar manualmente via `globalStyles`.
+- **`FlenxApp.run(faviconUrl:, appleTouchIconUrl:)`** — emite `<link rel="icon">` e
+  `<link rel="apple-touch-icon">` no `<head>`.
+
+### DX
+- `package:flenx/app.dart` agora re-exporta `css`, `Styles` e `StyleRule` — dá para
+  customizar `globalStyles` (ex.: `css.keyframes(...)`) sem importar jaspr direto.
+
 ## 0.2.0
 
 ### Novos componentes

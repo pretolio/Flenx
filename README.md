@@ -853,6 +853,10 @@ Três sites SSR completos, feitos 100% em Dart, na pasta [`example/`](https://gi
 
 Para rodar um exemplo: `cd example/demo && dart run flenx:bootstrap && jaspr serve`.
 
+## 👤 Autor
+
+Criado e mantido por **Gabriel Mattos** — [linkedin.com/in/gabriel-mattos-mobile](https://www.linkedin.com/in/gabriel-mattos-mobile/).
+
 ## 📄 Licença
 
 MIT © Potenza RH. Veja [LICENSE](LICENSE).

@@ -129,6 +129,18 @@ class FlenxServer {
     }
     await _activeServer?.close();
     _activeServer = server;
+
+    // Geração estática (`jaspr build` em mode: static): a flenx usa servidor
+    // próprio (shelf), então precisa reportar TODAS as suas rotas ao proxy do
+    // jaspr_cli — senão o build trava esperando rotas que nunca chegam.
+    if (kGenerateMode) {
+      for (final meta in await registry.resolveAll()) {
+        await ServerApp.requestRouteGeneration(
+          meta.path,
+          priority: meta.priority,
+        );
+      }
+    }
     return server;
   }
 

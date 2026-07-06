@@ -7,7 +7,7 @@ library;
 
 import 'dart:async';
 
-import 'package:jaspr/dom.dart' show StyleRule, script;
+import 'package:jaspr/dom.dart' show StyleRule, css, script, link;
 import 'package:jaspr/server.dart';
 
 import 'ads/ads_config.dart';
@@ -24,6 +24,9 @@ import 'site_server.dart';
 // Reexporta o barrel principal para o app importar só `package:flenx/app.dart`
 // e ter SeoConfig, RouteMeta, JsonlDbExecutor, ApiEndpoint, modelos, etc.
 export 'package:jaspr/server.dart' show ServerOptions;
+// Estilos (css/Styles/StyleRule) — para o app customizar globalStyles sem
+// precisar importar jaspr diretamente (ex.: css(':root'), css.keyframes(...)).
+export 'package:jaspr/dom.dart' show css, Styles, StyleRule;
 export 'flenx.dart';
 export 'site_server.dart' show PageResult;
 
@@ -84,6 +87,13 @@ class FlenxApp {
     AdsConfig? ads,
     String lang = 'pt-BR',
     int? port,
+    // Cor da marca: define o token CSS `--primary` (e `--primary-dark`) usado
+    // por botões, links e destaques. Evita ter que setar via globalStyles.
+    String? primaryColor,
+    String? primaryColorDark,
+    // Favicon: emite <link rel="icon"> e <link rel="apple-touch-icon"> no <head>.
+    String? faviconUrl,
+    String? appleTouchIconUrl,
   }) async {
     Jaspr.initializeApp(options: options);
 
@@ -133,8 +143,20 @@ class FlenxApp {
       onEmail: onEmail,
       tokenVerifier: tokenVerifier,
       notFound: notFound,
-      globalStyles: globalStyles,
+      globalStyles: [
+        // Token da marca (--primary) definido cedo para valer em toda a UI.
+        if (primaryColor != null)
+          css(':root').styles(raw: {
+            '--primary': primaryColor,
+            if (primaryColorDark != null) '--primary-dark': primaryColorDark,
+          }),
+        ...globalStyles,
+      ],
       headExtra: [
+        if (faviconUrl != null)
+          link(rel: 'icon', href: faviconUrl),
+        if (appleTouchIconUrl != null)
+          link(rel: 'apple-touch-icon', href: appleTouchIconUrl),
         if (ads != null && ads.enabled)
           script(
             src: ads.loaderUrl,
