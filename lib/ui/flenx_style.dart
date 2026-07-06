@@ -1,14 +1,45 @@
-import 'package:flutter/widgets.dart';
 import 'package:jaspr/dom.dart' show Selector, StyleRule, Styles;
 
-/// Estilo global no **padrão Flutter**: um seletor + propriedades tipadas
-/// (Color, EdgeInsets, FontWeight…). A flenx converte em CSS por baixo.
+String _px(double v) => v == v.roundToDouble() ? '${v.toInt()}px' : '${v}px';
+
+/// Espaçamento (padding/margin) no estilo `EdgeInsets` do Flutter, mas
+/// puro-Dart — não depende de `dart:ui` (que não roda na geração estática).
+class FlenxInsets {
+  const FlenxInsets.all(double value)
+    : top = value,
+      right = value,
+      bottom = value,
+      left = value;
+
+  const FlenxInsets.symmetric({double horizontal = 0, double vertical = 0})
+    : top = vertical,
+      bottom = vertical,
+      left = horizontal,
+      right = horizontal;
+
+  const FlenxInsets.only({
+    this.top = 0,
+    this.right = 0,
+    this.bottom = 0,
+    this.left = 0,
+  });
+
+  final double top;
+  final double right;
+  final double bottom;
+  final double left;
+
+  String get css => '${_px(top)} ${_px(right)} ${_px(bottom)} ${_px(left)}';
+}
+
+/// Estilo global no padrão Flutter (nomes de propriedades tipados), convertido
+/// em CSS pela flenx. Puro-Dart (seguro na geração estática — sem `dart:ui`).
 ///
 /// Usado em `FlenxApp.run(globalStyles: [...])`:
 /// ```dart
 /// FlenxStyle('.brand-img', height: 48)
-/// FlenxStyle('h1', color: Colors.white, fontSize: 48, fontWeight: FontWeight.bold)
-/// FlenxStyle('.card', background: Color(0xFF111827), padding: EdgeInsets.all(16), borderRadius: 12)
+/// FlenxStyle('h1', color: '#fff', fontSize: 48, fontWeight: 700, textAlign: 'center')
+/// FlenxStyle('.card', background: '#111827', padding: FlenxInsets.all(16), borderRadius: 12)
 /// ```
 class FlenxStyle {
   const FlenxStyle(
@@ -34,19 +65,27 @@ class FlenxStyle {
 
   /// Seletor CSS (ex.: `.brand-img`, `h1`, `.card a`).
   final String selector;
-  final Color? color;
-  final Color? background;
+
+  /// Cor do texto — qualquer cor CSS (`'#fff'`, `'rgb(0,0,0)'`, `'white'`).
+  final String? color;
+
+  /// Cor/gradiente de fundo (CSS).
+  final String? background;
   final double? width;
   final double? height;
   final double? minWidth;
   final double? maxWidth;
   final double? minHeight;
   final double? maxHeight;
-  final EdgeInsets? padding;
-  final EdgeInsets? margin;
+  final FlenxInsets? padding;
+  final FlenxInsets? margin;
   final double? fontSize;
-  final FontWeight? fontWeight;
-  final TextAlign? textAlign;
+
+  /// Peso da fonte 100–900 (ex.: 400 normal, 700 bold).
+  final int? fontWeight;
+
+  /// `'left'` | `'center'` | `'right'` | `'justify'`.
+  final String? textAlign;
   final double? borderRadius;
   final double? opacity;
 
@@ -56,52 +95,28 @@ class FlenxStyle {
   /// Escape para propriedades CSS não cobertas (ex.: `{'letter-spacing': '.02em'}`).
   final Map<String, String>? raw;
 
-  StyleRule toRule() {
-    return StyleRule(
-      selector: Selector(selector),
-      styles: Styles(raw: toCss()),
-    );
-  }
+  StyleRule toRule() => StyleRule(
+    selector: Selector(selector),
+    styles: Styles(raw: toCss()),
+  );
 
   Map<String, String> toCss() => {
-    if (color != null) 'color': _color(color!),
-    if (background != null) 'background': _color(background!),
+    if (color != null) 'color': color!,
+    if (background != null) 'background': background!,
     if (width != null) 'width': _px(width!),
     if (height != null) 'height': _px(height!),
     if (minWidth != null) 'min-width': _px(minWidth!),
     if (maxWidth != null) 'max-width': _px(maxWidth!),
     if (minHeight != null) 'min-height': _px(minHeight!),
     if (maxHeight != null) 'max-height': _px(maxHeight!),
-    if (padding != null) 'padding': _edge(padding!),
-    if (margin != null) 'margin': _edge(margin!),
+    if (padding != null) 'padding': padding!.css,
+    if (margin != null) 'margin': margin!.css,
     if (fontSize != null) 'font-size': _px(fontSize!),
-    if (fontWeight != null) 'font-weight': '${fontWeight!.value}',
-    if (textAlign != null) 'text-align': _align(textAlign!),
+    if (fontWeight != null) 'font-weight': '$fontWeight',
+    if (textAlign != null) 'text-align': textAlign!,
     if (borderRadius != null) 'border-radius': _px(borderRadius!),
     if (opacity != null) 'opacity': '$opacity',
     if (gap != null) 'gap': _px(gap!),
     ...?raw,
-  };
-
-  static String _px(double v) =>
-      v == v.roundToDouble() ? '${v.toInt()}px' : '${v}px';
-
-  static String _color(Color c) {
-    final r = (c.r * 255).round();
-    final g = (c.g * 255).round();
-    final b = (c.b * 255).round();
-    return c.a >= 1
-        ? 'rgb($r, $g, $b)'
-        : 'rgba($r, $g, $b, ${c.a.toStringAsFixed(3)})';
-  }
-
-  static String _edge(EdgeInsets e) =>
-      '${_px(e.top)} ${_px(e.right)} ${_px(e.bottom)} ${_px(e.left)}';
-
-  static String _align(TextAlign a) => switch (a) {
-    TextAlign.center => 'center',
-    TextAlign.right || TextAlign.end => 'right',
-    TextAlign.justify => 'justify',
-    _ => 'left',
   };
 }

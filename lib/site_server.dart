@@ -38,6 +38,8 @@ class FlenxServer {
     this.rawStyles = const [],
     this.headExtra = const [],
     this.floatingButtons = const [],
+    this.preloadImages = const [],
+    this.emitHtaccess = true,
     this.lang = 'pt-BR',
     this.flutterBootstrap = 'flutter_bootstrap.js?cb=1',
   });
@@ -67,6 +69,14 @@ class FlenxServer {
   /// Botões flutuantes globais (fixos), renderizados ao fim do body de toda
   /// página — ex.: `FlenxFloatingButton.whatsapp(...)`.
   final List<Component> floatingButtons;
+
+  /// Imagens da dobra inicial (LCP) para `<link rel="preload" fetchpriority>`.
+  final List<String> preloadImages;
+
+  /// Gera um `.htaccess` (Apache/LiteSpeed) no build estático: DirectoryIndex,
+  /// ErrorDocument 404, redirect www→sem-www, gzip e cache. Ignorado por hosts
+  /// não-Apache. Desligue com `emitHtaccess: false`.
+  final bool emitHtaccess;
   final String lang;
   final String flutterBootstrap;
 
@@ -77,6 +87,32 @@ class FlenxServer {
         port ?? int.tryParse(Platform.environment['PORT'] ?? '') ?? 8080;
     final meta = MetaTagsBuilder(seo);
     final router = Router();
+
+    // Geração estática: reporta TODAS as rotas + SEO + 404 ao proxy do
+    // jaspr_cli na 1ª requisição (dentro do handler, aguardado antes da
+    // resposta). Assim a fila enche antes do crawler esvaziá-la — evita a
+    // corrida que deixava só a raiz gerada.
+    var reportedAll = false;
+    Future<void> reportGenerateRoutes() async {
+      if (reportedAll) return;
+      reportedAll = true;
+      try {
+        for (final m in await registry.resolveAll()) {
+          await ServerApp.requestRouteGeneration(m.path, priority: m.priority);
+        }
+        for (final extra in const [
+          '/robots.txt',
+          '/sitemap.xml',
+          '/llms.txt',
+          '/llms-full.txt',
+          '/404.html',
+        ]) {
+          await ServerApp.requestRouteGeneration(extra);
+        }
+      } catch (_) {
+        // Proxy pode fechar durante o shutdown — ignora.
+      }
+    }
 
     // /robots.txt, /sitemap.xml, /llms.txt, /llms-full.txt automáticos.
     SeoEndpoints(config: seo, registry: registry).mountOn(router);
@@ -94,6 +130,7 @@ class FlenxServer {
     router.mount(
       '/',
       serveApp((request, render) async {
+        if (kGenerateMode) await reportGenerateRoutes();
         final path = request.requestedUri.path.isEmpty
             ? '/'
             : request.requestedUri.path;
@@ -128,6 +165,12 @@ class FlenxServer {
             ...meta.build(routeMeta),
             for (final raw in rawStyles)
               Component.element(tag: 'style', children: [RawText(raw)]),
+            for (final img in preloadImages)
+              link(
+                rel: 'preload',
+                href: img,
+                attributes: const {'as': 'image', 'fetchpriority': 'high'},
+              ),
             ...headExtra,
             if (result?.island ?? false)
               script(src: flutterBootstrap, defer: true),
@@ -169,31 +212,48 @@ class FlenxServer {
     await _activeServer?.close();
     _activeServer = server;
 
-    // Geração estática (`jaspr build` em mode: static): a flenx usa servidor
-    // próprio (shelf), então precisa reportar TODAS as suas rotas ao proxy do
-    // jaspr_cli — senão o build trava esperando rotas que nunca chegam.
+    // Geração estática (`jaspr build` em mode: static): destrava o crawler
+    // reportando a raiz (as demais rotas são reportadas na 1ª requisição, no
+    // handler) e escreve o .htaccess na pasta de saída.
     if (kGenerateMode) {
-      for (final meta in await registry.resolveAll()) {
-        await ServerApp.requestRouteGeneration(
-          meta.path,
-          priority: meta.priority,
+      await ServerApp.requestRouteGeneration('/');
+      if (emitHtaccess) {
+        const outDir = String.fromEnvironment(
+          'jaspr.dev.web',
+          defaultValue: 'build/jaspr',
         );
-      }
-      // Gera automaticamente os arquivos de SEO (SeoEndpoints) e a página 404 —
-      // sem nenhuma configuração do usuário. Têm extensão, então o jaspr_cli os
-      // grava direto (ex.: build/jaspr/robots.txt), não como pasta/index.html.
-      for (final extra in const [
-        '/robots.txt',
-        '/sitemap.xml',
-        '/llms.txt',
-        '/llms-full.txt',
-        '/404.html',
-      ]) {
-        await ServerApp.requestRouteGeneration(extra);
+        try {
+          File('$outDir/.htaccess').writeAsStringSync(_htaccess);
+        } catch (_) {
+          // Ambiente sem acesso de escrita — ignora silenciosamente.
+        }
       }
     }
     return server;
   }
+
+  /// Config Apache/LiteSpeed padrão para deploy estático (SPA/multi-página).
+  static const String _htaccess =
+      'DirectoryIndex index.html\n'
+      'ErrorDocument 404 /404.html\n'
+      'Options -Indexes -MultiViews\n'
+      '<IfModule mod_rewrite.c>\n'
+      '  RewriteEngine On\n'
+      '  RewriteCond %{HTTP_HOST} ^www\\.(.+)\$ [NC]\n'
+      '  RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]\n'
+      '</IfModule>\n'
+      '<IfModule mod_deflate.c>\n'
+      '  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml\n'
+      '</IfModule>\n'
+      '<IfModule mod_expires.c>\n'
+      '  ExpiresActive On\n'
+      '  ExpiresByType text/css "access plus 1 year"\n'
+      '  ExpiresByType application/javascript "access plus 1 year"\n'
+      '  ExpiresByType image/webp "access plus 1 year"\n'
+      '  ExpiresByType image/png "access plus 1 year"\n'
+      '  ExpiresByType image/jpeg "access plus 1 year"\n'
+      '  ExpiresByType text/html "access plus 1 hour"\n'
+      '</IfModule>\n';
 
   static HttpServer? _activeServer;
   static Object? _activeReloadLock;

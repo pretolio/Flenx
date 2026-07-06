@@ -104,6 +104,10 @@ class FlenxApp {
     // Botões flutuantes globais (aparecem em todas as páginas) — ex.:
     // `[FlenxFloatingButton.whatsapp(href: ...)]`.
     List<Component> floatingButtons = const [],
+    // Imagens da dobra inicial (LCP) — preload com fetchpriority=high.
+    List<String> preloadImages = const [],
+    // Gera `.htaccess` (Apache/LiteSpeed) no build estático. Padrão: sim.
+    bool emitHtaccess = true,
   }) async {
     Jaspr.initializeApp(options: options);
 
@@ -175,6 +179,8 @@ class FlenxApp {
           ),
       ],
       floatingButtons: floatingButtons,
+      preloadImages: preloadImages,
+      emitHtaccess: emitHtaccess,
       lang: lang,
       resolvePage: (path, query) async {
         final blogNow = await blogFor(path);
