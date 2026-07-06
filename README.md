@@ -48,8 +48,11 @@ O Flenx é um framework para construir **sites e apps web em Dart** com renderiz
 
 ## ✨ Recursos
 
-- **UI em Dart** — `FlenxColumn`, `FlenxHero`, `FlenxCard`… geram o HTML/CSS por baixo.
-- **SEO automático** — meta tags, Open Graph, JSON-LD, `sitemap.xml`, `robots.txt` e `llms.txt` a partir de uma única definição de rota.
+- **UI em Dart** — `FlenxColumn`, `FlenxHero`, `FlenxCard`, `FlenxHeroCover`… geram o HTML/CSS por baixo.
+- **SEO automático** — meta tags, Open Graph (com `defaultImage`), JSON-LD, `sitemap.xml`, `robots.txt`, `llms.txt` e `404.html` a partir de uma única definição de rota.
+- **Marca sem CSS** — `primaryColor`, `faviconUrl`, `SiteBrand(logoHeight:)`, `globalStyles` (tipado, estilo Flutter) e escape hatch `rawGlobalStyles`.
+- **Extras globais** — `floatingButtons` (WhatsApp/Telegram/qualquer chat), `globalScripts` (analytics) e `preloadImages` (LCP) em todas as páginas.
+- **Deploy estático 1-comando** — `jaspr build` gera HTML + SEO + `404.html` + favicon + `.htaccess` (Apache) prontos, sem configuração.
 - **Blog** — posts em Markdown **e/ou** banco, com editor estilo G1, categorias, tags, busca e paginação.
 - **Painel admin** — ilha Flutter pronta: CRUD genérico, permissões por papel e edição da home.
 - **APIs + banco** — endpoints declarativos (Dart **ou** PHP) e banco plugável: Supabase, Firebase, REST ou JSONL.
@@ -101,6 +104,18 @@ Future<void> runSite(ServerOptions options) => FlenxApp.run(
       seo: seo,
       routes: routes,
       notFound: const FlenxNotFound(brand: SiteBrand(label: 'Meu Site')),
+      // Marca/UI só com parâmetros — sem escrever CSS:
+      primaryColor: '#EA580C',                         // token --primary da UI
+      faviconUrl: '/favicon.ico',                      // <link rel="icon">
+      appleTouchIconUrl: '/apple-touch-icon.png',
+      preloadImages: const ['/assets/hero.webp'],      // LCP (preload fetchpriority=high)
+      globalScripts: const ['/assets/js/gtag.js'],     // <script defer> global (analytics)
+      floatingButtons: [                               // botões flutuantes globais
+        FlenxFloatingButton.whatsapp(href: 'https://wa.me/5511999999999'),
+      ],
+      globalStyles: const [                            // estilos globais tipados (padrão Flutter)
+        FlenxStyle('h1', color: '#fff', fontSize: 48, fontWeight: 700),
+      ],
     );
 ```
 
@@ -185,6 +200,14 @@ dart run flenx:bootstrap
 jaspr build                 # gera build/jaspr/ com HTML + assets prontos
 ```
 
+O build estático já sai **pronto para deploy, sem configuração**: além do HTML de
+todas as rotas + assets, o Flenx gera automaticamente `robots.txt`, `sitemap.xml`,
+`llms.txt`, `llms-full.txt`, `404.html`, o `favicon`/`apple-touch-icon` e um
+`.htaccess` (Apache/LiteSpeed: `DirectoryIndex`, `ErrorDocument 404`, redirect
+`www`→sem-`www`, gzip e cache). Desligue o `.htaccess` com `emitHtaccess: false`.
+
+> Ao subir por FTP, ignore os artefatos de build (`packages/`, `.dart_tool/`, `.build.manifest`).
+
 Publique o conteúdo de **`build/jaspr/`**:
 
 | Host | Como |
@@ -194,7 +217,7 @@ Publique o conteúdo de **`build/jaspr/`**:
 | **Vercel** | output dir `build/jaspr` (framework: Other) |
 | **Cloudflare Pages / S3** | aponte o bucket/Pages para `build/jaspr/` |
 
-> ⚠️ **Limites do estático:** APIs, banco, painel admin, carrinho e formulários **não funcionam** (não há servidor). Para esses recursos use **SSR** ou o build **PHP** abaixo. Bom para landing/blog/institucional. O SEO/sitemap/`llms.txt` continuam funcionando normalmente.
+> ⚠️ **Limites do estático:** APIs, banco, painel admin, carrinho e formulários **não funcionam** (não há servidor). Para esses recursos use **SSR** ou o build **PHP** abaixo. Bom para landing/blog/institucional. O SEO/sitemap/`llms.txt`/`404.html`/`.htaccess` são gerados normalmente.
 </details>
 
 <details>
@@ -317,6 +340,18 @@ Em ambos os casos: **só Dart, zero HTML/CSS.**
 FlenxPage(List<Component> children, {String? primaryColor, String? primaryDarkColor, String? secondaryColor})
 ```
 Raiz de toda página; injeta o CSS base e as CSS vars de tema herdadas pelos filhos.
+Envolve o conteúdo num landmark `<main>` (acessibilidade), mantendo header/footer no topo.
+
+### `FlenxStyle` — estilo global no padrão Flutter
+```dart
+FlenxStyle(String selector, {String? color, String? background, double? width, double? height,
+  double? minWidth, double? maxWidth, double? minHeight, double? maxHeight, FlenxInsets? padding,
+  FlenxInsets? margin, double? fontSize, int? fontWeight, String? textAlign, double? borderRadius,
+  double? opacity, double? gap, Map<String, String>? raw})
+// FlenxInsets.all(16) / .symmetric(horizontal:, vertical:) / .only(top:, ...)
+```
+Usado em `FlenxApp.run(globalStyles: [...])`. Escrita tipada (estilo Flutter), convertida em CSS
+pela lib — puro-Dart (funciona na geração estática). Para CSS cru, use `rawGlobalStyles: List<String>`.
 
 ### `FlenxSection` — faixa de seção
 ```dart
@@ -420,6 +455,16 @@ FlenxHeroSplit({required Component child, required String imageSrc, String image
 ```
 Texto à esquerda, imagem à direita; no mobile a imagem vira fundo desfocado.
 
+### `FlenxHeroCover`
+```dart
+FlenxHeroCover({required String imageSrc, required String title, String? subtitle,
+  List<Component> actions = const [], String? logoSrc, String logoAlt = '', double logoHeight = 120,
+  String overlay = '...', String background = '#111827', double paddingY = 96, double titleSize = 48,
+  bool kenBurns = true, String? id})
+```
+Hero de tela cheia: **imagem de fundo** (com zoom Ken Burns), **logo** opcional flutuando
+acima do título e conteúdo com animação de entrada. Tudo por parâmetros — o CSS fica no componente.
+
 ### `FlenxCodeCard`
 ```dart
 FlenxCodeCard(String code)        // cartão "janela de editor" com o código
@@ -465,8 +510,10 @@ FlenxAccordion({required List<FlenxAccordionItem> items, String accentColor = Fl
 ```dart
 SiteHeader({required SiteBrand brand, required List<MenuLink> links, String loginLabel = 'Entrar',
   String? loginHref, List<LoginOption> loginOptions = const [], NavAlign align = NavAlign.right})
+// SiteBrand({required String label, String homeHref = '/', String? logoSrc, double? logoHeight})
 ```
-Responsivo (vira hambúrguer no mobile), sem JS, indexável.
+Responsivo (vira hambúrguer no mobile), sem JS, indexável. Use `SiteBrand(logoHeight:)`
+para o tamanho do logo (sem CSS).
 
 ### `IframeEmbed` — embute outro site/vídeo/mapa
 ```dart
@@ -476,10 +523,15 @@ IframeEmbed(String url, {String title = 'Conteúdo incorporado', String? ratio, 
 ```
 Use `ratio: '16 / 9'` para responsivo, ou `cssHeight: 'calc(100vh - 72px)'` para portais.
 
-### `WhatsappButton` — botão flutuante
+### `FlenxFloatingButton` — botão flutuante (qualquer chat/ação)
 ```dart
-WhatsappButton({required String url, String label = 'Fale no WhatsApp'})
+FlenxFloatingButton({required String href, String label = '', String icon = '💬', String? iconImage,
+  String background = '#2563eb', String textColor = '#fff', FlenxCorner corner = FlenxCorner.bottomRight,
+  bool newTab = true, double offset = 20})
+// Presets: FlenxFloatingButton.whatsapp(href:) / .telegram(href:) / .messenger(href:)
 ```
+Fixo no canto da tela. Use em `FlenxApp.run(floatingButtons: [...])` para que apareça em
+**todas as páginas** (global). `WhatsappButton` continua disponível como atalho.
 
 ### `FlenxNotFound` — página 404 pronta
 ```dart
@@ -631,10 +683,18 @@ Future<void> FlenxApp.run({
   DbExecutor? db,
   EmailSender? onEmail,
   TokenVerifier? tokenVerifier,
-  List<StyleRule> globalStyles = const [],
   AdsConfig? ads,
   String lang = 'pt-BR',
   int? port,
+  // Marca / UI (sem escrever CSS):
+  String? primaryColor, String? primaryColorDark,   // token --primary
+  String? faviconUrl, String? appleTouchIconUrl,     // <link rel=icon>/apple-touch
+  List<String> globalScripts = const [],             // <script defer> global
+  List<Component> floatingButtons = const [],        // botões flutuantes globais
+  List<String> preloadImages = const [],             // preload LCP (fetchpriority=high)
+  List<FlenxStyle> globalStyles = const [],          // estilos tipados (padrão Flutter)
+  List<String> rawGlobalStyles = const [],           // escape hatch: CSS cru (strings)
+  bool emitHtaccess = true,                          // gera .htaccess no build estático
 })
 
 // Rota: SEO + componente (posicional)
@@ -645,10 +705,11 @@ FlenxRoute.island(RouteMeta meta, builder)    // injeta o bootstrap Flutter (pá
 **`SeoConfig`** (global):
 ```dart
 SeoConfig({required String baseUrl, required String siteName, required String description,
-  String defaultLocale = 'pt_BR', String? twitterHandle, String? logoUrl, String? organizationName,
-  List<String> sameAs = const [], String? searchUrlTemplate, String? themeColor, String? telephone,
-  String? email, SeoAddress? address, String? about, List<String> globalDisallow = const [],
-  List<CrawlerRule>? crawlerRules})
+  String defaultLocale = 'pt_BR', String? twitterHandle, String? logoUrl, String? defaultImage,
+  String? organizationName, List<String> sameAs = const [], String? searchUrlTemplate,
+  String? themeColor, String? telephone, String? email, SeoAddress? address, String? about,
+  List<String> globalDisallow = const [], List<CrawlerRule>? crawlerRules})
+// defaultImage: og:image/twitter:image padrão das páginas (cai para logoUrl).
 ```
 > Por padrão, libera buscadores e IAs (Googlebot, Bingbot, GPTBot, ClaudeBot, PerplexityBot, OAI-SearchBot…) e bloqueia scrapers abusivos (Bytespider, CCBot).
 
