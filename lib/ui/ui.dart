@@ -12,6 +12,7 @@ export 'flenx_row.dart';
 export 'flenx_text.dart';
 export 'flenx_heading.dart';
 export 'flenx_button.dart';
+export 'flenx_style.dart';
 export 'flenx_card.dart';
 export 'flenx_image.dart';
 export 'flenx_svg.dart';

@@ -7,11 +7,12 @@ library;
 
 import 'dart:async';
 
-import 'package:jaspr/dom.dart' show StyleRule, Styles, Selector, script, link;
+import 'package:jaspr/dom.dart' show script, link;
 import 'package:jaspr/server.dart';
 
 import 'ads/ads_config.dart';
 import 'api/api.dart';
+import 'ui/flenx_style.dart';
 import 'auth/token_verifier.dart';
 import 'blog/blog.dart';
 import 'blog/sources/blog_source.dart';
@@ -24,9 +25,6 @@ import 'site_server.dart';
 // Reexporta o barrel principal para o app importar só `package:flenx/app.dart`
 // e ter SeoConfig, RouteMeta, JsonlDbExecutor, ApiEndpoint, modelos, etc.
 export 'package:jaspr/server.dart' show ServerOptions;
-// Estilos tipados (padrão Flutter) para `globalStyles` — Styles + unidades
-// (`.px`, `.rem`…) sem precisar importar jaspr diretamente.
-export 'package:jaspr/dom.dart' show Styles, Unit, UnitExt, Color;
 export 'flenx.dart';
 export 'site_server.dart' show PageResult;
 
@@ -83,9 +81,10 @@ class FlenxApp {
     DbExecutor? db,
     EmailSender? onEmail,
     TokenVerifier? tokenVerifier,
-    // Estilos globais TIPADOS (Dart), no padrão Flutter: seletor -> Styles.
-    // Ex.: `{'.brand-img': Styles(height: 48.px), 'a': Styles(color: ...)}`.
-    Map<String, Styles> globalStyles = const {},
+    // Estilos globais no padrão Flutter — lista de [FlenxStyle] (seletor +
+    // props tipadas: Color, EdgeInsets, FontWeight…). Ex.:
+    // `[FlenxStyle('h1', color: Colors.white, fontSize: 48)]`.
+    List<FlenxStyle> globalStyles = const [],
     // Escape hatch de CSS puro: lista de strings (pode ser o conteúdo de um
     // arquivo .css). Ex.: `['.x{height:48px}', await File('site.css').readAsString()]`.
     List<String> rawGlobalStyles = const [],
@@ -154,11 +153,8 @@ class FlenxApp {
       onEmail: onEmail,
       tokenVerifier: tokenVerifier,
       notFound: notFound,
-      // Estilos tipados (Map seletor->Styles) convertidos em regras.
-      styleRules: [
-        for (final e in globalStyles.entries)
-          StyleRule(selector: Selector(e.key), styles: e.value),
-      ],
+      // Estilos tipados (FlenxStyle) convertidos em regras CSS.
+      styleRules: [for (final s in globalStyles) s.toRule()],
       // CSS puro: token da marca (--primary) + strings passadas pelo app.
       rawStyles: [
         if (primaryColor != null)

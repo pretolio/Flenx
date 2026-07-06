@@ -19,10 +19,11 @@
 - **`FlenxApp.run(floatingButtons:)`** — botões flutuantes globais (todas as páginas).
 - **`FlenxApp.run(globalScripts:)`** — injeta `<script src defer>` global (ex.: analytics).
 - **`SiteBrand(logoHeight:)`** — altura do logo no header sem escrever CSS.
-- **`FlenxApp.run`: `globalStyles` tipado (`Map<String, Styles>`) + `rawGlobalStyles` (`List<String>`)** —
-  `globalStyles` no padrão Flutter: seletor → `Styles(...)` tipado (ex.: `{'.x': Styles(height: 48.px)}`),
-  sem `StyleRule`/CSS. `rawGlobalStyles` é o escape hatch de CSS puro em strings
-  (aceita até o conteúdo de um arquivo `.css`). `app.dart` re-exporta `Styles`/`Unit`/`Color`.
+- **`FlenxStyle` + `globalStyles: List<FlenxStyle>`** — estilo global no padrão Flutter:
+  seletor + props tipadas (`Color`, `EdgeInsets`, `FontWeight`, `TextAlign`, `double` em px),
+  ex.: `FlenxStyle('h1', color: Colors.white, fontSize: 48, fontWeight: FontWeight.bold)`.
+  A flenx converte em CSS. **`rawGlobalStyles: List<String>`** é o escape hatch de CSS puro
+  (aceita até o conteúdo de um arquivo `.css`).
 
 ### Tema / marca
 - **`FlenxApp.run(primaryColor:, primaryColorDark:)`** — define os tokens CSS
