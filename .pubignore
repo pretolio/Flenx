@@ -7,3 +7,5 @@ example/news/
 docs/
 refs/
 libs/
+build/
+.dart_tool/
