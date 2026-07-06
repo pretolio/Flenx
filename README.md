@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <strong>Crie sites em Dart — sem escrever HTML nem CSS.</strong><br>
+  <strong>Crie sites em Flutter/Dart — sem escrever HTML nem CSS.</strong><br>
   Você monta as páginas com componentes prontos (botão, card, hero, rodapé…) e o Flenx gera
   o site por baixo: rápido, bem posicionado no Google e pronto pra publicar.
 </p>
