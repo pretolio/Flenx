@@ -62,6 +62,8 @@ class SiteHeader extends StatelessComponent {
           htmlFor: 'flenx-nav-toggle',
           classes: 'hamburger',
         ),
+        // Backdrop do drawer mobile: tocar fora fecha (label do mesmo checkbox).
+        label(const [], htmlFor: 'flenx-nav-toggle', classes: 'nav-backdrop'),
         div(classes: 'nav-wrap', [
           NavLinks(links),
           LoginButton(

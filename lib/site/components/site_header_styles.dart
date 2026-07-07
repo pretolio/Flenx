@@ -25,10 +25,17 @@ const String siteHeaderCss = '''
 .login-btn{display:inline-flex;align-items:center;gap:6px;background:var(--primary);color:#fff;padding:9px 18px;border-radius:9999px;text-decoration:none;font-weight:600;cursor:pointer;border:none;font-size:.95rem}
 .login-btn:hover{background:var(--primary-d)}
 .login-menu{position:relative}
+.nav-backdrop{display:none}
 @media (max-width:860px){
- .hamburger{display:block}
- .nav-wrap{display:none;position:absolute;top:64px;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:#fff;border-bottom:1px solid #e5e7eb;padding:10px;box-shadow:0 10px 24px rgba(0,0,0,.08)}
- .nav-toggle:checked ~ .nav-wrap{display:flex}
+ /* Hambúrguer encostado à direita do header. */
+ .hamburger{display:block;margin-left:auto}
+ /* Menu mobile = drawer lateral DIREITO (abaixo do header, que continua
+    visível para fechar pelo ☰). Fecha também tocando no backdrop. */
+ .nav-backdrop{position:fixed;inset:64px 0 0 0;background:rgba(0,0,0,.35);opacity:0;visibility:hidden;transition:opacity .2s ease;z-index:55}
+ .nav-toggle:checked ~ .nav-backdrop{display:block;opacity:1;visibility:visible}
+ .nav-wrap{display:flex;position:fixed;top:64px;right:0;bottom:0;left:auto;width:min(80vw,320px);flex-direction:column;align-items:stretch;gap:0;background:#fff;border-left:1px solid #e5e7eb;padding:14px;box-shadow:-12px 0 32px rgba(0,0,0,.12);margin-left:0;overflow-y:auto;transform:translateX(100%);transition:transform .25s ease;z-index:56}
+ .nav-toggle:checked ~ .nav-wrap{transform:translateX(0)}
+ .nav-center .nav-wrap{flex:none}
  .nav-list{flex-direction:column;align-items:stretch;gap:0;width:100%}
  .dropdown{position:static;opacity:1;visibility:visible;transform:none;box-shadow:none;border:none;margin:0 0 0 12px;min-width:auto}
  .login-btn{justify-content:center;margin-top:10px}

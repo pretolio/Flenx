@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.1
+
+- `SiteHeader` mobile: o menu agora abre como **drawer lateral direito** (desliza
+  da direita, com backdrop escuro que fecha ao tocar fora) e o hambúrguer fica
+  encostado à direita do header. Antes o menu caía como painel de largura total.
+
 ## 0.3.0
 
 ### Deploy / geração estática
