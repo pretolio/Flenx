@@ -1,4 +1,4 @@
-import 'dart:io';
+import '../../core/platform_env.dart';
 
 import '../notification_channel.dart';
 import '../notification_message.dart';
@@ -18,7 +18,7 @@ class TwilioSmsChannel implements NotificationChannel {
   final String from;
 
   factory TwilioSmsChannel.fromEnv([Map<String, String>? env]) {
-    final e = env ?? Platform.environment;
+    final e = env ?? platformEnv;
     return TwilioSmsChannel(
       accountSid: e['TWILIO_SID'] ?? '',
       authToken: e['TWILIO_TOKEN'] ?? '',

@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../core/platform_env.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -15,7 +15,7 @@ class FcmPushChannel implements NotificationChannel {
   final http.Client? client;
 
   factory FcmPushChannel.fromEnv([Map<String, String>? env]) => FcmPushChannel(
-    serverKey: (env ?? Platform.environment)['FCM_SERVER_KEY'] ?? '',
+    serverKey: (env ?? platformEnv)['FCM_SERVER_KEY'] ?? '',
   );
 
   @override

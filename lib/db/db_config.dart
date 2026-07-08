@@ -1,4 +1,4 @@
-import 'dart:io';
+import '../core/platform_env.dart';
 
 /// Configuração de conexão ao banco — lida do ambiente (`.env`), **só no
 /// servidor**. Nunca embuta credenciais no código nem no cliente.
@@ -20,7 +20,7 @@ class DbConfig {
   /// Lê de variáveis de ambiente: `DB_HOST`, `DB_PORT`, `DB_NAME`,
   /// `DB_USER`, `DB_PASSWORD`.
   factory DbConfig.fromEnv([Map<String, String>? env]) {
-    final e = env ?? Platform.environment;
+    final e = env ?? platformEnv;
     return DbConfig(
       host: e['DB_HOST'] ?? 'localhost',
       port: int.tryParse(e['DB_PORT'] ?? '') ?? 3306,

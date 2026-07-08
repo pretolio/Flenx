@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.3.2
+
+- **Compatibilidade com a plataforma Web**: `package:flenx/flenx.dart` não puxa
+  mais `dart:io`. As partes que dependem do servidor usam imports condicionais —
+  no navegador viram stubs que lançam `UnsupportedError`:
+  `BlogRepository`, `BlogScaffold`, `JsonlDbExecutor`, `PhpApiGenerator` e
+  `FileLeadStore`. `DbConfig` e os canais FCM/Twilio agora leem variáveis de
+  ambiente por um helper multiplataforma (`platformEnv`), vazio no navegador.
+  Nenhuma mudança de API no servidor.
+
 ## 0.3.1
 
 - `SiteHeader` mobile: o menu agora abre como **drawer lateral direito** (desliza

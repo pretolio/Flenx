@@ -3,7 +3,7 @@ description: >-
   SSR Flutter/Dart estilo Next.js: kit de UI em Dart (sem HTML/CSS), blog,
   SEO/sitemap/llms.txt automáticos, admin, APIs (Dart ou PHP) e banco plugável
   (Supabase/Firebase).
-version: 0.3.1
+version: 0.3.2
 repository: https://github.com/pretolio/Flenx
 homepage: https://github.com/pretolio/Flenx
 issue_tracker: https://github.com/pretolio/Flenx/issues
