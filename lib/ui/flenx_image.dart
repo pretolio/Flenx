@@ -10,6 +10,9 @@ class FlenxImage extends StatelessComponent {
     this.widthPx,
     this.heightPx,
     this.radius = 0,
+    this.srcset,
+    this.sizes,
+    this.loading,
     super.key,
   });
 
@@ -19,11 +22,25 @@ class FlenxImage extends StatelessComponent {
   final double? heightPx;
   final double radius;
 
+  /// `srcset` para imagens responsivas (por densidade `1x/2x` ou largura `w`).
+  final String? srcset;
+
+  /// `sizes` — usado com `srcset` de largura (`w`) para o browser escolher.
+  final String? sizes;
+
+  /// `loading` nativo (`'lazy'` para imagens fora da dobra).
+  final String? loading;
+
   @override
   Component build(BuildContext context) {
     return img(
       src: src,
       alt: alt,
+      attributes: {
+        if (srcset != null) 'srcset': srcset!,
+        if (sizes != null) 'sizes': sizes!,
+        if (loading != null) 'loading': loading!,
+      },
       styles: Styles(
         raw: {
           'max-width': '100%',

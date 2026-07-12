@@ -21,6 +21,9 @@ class BrandLogo extends StatelessComponent {
             src: brand.logoSrc!,
             alt: brand.label,
             classes: 'brand-img',
+            attributes: brand.logoSrcset != null
+                ? {'srcset': brand.logoSrcset!}
+                : null,
             styles: brand.logoHeight != null
                 ? Styles(raw: {'height': _px(brand.logoHeight!)})
                 : null,
