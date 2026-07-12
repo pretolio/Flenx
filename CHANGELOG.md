@@ -1,10 +1,13 @@
 # Changelog
 
-## 0.3.2
+## 0.3.3
 
 - `FlenxFloatingButton`: novos parâmetros `pulse` (animação de anel/pulso para
   chamar atenção, com elevação no hover) e `pulseColor`. Respeita
   `prefers-reduced-motion`. Sem quebra de API (padrão `pulse: false`).
+
+## 0.3.2
+
 - **Compatibilidade com a plataforma Web**: `package:flenx/flenx.dart` não puxa
   mais `dart:io`. As partes que dependem do servidor usam imports condicionais —
   no navegador viram stubs que lançam `UnsupportedError`:
