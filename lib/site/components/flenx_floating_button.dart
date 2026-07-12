@@ -22,6 +22,8 @@ class FlenxFloatingButton extends StatelessComponent {
     this.corner = FlenxCorner.bottomRight,
     this.newTab = true,
     this.offset = 20,
+    this.pulse = false,
+    this.pulseColor = 'rgba(37,99,235,.55)',
     super.key,
   });
 
@@ -36,7 +38,9 @@ class FlenxFloatingButton extends StatelessComponent {
   }) : icon = '💬',
        iconImage = null,
        background = '#25D366',
-       textColor = '#ffffff';
+       textColor = '#ffffff',
+       pulse = false,
+       pulseColor = 'rgba(37,99,235,.55)';
 
   /// Preset Telegram.
   const FlenxFloatingButton.telegram({
@@ -49,7 +53,9 @@ class FlenxFloatingButton extends StatelessComponent {
   }) : icon = '✈️',
        iconImage = null,
        background = '#229ED9',
-       textColor = '#ffffff';
+       textColor = '#ffffff',
+       pulse = false,
+       pulseColor = 'rgba(37,99,235,.55)';
 
   /// Preset Messenger.
   const FlenxFloatingButton.messenger({
@@ -62,7 +68,9 @@ class FlenxFloatingButton extends StatelessComponent {
   }) : icon = '💬',
        iconImage = null,
        background = '#0084FF',
-       textColor = '#ffffff';
+       textColor = '#ffffff',
+       pulse = false,
+       pulseColor = 'rgba(37,99,235,.55)';
 
   final String href;
   final String label;
@@ -78,13 +86,32 @@ class FlenxFloatingButton extends StatelessComponent {
   final bool newTab;
   final double offset;
 
+  /// Animação de pulso (anel expansivo) para chamar atenção. Inclui elevação
+  /// no hover. Respeita `prefers-reduced-motion`.
+  final bool pulse;
+
+  /// Cor do anel do pulso (aceita rgba para o fade ficar suave).
+  final String pulseColor;
+
   static String _px(double v) =>
       v == v.roundToDouble() ? '${v.toInt()}px' : '${v}px';
+
+  /// CSS injetado (uma vez; conteúdo idêntico é deduplicado pelo browser):
+  /// elevação no hover, keyframes do pulso e guarda de acessibilidade.
+  static const _css =
+      '.flenx-fab{transition:transform .18s ease,box-shadow .18s ease}'
+      '.flenx-fab:hover{transform:translateY(-3px) scale(1.04)}'
+      '.flenx-fab--pulse{animation:flenxFabPulse 2.4s ease-out infinite}'
+      '@keyframes flenxFabPulse{'
+      '0%{box-shadow:0 10px 26px rgba(0,0,0,.28),0 0 0 0 var(--fab-pulse)}'
+      '70%{box-shadow:0 10px 26px rgba(0,0,0,.28),0 0 0 16px transparent}'
+      '100%{box-shadow:0 10px 26px rgba(0,0,0,.28),0 0 0 0 transparent}}'
+      '@media(prefers-reduced-motion:reduce){.flenx-fab--pulse{animation:none}}';
 
   @override
   Component build(BuildContext context) {
     final side = corner == FlenxCorner.bottomLeft ? 'left' : 'right';
-    return a(
+    final link = a(
       [
         if (iconImage != null)
           img(
@@ -98,6 +125,7 @@ class FlenxFloatingButton extends StatelessComponent {
       ],
       href: href,
       target: newTab ? Target.blank : null,
+      classes: pulse ? 'flenx-fab flenx-fab--pulse' : 'flenx-fab',
       attributes: {
         if (newTab) 'rel': 'noopener noreferrer',
         'aria-label': label.isNotEmpty ? label : 'Abrir',
@@ -118,8 +146,13 @@ class FlenxFloatingButton extends StatelessComponent {
           'text-decoration': 'none',
           'font-weight': '700',
           'box-shadow': '0 8px 24px rgba(0,0,0,.18)',
+          if (pulse) '--fab-pulse': pulseColor,
         },
       ),
     );
+    return span(styles: Styles(raw: {'display': 'contents'}), [
+      Component.element(tag: 'style', children: [RawText(_css)]),
+      link,
+    ]);
   }
 }
