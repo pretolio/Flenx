@@ -38,6 +38,7 @@ export 'blocks/flenx_footer.dart';
 export 'blocks/flenx_alert_variant.dart';
 export 'blocks/flenx_alert.dart';
 export 'blocks/flenx_banner.dart';
+export 'blocks/flenx_promo_modal.dart';
 export 'blocks/flenx_accordion_item.dart';
 export 'blocks/flenx_accordion.dart';
 
