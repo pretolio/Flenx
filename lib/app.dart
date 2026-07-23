@@ -27,6 +27,8 @@ import 'site_server.dart';
 export 'package:jaspr/server.dart' show ServerOptions;
 export 'flenx.dart';
 export 'site_server.dart' show PageResult;
+// Gerador de rotas da Central de Documentos Comerciais (usa FlenxRoute).
+export 'docs/commercial_docs_routes.dart';
 
 /// Contexto passado para cada rota: caminho e query string.
 class RouteContext {

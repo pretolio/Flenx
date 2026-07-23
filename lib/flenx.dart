@@ -14,6 +14,10 @@ export 'flenx_palette.dart';
 // Kit de UI em Dart estilo Flutter (sem precisar saber HTML/CSS)
 export 'ui/ui.dart';
 
+// Documentos comerciais imprimíveis (propostas, cartões, tabelas…) só em Dart.
+// O gerador de rotas (commercialDocsRoutes) vive em `package:flenx/app.dart`.
+export 'docs/docs.dart';
+
 // API (envelope de retorno padrão + paginação) e banco (models + migration)
 export 'api/api.dart';
 export 'db/db.dart';
