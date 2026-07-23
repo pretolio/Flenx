@@ -30,14 +30,21 @@ class FlenxDocPage extends StatelessComponent {
   /// - evita cortar seções, cards e imagens no meio da página.
   static const _printCss = '''
 @media print{
-  html,body{background:#fff !important;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}
+  @page{size:A4;margin:0}
+  html,body{margin:0 !important;background:#fff !important;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}
   *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}
   .fxdoc-bar,.flenx-fab,.fxpromo-ov,.site-header,.al-footer,.ant-foot,.med-footer{display:none !important}
-  section,.fxspot,.fxck__item,.fxbc,img{break-inside:avoid;page-break-inside:avoid}
-  h1,h2,h3{break-after:avoid;page-break-after:avoid}
+  /* Folheto A4: cada seção ocupa uma página inteira, com o fundo (cor) sangrando
+     até as bordas. Conteúdo centralizado na vertical. */
+  section{break-before:page;page-break-before:always;break-inside:avoid;
+    min-height:100vh;box-sizing:border-box;display:flex;flex-direction:column;
+    justify-content:center;padding:16mm 15mm !important;margin:0 !important;width:100%}
+  section:first-of-type{break-before:avoid;page-break-before:avoid}
+  .fxcover{justify-content:flex-end}
+  .fxcover__bg,.fxcover__ov{padding:0 !important}
+  .fxspot,.fxck__item,.fxbc,img{break-inside:avoid;page-break-inside:avoid}
   a[href]:after{content:'' !important}
 }
-@page{margin:12mm}
 ''';
 
   @override
