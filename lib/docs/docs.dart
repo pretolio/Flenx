@@ -11,3 +11,4 @@ export 'flenx_business_card.dart';
 export 'flenx_doc_cover.dart';
 export 'flenx_doc_page.dart';
 export 'flenx_doc_hub.dart';
+export 'flenx_pdf_viewer.dart';

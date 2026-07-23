@@ -23,6 +23,8 @@ dependencies:
     sdk: flutter
   crypto: ^3.0.0
   http: ^1.2.0
+  pdf: ^3.11.0
+  image: ^4.2.0
   jaspr: ^0.23.1
   jaspr_flutter_embed: ^0.4.11
   markdown: ^7.3.1
