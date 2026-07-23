@@ -27,11 +27,16 @@ class FlenxSteps extends StatelessComponent {
     this.background,
     this.badgeColor = FlenxPalette.primary,
     this.animate = false,
+    this.minItemWidth = 260,
     this.id,
     super.key,
   });
 
   final List<FlenxStep> steps;
+
+  /// Largura mínima de cada passo (controla quantos cabem por linha). Aumente
+  /// para forçar menos colunas (ex.: 420 → 2 por linha, útil para 4 passos 2×2).
+  final double minItemWidth;
   final String? eyebrow;
   final String? title;
   final String? background;
@@ -84,7 +89,7 @@ class FlenxSteps extends StatelessComponent {
             FlenxAnimation.slideUp,
             100,
           ),
-        FlenxGrid(minItemWidth: 260, [
+        FlenxGrid(minItemWidth: minItemWidth, [
           for (var i = 0; i < steps.length; i++)
             _a(
               FlenxCard(
