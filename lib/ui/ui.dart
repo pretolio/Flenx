@@ -34,6 +34,7 @@ export 'blocks/flenx_code_card.dart';
 export 'blocks/flenx_trust_bar.dart';
 export 'blocks/flenx_steps.dart';
 export 'blocks/flenx_feature_spotlight.dart';
+export 'blocks/flenx_checklist.dart';
 export 'blocks/flenx_cta.dart';
 export 'blocks/flenx_footer.dart';
 export 'blocks/flenx_alert_variant.dart';
