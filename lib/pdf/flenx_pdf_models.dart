@@ -54,11 +54,24 @@ sealed class FlenxPdfPage {
 
 /// Capa: imagem de fundo cobrindo a página + gradiente + texto na base.
 class FlenxPdfCover extends FlenxPdfPage {
-  const FlenxPdfCover({required this.imagePath, this.eyebrow, required this.title, this.subtitle});
+  const FlenxPdfCover({
+    required this.imagePath,
+    this.eyebrow,
+    required this.title,
+    this.subtitle,
+    this.clientName,
+    this.clientLogoPath,
+  });
   final String imagePath;
   final String? eyebrow;
   final String title;
   final String? subtitle;
+
+  /// Co-branding opcional: nome do cliente destinatário da proposta.
+  final String? clientName;
+
+  /// Co-branding opcional: logo do cliente (exibido num selo "preparado para").
+  final String? clientLogoPath;
 }
 
 /// Lista de itens com marcador (✓ ou ×), 1–2 colunas.

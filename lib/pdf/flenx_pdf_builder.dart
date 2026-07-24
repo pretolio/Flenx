@@ -1,22 +1,28 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:image/image.dart' as img;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
+import 'flenx_pdf_loader.dart';
 import 'flenx_pdf_models.dart';
 
 /// Gera um PDF A4 comercial a partir de um [FlenxPdfDoc]. Cada página ocupa uma
 /// folha A4 inteira, com o fundo (cor) sangrando até as bordas — imprime igual
 /// em qualquer lugar, sem depender de "imprimir gráficos de fundo".
 class FlenxPdf {
-  /// [fontRegular]/[fontBold]: TTF opcionais. Se nulos, tenta Arial (Windows)
-  /// e cai para Helvetica. A fonte precisa cobrir acentos pt-BR e ✓/×.
+  /// [fontRegular]/[fontBold]: bytes de TTF opcionais. Se nulos, tenta Arial
+  /// (só no servidor/tool, via filesystem) e cai para Helvetica (embutida —
+  /// cobre acentos pt-BR). O ✓/× é vetorial, não depende de fonte.
+  ///
+  /// [preloadedImages]: mapa `caminho -> imagem` já decodificada. No navegador
+  /// (dart2js, sem filesystem) o chamador injeta aqui as fotos/logo já em
+  /// PNG/JPG; no servidor/tool basta deixar nulo que as imagens vêm do disco.
   static Future<Uint8List> build(
     FlenxPdfDoc doc, {
-    String? fontRegular,
-    String? fontBold,
+    Uint8List? fontRegular,
+    Uint8List? fontBold,
+    Map<String, pw.MemoryImage>? preloadedImages,
   }) async {
     final b = doc.brand;
     final reg = await _font(fontRegular, const [
@@ -33,43 +39,50 @@ class FlenxPdf {
     final theme = pw.ThemeData.withFont(base: reg ?? pw.Font.helvetica(), bold: bold ?? pw.Font.helveticaBold());
     final pdf = pw.Document(theme: theme);
 
-    // Pré-carrega imagens usadas.
+    // Pré-carrega imagens usadas (cache por caminho). Usa o que veio injetado
+    // (navegador) ou lê do disco (servidor/tool).
     final images = <String, pw.MemoryImage>{};
     Future<pw.MemoryImage?> image(String? path) async {
       if (path == null) return null;
       if (images.containsKey(path)) return images[path];
-      final mi = await _loadImage(path);
+      final mi = preloadedImages?[path] ?? await _loadImage(path);
       if (mi != null) images[path] = mi;
       return mi;
     }
+
+    // Papel timbrado: logo no topo de toda página (claro/escuro conforme o
+    // fundo). Pré-carregado uma vez e reutilizado.
+    final logoLight = await image(b.logoLightBgPath);
+    final logoDark = await image(b.logoDarkBgPath);
+    pw.MemoryImage? letterhead(FlenxPdfTone tone) => tone == FlenxPdfTone.ink ? logoDark : logoLight;
 
     final total = doc.pages.length;
     var pageNum = 0;
     for (final page in doc.pages) {
       pageNum++;
       switch (page) {
-        case FlenxPdfCover(:final imagePath, :final eyebrow, :final title, :final subtitle):
+        case FlenxPdfCover(:final imagePath, :final eyebrow, :final title, :final subtitle, :final clientName, :final clientLogoPath):
           final im = await image(imagePath);
-          pdf.addPage(_coverPage(b, im, eyebrow, title, subtitle));
+          final clientLogo = await image(clientLogoPath);
+          pdf.addPage(_coverPage(b, im, logoDark, eyebrow, title, subtitle, clientName, clientLogo));
         case FlenxPdfChecklist():
-          pdf.addPage(_sectionPage(b, page.tone, _checklist(b, page), page: pageNum, total: total));
+          pdf.addPage(_sectionPage(b, page.tone, _checklist(b, page), page: pageNum, total: total, logo: letterhead(page.tone)));
         case FlenxPdfText():
           final im = await image(page.imagePath);
-          pdf.addPage(_sectionPage(b, page.tone, _text(b, page, im), page: pageNum, total: total));
+          pdf.addPage(_sectionPage(b, page.tone, _text(b, page, im), page: pageNum, total: total, logo: letterhead(page.tone)));
         case FlenxPdfSpotlight():
           final im = await image(page.imagePath);
-          pdf.addPage(_sectionPage(b, page.tone, _spotlight(b, page, im), page: pageNum, total: total));
+          pdf.addPage(_sectionPage(b, page.tone, _spotlight(b, page, im), page: pageNum, total: total, logo: letterhead(page.tone)));
         case FlenxPdfSteps():
-          pdf.addPage(_sectionPage(b, page.tone, _steps(b, page), page: pageNum, total: total));
+          pdf.addPage(_sectionPage(b, page.tone, _steps(b, page), page: pageNum, total: total, logo: letterhead(page.tone)));
         case FlenxPdfCompare():
-          pdf.addPage(_sectionPage(b, page.tone, _compare(b, page), page: pageNum, total: total));
+          pdf.addPage(_sectionPage(b, page.tone, _compare(b, page), page: pageNum, total: total, logo: letterhead(page.tone)));
         case FlenxPdfTable():
-          pdf.addPage(_sectionPage(b, page.tone, _table(b, page), page: pageNum, total: total));
+          pdf.addPage(_sectionPage(b, page.tone, _table(b, page), page: pageNum, total: total, logo: letterhead(page.tone)));
         case FlenxPdfCombo():
-          pdf.addPage(_sectionPage(b, page.tone, _combo(b, page), page: pageNum, total: total));
+          pdf.addPage(_sectionPage(b, page.tone, _combo(b, page), page: pageNum, total: total, logo: letterhead(page.tone)));
         case FlenxPdfContact():
-          final im = await image(b.logoDarkBgPath);
-          pdf.addPage(_sectionPage(b, page.tone, _contact(b, page, im), page: pageNum, total: total));
+          pdf.addPage(_sectionPage(b, page.tone, _contact(b, page, logoDark), page: pageNum, total: total, logo: letterhead(page.tone)));
       }
     }
     return pdf.save();
@@ -78,18 +91,18 @@ class FlenxPdf {
   // ---------- infra ----------
   static PdfColor _c(String hex) => PdfColor.fromHex(hex.replaceAll('#', ''));
 
-  static Future<pw.Font?> _font(String? path, List<String> fallbacks) async {
-    for (final p in [if (path != null) path, ...fallbacks]) {
-      final f = File(p);
-      if (await f.exists()) return pw.Font.ttf((await f.readAsBytes()).buffer.asByteData());
+  static Future<pw.Font?> _font(Uint8List? injected, List<String> fallbacks) async {
+    if (injected != null) return pw.Font.ttf(injected.buffer.asByteData());
+    for (final p in fallbacks) {
+      final bytes = await loadLocalFile(p);
+      if (bytes != null) return pw.Font.ttf(bytes.buffer.asByteData());
     }
     return null;
   }
 
   static Future<pw.MemoryImage?> _loadImage(String path) async {
-    final f = File(path);
-    if (!await f.exists()) return null;
-    final bytes = await f.readAsBytes();
+    final bytes = await loadLocalFile(path);
+    if (bytes == null) return null;
     // O package pdf lê PNG/JPG — decodifica (inclusive webp) e recodifica.
     // Logos com transparência real precisam continuar em PNG: reencodar em
     // JPG apaga o alpha e pinta a área transparente de branco sólido (o
@@ -114,7 +127,7 @@ class FlenxPdf {
   /// O corpo ocupa toda a altura útil da folha (entre o topo e o rodapé de
   /// marca): listas se distribuem para preencher o espaço; blocos de texto
   /// ficam centralizados nele. Nunca sobra metade da folha em branco.
-  static pw.Page _sectionPage(FlenxPdfBrand b, FlenxPdfTone tone, pw.Widget child, {required int page, required int total}) {
+  static pw.Page _sectionPage(FlenxPdfBrand b, FlenxPdfTone tone, pw.Widget child, {required int page, required int total, pw.MemoryImage? logo}) {
     return pw.Page(
       pageFormat: PdfPageFormat.a4,
       margin: pw.EdgeInsets.zero,
@@ -122,13 +135,32 @@ class FlenxPdf {
         color: _bg(b, tone),
         width: double.infinity,
         height: double.infinity,
-        padding: const pw.EdgeInsets.fromLTRB(46, 54, 46, 34),
+        padding: const pw.EdgeInsets.fromLTRB(46, 40, 46, 34),
         child: pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.stretch, children: [
+          if (logo != null) _letterhead(b, tone, logo),
           pw.Expanded(child: child),
           _footer(b, tone, page, total),
         ]),
       ),
     );
+  }
+
+  /// Papel timbrado: logo da empresa no topo da folha + fina régua — dá
+  /// presença de marca em toda página, igual a um cabeçalho timbrado.
+  static pw.Widget _letterhead(FlenxPdfBrand b, FlenxPdfTone tone, pw.MemoryImage logo) {
+    final rule = tone == FlenxPdfTone.ink ? _c('#1c3565') : _c('#e3e9f5');
+    return pw.Column(mainAxisSize: pw.MainAxisSize.min, crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
+      pw.SizedBox(
+        height: 28,
+        child: pw.Align(
+          alignment: pw.Alignment.centerLeft,
+          child: pw.FittedBox(fit: pw.BoxFit.contain, child: pw.Image(logo)),
+        ),
+      ),
+      pw.SizedBox(height: 12),
+      pw.Container(height: 0.75, color: rule),
+      pw.SizedBox(height: 22),
+    ]);
   }
 
   static pw.Widget _footer(FlenxPdfBrand b, FlenxPdfTone tone, int page, int total) {
@@ -683,7 +715,7 @@ class FlenxPdf {
     return pw.Align(alignment: pw.Alignment.center, child: block);
   }
 
-  static pw.Page _coverPage(FlenxPdfBrand b, pw.MemoryImage? im, String? eyebrow, String title, String? subtitle) {
+  static pw.Page _coverPage(FlenxPdfBrand b, pw.MemoryImage? im, pw.MemoryImage? logo, String? eyebrow, String title, String? subtitle, [String? clientName, pw.MemoryImage? clientLogo]) {
     return pw.Page(
       pageFormat: PdfPageFormat.a4,
       margin: pw.EdgeInsets.zero,
@@ -698,6 +730,36 @@ class FlenxPdf {
             color: _c(b.ink),
             padding: const pw.EdgeInsets.fromLTRB(46, 34, 46, 40),
             child: pw.Column(mainAxisSize: pw.MainAxisSize.min, crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
+              if (clientLogo != null || clientName != null) ...[
+                pw.Row(mainAxisSize: pw.MainAxisSize.min, crossAxisAlignment: pw.CrossAxisAlignment.center, children: [
+                  if (clientLogo != null) ...[
+                    pw.Container(
+                      padding: const pw.EdgeInsets.all(9),
+                      decoration: pw.BoxDecoration(color: PdfColors.white, borderRadius: pw.BorderRadius.circular(10)),
+                      child: pw.SizedBox(height: 30, width: 30, child: pw.FittedBox(fit: pw.BoxFit.contain, child: pw.Image(clientLogo))),
+                    ),
+                    pw.SizedBox(width: 14),
+                  ],
+                  pw.Column(mainAxisSize: pw.MainAxisSize.min, crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
+                    pw.Text('PROPOSTA PREPARADA PARA', style: pw.TextStyle(color: _c(b.primaryLight), fontWeight: pw.FontWeight.bold, fontSize: 8, letterSpacing: 1.8)),
+                    if (clientName != null) ...[
+                      pw.SizedBox(height: 3),
+                      pw.Text(clientName, style: pw.TextStyle(color: PdfColors.white, fontWeight: pw.FontWeight.bold, fontSize: 15)),
+                    ],
+                  ]),
+                ]),
+                pw.SizedBox(height: 22),
+              ],
+              if (logo != null) ...[
+                pw.SizedBox(
+                  height: 34,
+                  child: pw.Align(
+                    alignment: pw.Alignment.centerLeft,
+                    child: pw.FittedBox(fit: pw.BoxFit.contain, child: pw.Image(logo)),
+                  ),
+                ),
+                pw.SizedBox(height: 22),
+              ],
               if (eyebrow != null)
                 pw.Text(eyebrow.toUpperCase(), style: pw.TextStyle(color: _c(b.primaryLight), fontWeight: pw.FontWeight.bold, fontSize: 10, letterSpacing: 2)),
               pw.SizedBox(height: 12),
