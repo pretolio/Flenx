@@ -68,6 +68,7 @@ class FlenxPdfChecklist extends FlenxPdfPage {
     this.negative = false,
     this.tone = FlenxPdfTone.white,
     this.highlight,
+    this.trend,
   });
   final String? eyebrow;
   final String title;
@@ -79,6 +80,27 @@ class FlenxPdfChecklist extends FlenxPdfPage {
 
   /// Frase de fechamento em destaque, num card abaixo da lista (opcional).
   final String? highlight;
+
+  /// Card de estatística + mini-gráfico de tendência (queda), abaixo da
+  /// lista — alternativa ao [highlight] quando o ponto vale um gráfico.
+  final FlenxPdfTrend? trend;
+}
+
+/// Um ponto do mini-gráfico de [FlenxPdfTrend] (rótulo do eixo + valor
+/// ilustrativo, não é dado de mercado — é só pra desenhar a tendência).
+class FlenxPdfTrendPoint {
+  const FlenxPdfTrendPoint(this.label, this.value);
+  final String label;
+  final double value;
+}
+
+/// Card de estatística em destaque + mini-gráfico de linha (tendência) —
+/// usado pra ilustrar queda/perda ao lado de uma lista de dores.
+class FlenxPdfTrend {
+  const FlenxPdfTrend({required this.stat, required this.statLabel, required this.points});
+  final String stat;
+  final String statLabel;
+  final List<FlenxPdfTrendPoint> points;
 }
 
 /// Texto institucional: parágrafos + destaques (stats) opcionais.

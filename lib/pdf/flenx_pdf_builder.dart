@@ -238,6 +238,87 @@ class FlenxPdf {
                 style: pw.TextStyle(color: _title(b, p.tone), fontWeight: pw.FontWeight.bold, fontSize: 12, lineSpacing: 1.6)),
           ),
         ],
+        if (p.trend != null) ...[
+          pw.SizedBox(height: 22),
+          _trendCard(b, p.tone, p.trend!),
+        ],
+      ]),
+    );
+  }
+
+  /// Card de estatística + mini-gráfico de linha em queda (valores
+  /// ilustrativos — comunica a tendência, não é dado de mercado).
+  static pw.Widget _trendCard(FlenxPdfBrand b, FlenxPdfTone tone, FlenxPdfTrend t) {
+    final values = t.points.map((p) => p.value).toList();
+    final maxV = values.reduce((a, c) => a > c ? a : c);
+    final minV = values.reduce((a, c) => a < c ? a : c);
+    final range = (maxV - minV) == 0 ? 1.0 : (maxV - minV);
+    final cardBg = tone == FlenxPdfTone.ink ? _c('#0f2a57') : PdfColors.white;
+    final cardBorder = tone == FlenxPdfTone.ink ? _c('#1c3565') : _c('#e3e9f5');
+    final axisTxt = _body(b, tone);
+
+    return pw.Container(
+      padding: const pw.EdgeInsets.all(18),
+      decoration: pw.BoxDecoration(color: cardBg, borderRadius: pw.BorderRadius.circular(10), border: pw.Border.all(color: cardBorder, width: 1)),
+      child: pw.Row(crossAxisAlignment: pw.CrossAxisAlignment.center, children: [
+        pw.Expanded(
+          flex: 5,
+          child: pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
+            pw.Text(t.stat, style: pw.TextStyle(color: _c(b.primaryDark), fontWeight: pw.FontWeight.bold, fontSize: 15)),
+            pw.SizedBox(height: 5),
+            pw.Text(t.statLabel, style: pw.TextStyle(color: _title(b, tone), fontSize: 11, lineSpacing: 1.6)),
+          ]),
+        ),
+        pw.SizedBox(width: 22),
+        pw.Expanded(
+          flex: 4,
+          child: pw.Column(children: [
+            pw.SizedBox(
+              height: 70,
+              width: double.infinity,
+              child: pw.CustomPaint(
+                size: const PdfPoint(200, 70),
+                painter: (c, size) {
+                  final n = values.length;
+                  if (n < 2) return;
+                  const padX = 5.0, padY = 8.0;
+                  final w = size.x - padX * 2, h = size.y - padY * 2;
+                  double xAt(int i) => padX + w * i / (n - 1);
+                  double yAt(double v) => padY + h * (v - minV) / range;
+                  c
+                    ..setStrokeColor(cardBorder)
+                    ..setLineWidth(0.75)
+                    ..drawLine(padX, padY, size.x - padX, padY)
+                    ..strokePath();
+                  c
+                    ..setStrokeColor(_c(b.primaryDark))
+                    ..setLineWidth(2.2)
+                    ..setLineCap(PdfLineCap.round)
+                    ..setLineJoin(PdfLineJoin.round)
+                    ..moveTo(xAt(0), yAt(values[0]));
+                  for (var i = 1; i < n; i++) {
+                    c.lineTo(xAt(i), yAt(values[i]));
+                  }
+                  c.strokePath();
+                  for (var i = 0; i < n; i++) {
+                    final last = i == n - 1;
+                    c
+                      ..setFillColor(last ? _c(b.primaryDark) : cardBg)
+                      ..setStrokeColor(_c(b.primaryDark))
+                      ..setLineWidth(1.3)
+                      ..drawEllipse(xAt(i), yAt(values[i]), last ? 3.4 : 2.6, last ? 3.4 : 2.6)
+                      ..fillAndStrokePath();
+                  }
+                },
+              ),
+            ),
+            pw.SizedBox(height: 4),
+            pw.Row(mainAxisAlignment: pw.MainAxisAlignment.spaceBetween, children: [
+              pw.Text(t.points.first.label, style: pw.TextStyle(color: axisTxt, fontSize: 8)),
+              pw.Text(t.points.last.label, style: pw.TextStyle(color: axisTxt, fontSize: 8)),
+            ]),
+          ]),
+        ),
       ]),
     );
   }

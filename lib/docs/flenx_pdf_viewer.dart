@@ -36,7 +36,12 @@ font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 .fxpv__dl{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;border-radius:999px;
 font-weight:800;font-size:.9rem;color:#fff;text-decoration:none;transition:transform .15s ease}
 .fxpv__dl:hover{transform:translateY(-1px)}
+.fxpv__print{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;
+border:1px solid rgba(255,255,255,.35);background:transparent;cursor:pointer;
+font-weight:800;font-size:.9rem;font-family:inherit;color:#fff;transition:transform .15s ease}
+.fxpv__print:hover{transform:translateY(-1px);border-color:rgba(255,255,255,.6)}
 .fxpv__frame{flex:1;border:0;width:100%}
+@media print{.fxpv__bar{display:none !important}.fxpv{position:static;background:none}}
 ''';
 
   /// Safari (WebKit) ignora `#toolbar=1` — o visor nativo dele não mostra
@@ -44,7 +49,9 @@ font-weight:800;font-size:.9rem;color:#fff;text-decoration:none;transition:trans
   /// links de PDF, abrindo o arquivo em vez de baixar. Por isso o clique no
   /// botão baixa via fetch+blob (funciona em qualquer navegador) em vez de
   /// depender só do atributo `download`; se o fetch falhar, cai para a
-  /// navegação normal do link.
+  /// navegação normal do link. O botão de imprimir foca a `contentWindow` do
+  /// iframe e chama `print()` nela — no Safari, `window.print()` no
+  /// documento-pai imprimiria uma folha em branco no lugar do PDF.
   static const _js = '''
 (function(){
   var dl=document.getElementById('fxpv-dl');
@@ -59,6 +66,14 @@ font-weight:800;font-size:.9rem;color:#fff;text-decoration:none;transition:trans
       }).catch(function(){window.location.href=url;});
     });
   }
+  var pr=document.getElementById('fxpv-print');
+  if(pr&&!pr.__b){pr.__b=1;
+    pr.addEventListener('click',function(){
+      var f=document.getElementById('fxpv-frame');
+      if(f&&f.contentWindow){try{f.contentWindow.focus();f.contentWindow.print();return;}catch(e){}}
+      window.print();
+    });
+  }
 })();
 ''';
 
@@ -69,6 +84,7 @@ font-weight:800;font-size:.9rem;color:#fff;text-decoration:none;transition:trans
       div(classes: 'fxpv__bar', styles: Styles(raw: {'background': barColor}), [
         a([Component.text('← $backLabel')], href: backHref, classes: 'fxpv__back'),
         span(classes: 'fxpv__title', [Component.text(title)]),
+        button(id: 'fxpv-print', classes: 'fxpv__print', [Component.text('🖨  Imprimir')]),
         a(
           [Component.text('⭳  Baixar PDF')],
           href: pdfUrl,

@@ -55,9 +55,12 @@ class FlenxDocPage extends StatelessComponent {
       DocPrintFormat.card => content,
       DocPrintFormat.bare => content,
     };
+    // `bare` já traz o próprio invólucro em tela cheia (ex.: FlenxPdfViewer,
+    // com sua própria barra de voltar/baixar/imprimir) — a barra genérica
+    // aqui em cima ficaria duplicada.
     return Component.fragment([
       Component.element(tag: 'style', children: const [RawText(_printCss)]),
-      FlenxDocBar(title: doc.title, backHref: backHref, accent: accent, barColor: barColor),
+      if (doc.format != DocPrintFormat.bare) FlenxDocBar(title: doc.title, backHref: backHref, accent: accent, barColor: barColor),
       wrapped,
     ]);
   }
