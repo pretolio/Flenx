@@ -138,9 +138,13 @@ class FlenxPdf {
         padding: const pw.EdgeInsets.fromLTRB(46, 38, 46, 34),
         child: pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.stretch, children: [
           // Cabeçalho tipo "papel timbrado" (manual de marca): logo fixo no
-          // topo de toda página de conteúdo, não só na capa.
+          // topo de toda página de conteúdo, não só na capa. Apagado (como
+          // no cabeçalho/rodapé do Word) pra não competir com o título.
           if (logo != null) ...[
-            pw.Align(alignment: pw.Alignment.centerLeft, child: pw.Image(logo, width: 100, height: 59)),
+            pw.Align(
+              alignment: pw.Alignment.centerLeft,
+              child: pw.Opacity(opacity: 0.35, child: pw.Image(logo, width: 100, height: 59)),
+            ),
             pw.SizedBox(height: 18),
           ],
           pw.Expanded(child: child),
