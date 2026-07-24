@@ -129,6 +129,9 @@ class FlenxPdf {
   /// marca): listas se distribuem para preencher o espaço; blocos de texto
   /// ficam centralizados nele. Nunca sobra metade da folha em branco.
   static pw.Page _sectionPage(FlenxPdfBrand b, FlenxPdfTone tone, pw.Widget child, {required int page, required int total, pw.MemoryImage? logo}) {
+    // Papel timbrado (igual ao .docx da Alstop): barra laranja full-bleed no
+    // topo e no rodapé; logo nítido + régua laranja logo abaixo do topo.
+    final bar = _c(b.primary);
     return pw.Page(
       pageFormat: PdfPageFormat.a4,
       margin: pw.EdgeInsets.zero,
@@ -136,32 +139,38 @@ class FlenxPdf {
         color: _bg(b, tone),
         width: double.infinity,
         height: double.infinity,
-        padding: const pw.EdgeInsets.fromLTRB(46, 40, 46, 34),
         child: pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.stretch, children: [
-          if (logo != null) _letterhead(b, tone, logo),
-          pw.Expanded(child: child),
-          _footer(b, tone, page, total),
+          if (logo != null) pw.Container(height: 6, color: bar),
+          pw.Expanded(
+            child: pw.Padding(
+              padding: pw.EdgeInsets.fromLTRB(46, logo != null ? 26 : 40, 46, logo != null ? 16 : 34),
+              child: pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.stretch, children: [
+                if (logo != null) _letterhead(b, tone, logo),
+                pw.Expanded(child: child),
+                _footer(b, tone, page, total),
+              ]),
+            ),
+          ),
+          if (logo != null) pw.Container(height: 6, color: bar),
         ]),
       ),
     );
   }
 
-  /// Papel timbrado: logo da empresa no topo da folha, grande e esmaecido —
-  /// igual a uma imagem no cabeçalho do Word (efeito "desbotado"/marca-d'água),
-  /// dando presença de marca sem competir com o conteúdo.
+  /// Papel timbrado (mesmo padrão do .docx): logo nítido no canto superior
+  /// esquerdo + régua laranja separando do conteúdo.
   static pw.Widget _letterhead(FlenxPdfBrand b, FlenxPdfTone tone, pw.MemoryImage logo) {
     return pw.Column(mainAxisSize: pw.MainAxisSize.min, crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
-      pw.Opacity(
-        opacity: 0.22,
-        child: pw.SizedBox(
-          height: 50,
-          child: pw.Align(
-            alignment: pw.Alignment.centerLeft,
-            child: pw.FittedBox(fit: pw.BoxFit.contain, child: pw.Image(logo)),
-          ),
+      pw.SizedBox(
+        height: 36,
+        child: pw.Align(
+          alignment: pw.Alignment.centerLeft,
+          child: pw.FittedBox(fit: pw.BoxFit.contain, child: pw.Image(logo)),
         ),
       ),
-      pw.SizedBox(height: 20),
+      pw.SizedBox(height: 12),
+      pw.Container(height: 1.5, color: _c(b.primary)),
+      pw.SizedBox(height: 22),
     ]);
   }
 
