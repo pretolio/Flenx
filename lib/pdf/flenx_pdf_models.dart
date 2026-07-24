@@ -67,6 +67,7 @@ class FlenxPdfChecklist extends FlenxPdfPage {
     this.columns = 2,
     this.negative = false,
     this.tone = FlenxPdfTone.white,
+    this.highlight,
   });
   final String? eyebrow;
   final String title;
@@ -75,6 +76,9 @@ class FlenxPdfChecklist extends FlenxPdfPage {
   final int columns;
   final bool negative;
   final FlenxPdfTone tone;
+
+  /// Frase de fechamento em destaque, num card abaixo da lista (opcional).
+  final String? highlight;
 }
 
 /// Texto institucional: parágrafos + destaques (stats) opcionais.
@@ -146,6 +150,16 @@ class FlenxPdfCompare extends FlenxPdfPage {
   final String ourLabel;
   final String theirLabel;
   final List<FlenxPdfCompareRow> rows;
+  final FlenxPdfTone tone;
+}
+
+/// Duas ou mais seções curtas empilhadas numa única folha (mesmo tom de
+/// fundo) — para juntar conteúdos que sozinhos não preenchem uma página A4.
+/// Aceita blocos de texto, checklist, passos e comparativo (não capa,
+/// spotlight nem contato/fechamento).
+class FlenxPdfCombo extends FlenxPdfPage {
+  const FlenxPdfCombo({required this.blocks, this.tone = FlenxPdfTone.white});
+  final List<FlenxPdfPage> blocks;
   final FlenxPdfTone tone;
 }
 

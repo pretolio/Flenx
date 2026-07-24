@@ -62,6 +62,8 @@ class FlenxPdf {
           pdf.addPage(_sectionPage(b, page.tone, _steps(b, page), page: pageNum, total: total));
         case FlenxPdfCompare():
           pdf.addPage(_sectionPage(b, page.tone, _compare(b, page), page: pageNum, total: total));
+        case FlenxPdfCombo():
+          pdf.addPage(_sectionPage(b, page.tone, _combo(b, page), page: pageNum, total: total));
         case FlenxPdfContact():
           final im = await image(b.logoDarkBgPath);
           pdf.addPage(_sectionPage(b, page.tone, _contact(b, page, im), page: pageNum, total: total));
@@ -223,6 +225,19 @@ class FlenxPdf {
         _head(b, p.tone, p.eyebrow, p.title, p.subtitle),
         pw.SizedBox(height: 28),
         twoCol ? _twoCols(rows) : pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: rows),
+        if (p.highlight != null) ...[
+          pw.SizedBox(height: 22),
+          pw.Container(
+            padding: const pw.EdgeInsets.fromLTRB(18, 14, 18, 14),
+            decoration: pw.BoxDecoration(
+              color: p.tone == FlenxPdfTone.ink ? _c('#0f2a57') : _c(b.light),
+              borderRadius: pw.BorderRadius.circular(8),
+              border: pw.Border(left: pw.BorderSide(color: _c(b.primary), width: 3)),
+            ),
+            child: pw.Text(p.highlight!,
+                style: pw.TextStyle(color: _title(b, p.tone), fontWeight: pw.FontWeight.bold, fontSize: 12, lineSpacing: 1.6)),
+          ),
+        ],
       ]),
     );
   }
@@ -398,8 +413,35 @@ class FlenxPdf {
     );
   }
 
-  /// Fechamento — ancorado no topo, com card de contato (não mais um bloco
-  /// solto centralizado na folha).
+  static pw.Widget _renderBlock(FlenxPdfBrand b, FlenxPdfPage blk) => switch (blk) {
+        FlenxPdfText() => _text(b, blk),
+        FlenxPdfChecklist() => _checklist(b, blk),
+        FlenxPdfSteps() => _steps(b, blk),
+        FlenxPdfCompare() => _compare(b, blk),
+        _ => throw UnsupportedError('Bloco não suportado em FlenxPdfCombo: ${blk.runtimeType}'),
+      };
+
+  /// Empilha os blocos de um [FlenxPdfCombo] numa folha só, com uma linha
+  /// divisória entre cada um — todos ancorados no topo.
+  static pw.Widget _combo(FlenxPdfBrand b, FlenxPdfCombo p) {
+    final rule = p.tone == FlenxPdfTone.ink ? '#1c3565' : '#e3e9f5';
+    final children = <pw.Widget>[];
+    for (var i = 0; i < p.blocks.length; i++) {
+      if (i > 0) {
+        children.add(pw.SizedBox(height: 26));
+        children.add(pw.Container(height: 0.75, color: _c(rule)));
+        children.add(pw.SizedBox(height: 26));
+      }
+      children.add(_renderBlock(b, p.blocks[i]));
+    }
+    return pw.Align(
+      alignment: pw.Alignment.topLeft,
+      child: pw.Column(mainAxisSize: pw.MainAxisSize.min, crossAxisAlignment: pw.CrossAxisAlignment.stretch, children: children),
+    );
+  }
+
+  /// Fechamento — bloco de contato centralizado na folha (única página do
+  /// documento que não fica ancorada no topo: é o encerramento).
   static pw.Widget _contact(FlenxPdfBrand b, FlenxPdfContact p, pw.MemoryImage? logo) {
     final block = pw.Column(mainAxisSize: pw.MainAxisSize.min, crossAxisAlignment: pw.CrossAxisAlignment.center, children: [
       if (logo != null) ...[pw.Image(logo, width: 210), pw.SizedBox(height: 30)],
@@ -424,7 +466,7 @@ class FlenxPdf {
         ]),
       ),
     ]);
-    return pw.Align(alignment: pw.Alignment.topCenter, child: block);
+    return pw.Align(alignment: pw.Alignment.center, child: block);
   }
 
   static pw.Page _coverPage(FlenxPdfBrand b, pw.MemoryImage? im, String? eyebrow, String title, String? subtitle) {
