@@ -144,11 +144,27 @@ class FlenxPdfSpotlight extends FlenxPdfPage {
 
 /// Passos numerados.
 class FlenxPdfSteps extends FlenxPdfPage {
-  const FlenxPdfSteps({this.eyebrow, required this.title, required this.steps, this.tone = FlenxPdfTone.white});
+  const FlenxPdfSteps({
+    this.eyebrow,
+    required this.title,
+    required this.steps,
+    this.tone = FlenxPdfTone.white,
+    this.highlight,
+    this.timeline = false,
+  });
   final String? eyebrow;
   final String title;
   final List<FlenxPdfItem> steps;
   final FlenxPdfTone tone;
+
+  /// Frase de fechamento em destaque, num card abaixo dos passos (opcional).
+  final String? highlight;
+
+  /// `true`: uma coluna, círculos maiores ligados por uma linha vertical
+  /// (visual de "jornada") — usa bem mais altura, bom quando os passos são
+  /// a única lista da página. `false` (default): grade 2×2 compacta, boa
+  /// quando a página já tem outro conteúdo.
+  final bool timeline;
 }
 
 /// Tabela genérica de dados (preços, prazos, faixas etc.) — cabeçalho +

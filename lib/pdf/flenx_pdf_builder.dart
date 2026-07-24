@@ -253,16 +253,7 @@ class FlenxPdf {
         twoCol ? _twoCols(rows) : pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: rows),
         if (p.highlight != null) ...[
           pw.SizedBox(height: 22),
-          pw.Container(
-            padding: const pw.EdgeInsets.fromLTRB(18, 14, 18, 14),
-            decoration: pw.BoxDecoration(
-              color: p.tone == FlenxPdfTone.ink ? _c('#0f2a57') : _c(b.light),
-              borderRadius: pw.BorderRadius.circular(8),
-              border: pw.Border(left: pw.BorderSide(color: _c(b.primary), width: 3)),
-            ),
-            child: pw.Text(p.highlight!,
-                style: pw.TextStyle(color: _title(b, p.tone), fontWeight: pw.FontWeight.bold, fontSize: 12, lineSpacing: 1.6)),
-          ),
+          _highlightCard(b, p.tone, p.highlight!),
         ],
         if (p.trend != null) ...[
           pw.SizedBox(height: 22),
@@ -273,6 +264,18 @@ class FlenxPdf {
       ]),
     );
   }
+
+  /// Card de frase em destaque (borda lateral colorida) — usado no fim de
+  /// [_checklist] e [_steps].
+  static pw.Widget _highlightCard(FlenxPdfBrand b, FlenxPdfTone tone, String text) => pw.Container(
+        padding: const pw.EdgeInsets.fromLTRB(18, 14, 18, 14),
+        decoration: pw.BoxDecoration(
+          color: tone == FlenxPdfTone.ink ? _c('#0f2a57') : _c(b.light),
+          borderRadius: pw.BorderRadius.circular(8),
+          border: pw.Border(left: pw.BorderSide(color: _c(b.primary), width: 3)),
+        ),
+        child: pw.Text(text, style: pw.TextStyle(color: _title(b, tone), fontWeight: pw.FontWeight.bold, fontSize: 12, lineSpacing: 1.6)),
+      );
 
   /// Card de estatística + mini-gráfico de linha em queda (valores
   /// ilustrativos — comunica a tendência, não é dado de mercado). Preenche
@@ -419,6 +422,7 @@ class FlenxPdf {
 
   /// Cabeçalho + passos numerados, ancorados no topo da folha.
   static pw.Widget _steps(FlenxPdfBrand b, FlenxPdfSteps p) {
+    if (p.timeline) return _stepsTimeline(b, p);
     var n = 0;
     final rows = p.steps.map((s) {
       n++;
@@ -445,6 +449,64 @@ class FlenxPdf {
         _head(b, p.tone, p.eyebrow, p.title),
         pw.SizedBox(height: 30),
         _twoCols(rows),
+        if (p.highlight != null) ...[
+          pw.SizedBox(height: 22),
+          _highlightCard(b, p.tone, p.highlight!),
+        ],
+      ]),
+    );
+  }
+
+  /// Variante "jornada": uma coluna, círculos maiores ligados por uma linha
+  /// vertical — usa bem mais altura que a grade 2×2, pra quando os passos
+  /// são a única lista da página (ver [FlenxPdfSteps.timeline]).
+  static pw.Widget _stepsTimeline(FlenxPdfBrand b, FlenxPdfSteps p) {
+    const circle = 44.0;
+    final lineColor = p.tone == FlenxPdfTone.ink ? _c('#1c3565') : _c('#e3e9f5');
+    final children = <pw.Widget>[];
+    for (var i = 0; i < p.steps.length; i++) {
+      final s = p.steps[i];
+      final last = i == p.steps.length - 1;
+      children.add(pw.Row(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
+        pw.Container(
+          width: circle, height: circle,
+          decoration: pw.BoxDecoration(color: _c(b.primary), borderRadius: pw.BorderRadius.circular(12)),
+          alignment: pw.Alignment.center,
+          child: pw.Text('${i + 1}', style: pw.TextStyle(color: PdfColors.white, fontWeight: pw.FontWeight.bold, fontSize: 17)),
+        ),
+        pw.SizedBox(width: 20),
+        pw.Expanded(
+          child: pw.Padding(
+            padding: const pw.EdgeInsets.only(top: 6),
+            child: pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
+              pw.Text(s.title, style: pw.TextStyle(color: _title(b, p.tone), fontWeight: pw.FontWeight.bold, fontSize: 15.5)),
+              if (s.description != null) ...[
+                pw.SizedBox(height: 5),
+                pw.Text(s.description!, style: pw.TextStyle(color: _body(b, p.tone), fontSize: 11.5, lineSpacing: 1.8)),
+              ],
+            ]),
+          ),
+        ),
+      ]));
+      if (!last) {
+        children.add(pw.Padding(
+          padding: const pw.EdgeInsets.symmetric(vertical: 8),
+          child: pw.Row(children: [
+            pw.SizedBox(width: circle, child: pw.Center(child: pw.Container(width: 2, height: 36, color: lineColor))),
+          ]),
+        ));
+      }
+    }
+    return pw.Align(
+      alignment: pw.Alignment.topLeft,
+      child: pw.Column(mainAxisSize: pw.MainAxisSize.min, crossAxisAlignment: pw.CrossAxisAlignment.stretch, children: [
+        _head(b, p.tone, p.eyebrow, p.title),
+        pw.SizedBox(height: 36),
+        ...children,
+        if (p.highlight != null) ...[
+          pw.SizedBox(height: 30),
+          _highlightCard(b, p.tone, p.highlight!),
+        ],
       ]),
     );
   }
