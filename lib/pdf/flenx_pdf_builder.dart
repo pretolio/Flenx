@@ -60,6 +60,8 @@ class FlenxPdf {
           pdf.addPage(_sectionPage(b, page.tone, _spotlight(b, page, im), page: pageNum, total: total));
         case FlenxPdfSteps():
           pdf.addPage(_sectionPage(b, page.tone, _steps(b, page), page: pageNum, total: total));
+        case FlenxPdfCompare():
+          pdf.addPage(_sectionPage(b, page.tone, _compare(b, page), page: pageNum, total: total));
         case FlenxPdfContact():
           final im = await image(b.logoDarkBgPath);
           pdf.addPage(_sectionPage(b, page.tone, _contact(b, page, im), page: pageNum, total: total));
@@ -83,10 +85,18 @@ class FlenxPdf {
     final f = File(path);
     if (!await f.exists()) return null;
     final bytes = await f.readAsBytes();
-    // O package pdf lê PNG/JPG — decodifica (inclusive webp) e recodifica em PNG.
+    // O package pdf lê PNG/JPG — decodifica (inclusive webp) e recodifica.
+    // Logos com transparência real precisam continuar em PNG: reencodar em
+    // JPG apaga o alpha e pinta a área transparente de branco sólido (o
+    // "quadrado branco" atrás do logo no fundo escuro). Fotos/prints não têm
+    // transparência de verdade mesmo quando decodificam com 4 canais — por
+    // isso checamos se existe algum pixel realmente transparente, em vez de
+    // só olhar o número de canais (senão toda imagem vira PNG, bem mais
+    // pesado que JPG).
     final decoded = img.decodeImage(bytes);
     if (decoded == null) return null;
-    return pw.MemoryImage(img.encodeJpg(decoded, quality: 86));
+    final transparent = decoded.hasAlpha && decoded.any((p) => p.a < 255);
+    return pw.MemoryImage(transparent ? img.encodePng(decoded) : img.encodeJpg(decoded, quality: 86));
   }
 
   static PdfColor _bg(FlenxPdfBrand b, FlenxPdfTone t) =>
@@ -191,39 +201,49 @@ class FlenxPdf {
         ]),
       );
 
-  /// Duas colunas de linhas. Com [distribute], cada coluna espalha suas
-  /// linhas para ocupar toda a altura recebida (usado quando o pai é
-  /// [pw.Expanded], para a lista preencher a folha em vez de ficar espremida
-  /// no topo).
-  static pw.Widget _twoCols(List<pw.Widget> rows, {bool distribute = false}) {
+  /// Duas colunas de linhas, alinhadas no topo.
+  static pw.Widget _twoCols(List<pw.Widget> rows) {
     final mid = (rows.length / 2).ceil();
-    final align = distribute ? pw.MainAxisAlignment.spaceEvenly : pw.MainAxisAlignment.start;
     return pw.Row(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
-      pw.Expanded(child: pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, mainAxisAlignment: align, children: rows.sublist(0, mid))),
+      pw.Expanded(child: pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: rows.sublist(0, mid))),
       pw.SizedBox(width: 34),
-      pw.Expanded(child: pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, mainAxisAlignment: align, children: rows.sublist(mid))),
+      pw.Expanded(child: pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: rows.sublist(mid))),
     ]);
   }
 
-  /// Cabeçalho fixo no topo; a lista se espalha (`spaceEvenly`) pelo restante
-  /// da folha — poucas ou muitas linhas, a página sempre fica preenchida do
-  /// topo até o rodapé.
+  /// Cabeçalho + lista, sempre ancorados no topo da folha — sem centralizar
+  /// e sem espaçamento artificial; a página se preenche com conteúdo real
+  /// (mais itens/descrição), não com espaço em branco distribuído.
   static pw.Widget _checklist(FlenxPdfBrand b, FlenxPdfChecklist p) {
     final rows = p.items.map((it) => _itemRow(b, p.tone, it, p.negative)).toList();
     final twoCol = p.columns >= 2 && rows.length > 3;
-    return pw.Column(mainAxisSize: pw.MainAxisSize.max, crossAxisAlignment: pw.CrossAxisAlignment.stretch, children: [
-      _head(b, p.tone, p.eyebrow, p.title, p.subtitle),
-      pw.SizedBox(height: 20),
-      pw.Expanded(
-        child: twoCol
-            ? _twoCols(rows, distribute: true)
-            : pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, mainAxisAlignment: pw.MainAxisAlignment.spaceEvenly, children: rows),
-      ),
-    ]);
+    return pw.Align(
+      alignment: pw.Alignment.topLeft,
+      child: pw.Column(mainAxisSize: pw.MainAxisSize.min, crossAxisAlignment: pw.CrossAxisAlignment.stretch, children: [
+        _head(b, p.tone, p.eyebrow, p.title, p.subtitle),
+        pw.SizedBox(height: 28),
+        twoCol ? _twoCols(rows) : pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: rows),
+      ]),
+    );
   }
 
-  /// Cabeçalho + parágrafos/estatísticas centralizados no espaço disponível
-  /// (bloco editorial — não é uma lista para "esticar").
+  /// Card de estatística (valor + rótulo) com borda — usado em [_text].
+  static pw.Widget _statCard(FlenxPdfBrand b, FlenxPdfTone tone, FlenxPdfStat s) => pw.Container(
+        width: 132,
+        padding: const pw.EdgeInsets.fromLTRB(14, 12, 14, 14),
+        decoration: pw.BoxDecoration(
+          color: tone == FlenxPdfTone.ink ? _c('#0f2a57') : PdfColors.white,
+          borderRadius: pw.BorderRadius.circular(8),
+          border: pw.Border.all(color: tone == FlenxPdfTone.ink ? _c('#1c3565') : _c('#e3e9f5'), width: 1),
+        ),
+        child: pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
+          pw.Text(s.value, style: pw.TextStyle(color: _c(b.primary), fontWeight: pw.FontWeight.bold, fontSize: 16)),
+          pw.SizedBox(height: 3),
+          pw.Text(s.label, style: pw.TextStyle(color: _body(b, tone), fontSize: 9.5, lineSpacing: 1.4)),
+        ]),
+      );
+
+  /// Cabeçalho + parágrafos/estatísticas ancorados no topo da folha.
   static pw.Widget _text(FlenxPdfBrand b, FlenxPdfText p) {
     final block = pw.Column(mainAxisSize: pw.MainAxisSize.min, crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
       _head(b, p.tone, p.eyebrow, p.title, null, false),
@@ -233,20 +253,11 @@ class FlenxPdf {
         pw.SizedBox(height: 16),
       ],
       if (p.stats.isNotEmpty) ...[
-        pw.SizedBox(height: 20),
-        pw.Container(height: 0.75, color: _c(p.tone == FlenxPdfTone.ink ? '#1c3565' : '#e3e9f5')),
-        pw.SizedBox(height: 24),
-        pw.Wrap(spacing: 46, runSpacing: 20, children: [
-          for (final s in p.stats)
-            pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
-              pw.Text(s.value, style: pw.TextStyle(color: _c(b.primary), fontWeight: pw.FontWeight.bold, fontSize: 17)),
-              pw.SizedBox(height: 2),
-              pw.Text(s.label, style: pw.TextStyle(color: _body(b, p.tone), fontSize: 10)),
-            ]),
-        ]),
+        pw.SizedBox(height: 10),
+        pw.Wrap(spacing: 14, runSpacing: 14, children: [for (final s in p.stats) _statCard(b, p.tone, s)]),
       ],
     ]);
-    return pw.Align(alignment: pw.Alignment.centerLeft, child: block);
+    return pw.Align(alignment: pw.Alignment.topLeft, child: block);
   }
 
   static pw.Widget _bullet(FlenxPdfBrand b, FlenxPdfTone tone, String t) => pw.Padding(
@@ -260,8 +271,9 @@ class FlenxPdf {
         ]),
       );
 
-  /// Texto + bullets no topo; se houver imagem, ela cresce para preencher
-  /// todo o resto da folha (em vez de uma miniatura solta sobre fundo vazio).
+  /// Texto + bullets no topo; se houver imagem, ela cresce para preencher todo
+  /// o resto da folha, emoldurada como um card de produto — sem cortar nada
+  /// (BoxFit.contain: o print inteiro sempre visível, nunca com pedaço fora).
   static pw.Widget _spotlight(FlenxPdfBrand b, FlenxPdfSpotlight p, pw.MemoryImage? im) {
     final head = pw.Column(mainAxisSize: pw.MainAxisSize.min, crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
       _head(b, p.tone, p.eyebrow, p.title, null, false),
@@ -277,17 +289,21 @@ class FlenxPdf {
       head,
       pw.SizedBox(height: 26),
       pw.Expanded(
-        child: pw.ClipRRect(
-          horizontalRadius: 10,
-          verticalRadius: 10,
-          child: pw.Image(im, fit: pw.BoxFit.cover),
+        child: pw.Container(
+          decoration: pw.BoxDecoration(
+            color: PdfColors.white,
+            borderRadius: pw.BorderRadius.circular(10),
+            border: pw.Border.all(color: _c('#e3e9f5'), width: 1),
+          ),
+          padding: const pw.EdgeInsets.all(14),
+          alignment: pw.Alignment.center,
+          child: pw.Image(im, fit: pw.BoxFit.contain),
         ),
       ),
     ]);
   }
 
-  /// Cabeçalho fixo; os passos se espalham (`spaceEvenly`) por toda a altura
-  /// restante.
+  /// Cabeçalho + passos numerados, ancorados no topo da folha.
   static pw.Widget _steps(FlenxPdfBrand b, FlenxPdfSteps p) {
     var n = 0;
     final rows = p.steps.map((s) {
@@ -309,31 +325,106 @@ class FlenxPdf {
         ]),
       );
     }).toList();
-    return pw.Column(mainAxisSize: pw.MainAxisSize.max, crossAxisAlignment: pw.CrossAxisAlignment.stretch, children: [
-      _head(b, p.tone, p.eyebrow, p.title),
-      pw.SizedBox(height: 20),
-      pw.Expanded(child: _twoCols(rows, distribute: true)),
-    ]);
+    return pw.Align(
+      alignment: pw.Alignment.topLeft,
+      child: pw.Column(mainAxisSize: pw.MainAxisSize.min, crossAxisAlignment: pw.CrossAxisAlignment.stretch, children: [
+        _head(b, p.tone, p.eyebrow, p.title),
+        pw.SizedBox(height: 30),
+        _twoCols(rows),
+      ]),
+    );
   }
 
-  /// Fechamento — bloco único centralizado na folha inteira (assinatura de
-  /// encerramento, não uma lista para distribuir).
+  static pw.Widget _compareMark(FlenxPdfBrand b, bool yes, String? note) => pw.Column(children: [
+        pw.Container(
+          width: 22, height: 22,
+          decoration: pw.BoxDecoration(
+            color: yes ? _c(b.primary) : _c('#e7ebf2'),
+            borderRadius: pw.BorderRadius.circular(6),
+          ),
+          alignment: pw.Alignment.center,
+          child: yes ? _check() : _dash(),
+        ),
+        if (note != null) ...[
+          pw.SizedBox(height: 3),
+          pw.Text(note, textAlign: pw.TextAlign.center, style: pw.TextStyle(color: _c('#8a95a8'), fontSize: 7.5)),
+        ],
+      ]);
+
+  /// Tabela comparativa Alstop × alternativa — gráfico simples (check/×) que
+  /// carrega informação real, em vez de espaço decorativo.
+  static pw.Widget _compare(FlenxPdfBrand b, FlenxPdfCompare p) {
+    final rowsW = <pw.Widget>[];
+    for (var i = 0; i < p.rows.length; i++) {
+      final r = p.rows[i];
+      rowsW.add(pw.Container(
+        color: i.isOdd ? _c(p.tone == FlenxPdfTone.light ? '#eef2f9' : '#f5f8fd') : null,
+        padding: const pw.EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+        child: pw.Row(crossAxisAlignment: pw.CrossAxisAlignment.center, children: [
+          pw.Expanded(flex: 5, child: pw.Text(r.label, style: pw.TextStyle(color: _title(b, p.tone), fontSize: 11.5, fontWeight: pw.FontWeight.bold))),
+          pw.Expanded(flex: 2, child: pw.Center(child: _compareMark(b, r.ours, null))),
+          pw.Expanded(flex: 2, child: pw.Center(child: _compareMark(b, r.theirs, r.theirsNote))),
+        ]),
+      ));
+    }
+    return pw.Align(
+      alignment: pw.Alignment.topLeft,
+      child: pw.Column(mainAxisSize: pw.MainAxisSize.min, crossAxisAlignment: pw.CrossAxisAlignment.stretch, children: [
+        _head(b, p.tone, p.eyebrow, p.title, p.subtitle),
+        pw.SizedBox(height: 28),
+        pw.Container(
+          decoration: pw.BoxDecoration(
+            border: pw.Border.all(color: _c('#e3e9f5'), width: 1),
+            borderRadius: pw.BorderRadius.circular(10),
+          ),
+          child: pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.stretch, children: [
+            pw.Container(
+              color: _c(b.ink),
+              padding: const pw.EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+              child: pw.Row(children: [
+                pw.Expanded(flex: 5, child: pw.SizedBox()),
+                pw.Expanded(flex: 2, child: pw.Center(child: pw.Text(p.ourLabel, style: pw.TextStyle(color: _c(b.primaryLight), fontWeight: pw.FontWeight.bold, fontSize: 10)))),
+                pw.Expanded(flex: 2, child: pw.Center(child: pw.Text(p.theirLabel, style: pw.TextStyle(color: PdfColors.white, fontWeight: pw.FontWeight.bold, fontSize: 10)))),
+              ]),
+            ),
+            pw.ClipRRect(
+              horizontalRadius: 10,
+              verticalRadius: 10,
+              child: pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.stretch, children: rowsW),
+            ),
+          ]),
+        ),
+      ]),
+    );
+  }
+
+  /// Fechamento — ancorado no topo, com card de contato (não mais um bloco
+  /// solto centralizado na folha).
   static pw.Widget _contact(FlenxPdfBrand b, FlenxPdfContact p, pw.MemoryImage? logo) {
     final block = pw.Column(mainAxisSize: pw.MainAxisSize.min, crossAxisAlignment: pw.CrossAxisAlignment.center, children: [
-      if (logo != null) ...[pw.Image(logo, width: 200), pw.SizedBox(height: 28)],
-      pw.Text(p.title, textAlign: pw.TextAlign.center, style: pw.TextStyle(color: PdfColors.white, fontWeight: pw.FontWeight.bold, fontSize: 25, lineSpacing: 1.4)),
+      if (logo != null) ...[pw.Image(logo, width: 210), pw.SizedBox(height: 30)],
+      pw.Text(p.title, textAlign: pw.TextAlign.center, style: pw.TextStyle(color: PdfColors.white, fontWeight: pw.FontWeight.bold, fontSize: 26, lineSpacing: 1.4)),
       if (p.subtitle != null) ...[
         pw.SizedBox(height: 12),
-        pw.Text(p.subtitle!, textAlign: pw.TextAlign.center, style: pw.TextStyle(color: _c('#c3d2ec'), fontSize: 11.5, lineSpacing: 1.6)),
+        pw.Text(p.subtitle!, textAlign: pw.TextAlign.center, style: pw.TextStyle(color: _c('#c3d2ec'), fontSize: 12, lineSpacing: 1.7)),
       ],
-      pw.SizedBox(height: 26),
-      pw.Container(width: 64, height: 2, color: _c(b.primary)),
-      pw.SizedBox(height: 22),
-      for (final l in p.lines)
-        pw.Padding(padding: const pw.EdgeInsets.only(bottom: 7),
-            child: pw.Text(l, textAlign: pw.TextAlign.center, style: pw.TextStyle(color: PdfColors.white, fontSize: 11.5))),
+      pw.SizedBox(height: 30),
+      pw.Container(
+        width: double.infinity,
+        padding: const pw.EdgeInsets.symmetric(vertical: 22, horizontal: 24),
+        decoration: pw.BoxDecoration(
+          color: _c('#0f2a57'),
+          borderRadius: pw.BorderRadius.circular(10),
+          border: pw.Border.all(color: _c('#1c3565'), width: 1),
+        ),
+        child: pw.Column(children: [
+          for (final l in p.lines)
+            pw.Padding(padding: const pw.EdgeInsets.only(bottom: 8),
+                child: pw.Text(l, textAlign: pw.TextAlign.center, style: pw.TextStyle(color: PdfColors.white, fontSize: 11.5))),
+        ]),
+      ),
     ]);
-    return pw.Align(alignment: pw.Alignment.center, child: block);
+    return pw.Align(alignment: pw.Alignment.topCenter, child: block);
   }
 
   static pw.Page _coverPage(FlenxPdfBrand b, pw.MemoryImage? im, String? eyebrow, String title, String? subtitle) {

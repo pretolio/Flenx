@@ -120,6 +120,35 @@ class FlenxPdfSteps extends FlenxPdfPage {
   final FlenxPdfTone tone;
 }
 
+/// Uma linha do comparativo: recurso + se a Alstop e a alternativa atendem.
+class FlenxPdfCompareRow {
+  const FlenxPdfCompareRow(this.label, {this.ours = true, this.theirs = false, this.theirsNote});
+  final String label;
+  final bool ours;
+  final bool theirs;
+  final String? theirsNote;
+}
+
+/// Tabela comparativa (Alstop × alternativa) — 2 colunas de check/×.
+class FlenxPdfCompare extends FlenxPdfPage {
+  const FlenxPdfCompare({
+    this.eyebrow,
+    required this.title,
+    this.subtitle,
+    required this.ourLabel,
+    required this.theirLabel,
+    required this.rows,
+    this.tone = FlenxPdfTone.white,
+  });
+  final String? eyebrow;
+  final String title;
+  final String? subtitle;
+  final String ourLabel;
+  final String theirLabel;
+  final List<FlenxPdfCompareRow> rows;
+  final FlenxPdfTone tone;
+}
+
 /// Fechamento com logo + dados de contato.
 class FlenxPdfContact extends FlenxPdfPage {
   const FlenxPdfContact({required this.title, this.subtitle, required this.lines, this.tone = FlenxPdfTone.ink});
