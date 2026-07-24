@@ -43,6 +43,13 @@ class FlenxPdf {
       return mi;
     }
 
+    // Logo do cabeçalho tipo "papel timbrado" (manual de marca, seção 17 —
+    // Papelaria corporativa): mesmo logo em toda página de conteúdo, claro
+    // ou escuro conforme o tom de fundo.
+    final logoLight = await image(b.logoLightBgPath);
+    final logoDark = await image(b.logoDarkBgPath);
+    pw.MemoryImage? headerLogo(FlenxPdfTone tone) => tone == FlenxPdfTone.ink ? logoDark : logoLight;
+
     final total = doc.pages.length;
     var pageNum = 0;
     for (final page in doc.pages) {
@@ -52,22 +59,22 @@ class FlenxPdf {
           final im = await image(imagePath);
           pdf.addPage(_coverPage(b, im, eyebrow, title, subtitle));
         case FlenxPdfChecklist():
-          pdf.addPage(_sectionPage(b, page.tone, _checklist(b, page), page: pageNum, total: total));
+          pdf.addPage(_sectionPage(b, page.tone, _checklist(b, page), page: pageNum, total: total, logo: headerLogo(page.tone)));
         case FlenxPdfText():
-          pdf.addPage(_sectionPage(b, page.tone, _text(b, page), page: pageNum, total: total));
+          pdf.addPage(_sectionPage(b, page.tone, _text(b, page), page: pageNum, total: total, logo: headerLogo(page.tone)));
         case FlenxPdfSpotlight():
           final im = await image(page.imagePath);
-          pdf.addPage(_sectionPage(b, page.tone, _spotlight(b, page, im), page: pageNum, total: total));
+          pdf.addPage(_sectionPage(b, page.tone, _spotlight(b, page, im), page: pageNum, total: total, logo: headerLogo(page.tone)));
         case FlenxPdfSteps():
-          pdf.addPage(_sectionPage(b, page.tone, _steps(b, page), page: pageNum, total: total));
+          pdf.addPage(_sectionPage(b, page.tone, _steps(b, page), page: pageNum, total: total, logo: headerLogo(page.tone)));
         case FlenxPdfCompare():
-          pdf.addPage(_sectionPage(b, page.tone, _compare(b, page), page: pageNum, total: total));
+          pdf.addPage(_sectionPage(b, page.tone, _compare(b, page), page: pageNum, total: total, logo: headerLogo(page.tone)));
         case FlenxPdfTable():
-          pdf.addPage(_sectionPage(b, page.tone, _table(b, page), page: pageNum, total: total));
+          pdf.addPage(_sectionPage(b, page.tone, _table(b, page), page: pageNum, total: total, logo: headerLogo(page.tone)));
         case FlenxPdfCombo():
-          pdf.addPage(_sectionPage(b, page.tone, _combo(b, page), page: pageNum, total: total));
+          pdf.addPage(_sectionPage(b, page.tone, _combo(b, page), page: pageNum, total: total, logo: headerLogo(page.tone)));
         case FlenxPdfContact():
-          final im = await image(b.logoDarkBgPath);
+          final im = logoDark;
           pdf.addPage(_sectionPage(b, page.tone, _contact(b, page, im), page: pageNum, total: total));
       }
     }
@@ -113,7 +120,14 @@ class FlenxPdf {
   /// O corpo ocupa toda a altura útil da folha (entre o topo e o rodapé de
   /// marca): listas se distribuem para preencher o espaço; blocos de texto
   /// ficam centralizados nele. Nunca sobra metade da folha em branco.
-  static pw.Page _sectionPage(FlenxPdfBrand b, FlenxPdfTone tone, pw.Widget child, {required int page, required int total}) {
+  static pw.Page _sectionPage(
+    FlenxPdfBrand b,
+    FlenxPdfTone tone,
+    pw.Widget child, {
+    required int page,
+    required int total,
+    pw.MemoryImage? logo,
+  }) {
     return pw.Page(
       pageFormat: PdfPageFormat.a4,
       margin: pw.EdgeInsets.zero,
@@ -121,8 +135,14 @@ class FlenxPdf {
         color: _bg(b, tone),
         width: double.infinity,
         height: double.infinity,
-        padding: const pw.EdgeInsets.fromLTRB(46, 54, 46, 34),
+        padding: const pw.EdgeInsets.fromLTRB(46, 38, 46, 34),
         child: pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.stretch, children: [
+          // Cabeçalho tipo "papel timbrado" (manual de marca): logo fixo no
+          // topo de toda página de conteúdo, não só na capa.
+          if (logo != null) ...[
+            pw.Align(alignment: pw.Alignment.centerLeft, child: pw.Image(logo, width: 100, height: 59)),
+            pw.SizedBox(height: 18),
+          ],
           pw.Expanded(child: child),
           _footer(b, tone, page, total),
         ]),
@@ -131,7 +151,7 @@ class FlenxPdf {
   }
 
   static pw.Widget _footer(FlenxPdfBrand b, FlenxPdfTone tone, int page, int total) {
-    final rule = tone == FlenxPdfTone.ink ? _c('#1c3565') : _c('#e3e9f5');
+    final rule = _c(b.primary);
     final txt = tone == FlenxPdfTone.ink ? _c('#8fa3c9') : _c('#8a95a8');
     return pw.Column(mainAxisSize: pw.MainAxisSize.min, children: [
       pw.Container(height: 0.75, color: rule),

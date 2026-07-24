@@ -15,6 +15,7 @@ class FlenxPdfBrand {
     required this.ink2,
     this.light = '#F5F8FD',
     this.logoDarkBgPath,
+    this.logoLightBgPath,
   });
 
   /// Cores em hex (#RRGGBB).
@@ -27,6 +28,10 @@ class FlenxPdfBrand {
 
   /// Caminho do arquivo do logo para fundo escuro (usado na capa/contato).
   final String? logoDarkBgPath;
+
+  /// Caminho do logo para fundo claro/branco — usado no cabeçalho tipo
+  /// "papel timbrado" de cada página de conteúdo (ver [FlenxPdf._sectionPage]).
+  final String? logoLightBgPath;
 }
 
 /// Item de lista (título + descrição opcional).
