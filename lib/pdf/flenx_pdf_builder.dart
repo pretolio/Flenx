@@ -221,7 +221,7 @@ class FlenxPdf {
     final twoCol = p.columns >= 2 && rows.length > 3;
     return pw.Align(
       alignment: pw.Alignment.topLeft,
-      child: pw.Column(mainAxisSize: pw.MainAxisSize.min, crossAxisAlignment: pw.CrossAxisAlignment.stretch, children: [
+      child: pw.Column(mainAxisSize: pw.MainAxisSize.max, crossAxisAlignment: pw.CrossAxisAlignment.stretch, children: [
         _head(b, p.tone, p.eyebrow, p.title, p.subtitle),
         pw.SizedBox(height: 28),
         twoCol ? _twoCols(rows) : pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: rows),
@@ -240,14 +240,18 @@ class FlenxPdf {
         ],
         if (p.trend != null) ...[
           pw.SizedBox(height: 22),
-          _trendCard(b, p.tone, p.trend!),
+          // Expanded: o card cresce pra ocupar todo o resto da folha (o
+          // gráfico dentro dele também escala com o espaço disponível).
+          pw.Expanded(child: _trendCard(b, p.tone, p.trend!)),
         ],
       ]),
     );
   }
 
   /// Card de estatística + mini-gráfico de linha em queda (valores
-  /// ilustrativos — comunica a tendência, não é dado de mercado).
+  /// ilustrativos — comunica a tendência, não é dado de mercado). Preenche
+  /// toda a altura que o pai (normalmente um [pw.Expanded]) der a ele — o
+  /// gráfico escala junto, em vez de ficar pequeno num card grande.
   static pw.Widget _trendCard(FlenxPdfBrand b, FlenxPdfTone tone, FlenxPdfTrend t) {
     final values = t.points.map((p) => p.value).toList();
     final maxV = values.reduce((a, c) => a > c ? a : c);
@@ -258,41 +262,39 @@ class FlenxPdf {
     final axisTxt = _body(b, tone);
 
     return pw.Container(
-      padding: const pw.EdgeInsets.all(18),
-      decoration: pw.BoxDecoration(color: cardBg, borderRadius: pw.BorderRadius.circular(10), border: pw.Border.all(color: cardBorder, width: 1)),
-      child: pw.Row(crossAxisAlignment: pw.CrossAxisAlignment.center, children: [
-        pw.Expanded(
-          flex: 5,
-          child: pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
-            pw.Text(t.stat, style: pw.TextStyle(color: _c(b.primaryDark), fontWeight: pw.FontWeight.bold, fontSize: 15)),
-            pw.SizedBox(height: 5),
-            pw.Text(t.statLabel, style: pw.TextStyle(color: _title(b, tone), fontSize: 11, lineSpacing: 1.6)),
-          ]),
-        ),
-        pw.SizedBox(width: 22),
+      padding: const pw.EdgeInsets.all(30),
+      decoration: pw.BoxDecoration(color: cardBg, borderRadius: pw.BorderRadius.circular(14), border: pw.Border.all(color: cardBorder, width: 1)),
+      child: pw.Row(crossAxisAlignment: pw.CrossAxisAlignment.stretch, children: [
         pw.Expanded(
           flex: 4,
-          child: pw.Column(children: [
-            pw.SizedBox(
-              height: 70,
-              width: double.infinity,
+          child: pw.Column(mainAxisAlignment: pw.MainAxisAlignment.center, crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
+            pw.Text(t.stat, style: pw.TextStyle(color: _c(b.primaryDark), fontWeight: pw.FontWeight.bold, fontSize: 30, lineSpacing: 1.3)),
+            pw.SizedBox(height: 14),
+            pw.Text(t.statLabel, style: pw.TextStyle(color: _title(b, tone), fontSize: 14, lineSpacing: 1.8)),
+          ]),
+        ),
+        pw.SizedBox(width: 32),
+        pw.Expanded(
+          flex: 5,
+          child: pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.stretch, children: [
+            pw.Expanded(
               child: pw.CustomPaint(
-                size: const PdfPoint(200, 70),
+                size: const PdfPoint(320, 220),
                 painter: (c, size) {
                   final n = values.length;
                   if (n < 2) return;
-                  const padX = 5.0, padY = 8.0;
+                  final padX = size.x * 0.03, padY = size.y * 0.08;
                   final w = size.x - padX * 2, h = size.y - padY * 2;
                   double xAt(int i) => padX + w * i / (n - 1);
                   double yAt(double v) => padY + h * (v - minV) / range;
                   c
                     ..setStrokeColor(cardBorder)
-                    ..setLineWidth(0.75)
+                    ..setLineWidth(1)
                     ..drawLine(padX, padY, size.x - padX, padY)
                     ..strokePath();
                   c
                     ..setStrokeColor(_c(b.primaryDark))
-                    ..setLineWidth(2.2)
+                    ..setLineWidth(4)
                     ..setLineCap(PdfLineCap.round)
                     ..setLineJoin(PdfLineJoin.round)
                     ..moveTo(xAt(0), yAt(values[0]));
@@ -305,17 +307,17 @@ class FlenxPdf {
                     c
                       ..setFillColor(last ? _c(b.primaryDark) : cardBg)
                       ..setStrokeColor(_c(b.primaryDark))
-                      ..setLineWidth(1.3)
-                      ..drawEllipse(xAt(i), yAt(values[i]), last ? 3.4 : 2.6, last ? 3.4 : 2.6)
+                      ..setLineWidth(2.2)
+                      ..drawEllipse(xAt(i), yAt(values[i]), last ? 6.5 : 5, last ? 6.5 : 5)
                       ..fillAndStrokePath();
                   }
                 },
               ),
             ),
-            pw.SizedBox(height: 4),
+            pw.SizedBox(height: 10),
             pw.Row(mainAxisAlignment: pw.MainAxisAlignment.spaceBetween, children: [
-              pw.Text(t.points.first.label, style: pw.TextStyle(color: axisTxt, fontSize: 8)),
-              pw.Text(t.points.last.label, style: pw.TextStyle(color: axisTxt, fontSize: 8)),
+              pw.Text(t.points.first.label, style: pw.TextStyle(color: axisTxt, fontSize: 11, fontWeight: pw.FontWeight.bold)),
+              pw.Text(t.points.last.label, style: pw.TextStyle(color: axisTxt, fontSize: 11, fontWeight: pw.FontWeight.bold)),
             ]),
           ]),
         ),
