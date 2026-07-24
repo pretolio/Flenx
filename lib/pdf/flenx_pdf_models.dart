@@ -116,12 +116,17 @@ class FlenxPdfText extends FlenxPdfPage {
     this.paragraphs = const [],
     this.stats = const [],
     this.tone = FlenxPdfTone.white,
+    this.imagePath,
   });
   final String? eyebrow;
   final String title;
   final List<String> paragraphs;
   final List<FlenxPdfStat> stats;
   final FlenxPdfTone tone;
+
+  /// Foto opcional abaixo do texto/estatísticas — cresce pra preencher o
+  /// resto da folha, igual à imagem do [FlenxPdfSpotlight].
+  final String? imagePath;
 }
 
 /// Spotlight: texto + bullets + imagem (screenshot) embaixo.

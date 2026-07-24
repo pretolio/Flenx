@@ -61,7 +61,8 @@ class FlenxPdf {
         case FlenxPdfChecklist():
           pdf.addPage(_sectionPage(b, page.tone, _checklist(b, page), page: pageNum, total: total, logo: headerLogo(page.tone)));
         case FlenxPdfText():
-          pdf.addPage(_sectionPage(b, page.tone, _text(b, page), page: pageNum, total: total, logo: headerLogo(page.tone)));
+          final im = await image(page.imagePath);
+          pdf.addPage(_sectionPage(b, page.tone, _text(b, page, im), page: pageNum, total: total, logo: headerLogo(page.tone)));
         case FlenxPdfSpotlight():
           final im = await image(page.imagePath);
           pdf.addPage(_sectionPage(b, page.tone, _spotlight(b, page, im), page: pageNum, total: total, logo: headerLogo(page.tone)));
@@ -389,8 +390,8 @@ class FlenxPdf {
   }
 
   /// Cabeçalho + parágrafos/estatísticas ancorados no topo da folha.
-  static pw.Widget _text(FlenxPdfBrand b, FlenxPdfText p) {
-    final block = pw.Column(mainAxisSize: pw.MainAxisSize.min, crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
+  static pw.Widget _text(FlenxPdfBrand b, FlenxPdfText p, pw.MemoryImage? im) {
+    final head = pw.Column(mainAxisSize: pw.MainAxisSize.min, crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
       _head(b, p.tone, p.eyebrow, p.title, null, false),
       pw.SizedBox(height: 20),
       for (final para in p.paragraphs) ...[
@@ -402,7 +403,28 @@ class FlenxPdf {
         _statGrid([for (final s in p.stats) _statCard(b, p.tone, s)]),
       ],
     ]);
-    return pw.Align(alignment: pw.Alignment.topLeft, child: block);
+    if (im == null) return pw.Align(alignment: pw.Alignment.topLeft, child: head);
+    // Com foto: cabeçalho fixo no topo, imagem cresce pra preencher o resto
+    // da folha — mesmo card emoldurado do FlenxPdfSpotlight.
+    return pw.Column(mainAxisSize: pw.MainAxisSize.max, crossAxisAlignment: pw.CrossAxisAlignment.stretch, children: [
+      head,
+      pw.SizedBox(height: 22),
+      pw.Expanded(
+        child: pw.Container(
+          decoration: pw.BoxDecoration(
+            color: PdfColors.white,
+            borderRadius: pw.BorderRadius.circular(10),
+            border: pw.Border.all(color: _c('#e3e9f5'), width: 1),
+          ),
+          padding: const pw.EdgeInsets.all(6),
+          child: pw.ClipRRect(
+            horizontalRadius: 8,
+            verticalRadius: 8,
+            child: pw.Image(im, fit: pw.BoxFit.cover),
+          ),
+        ),
+      ),
+    ]);
   }
 
   static pw.Widget _bullet(FlenxPdfBrand b, FlenxPdfTone tone, String t) => pw.Padding(
@@ -660,7 +682,9 @@ class FlenxPdf {
   }
 
   static pw.Widget _renderBlock(FlenxPdfBrand b, FlenxPdfPage blk) => switch (blk) {
-        FlenxPdfText() => _text(b, blk),
+        // Imagem de FlenxPdfText não é suportada dentro de um Combo (blocos
+        // são renderizados sem carregamento assíncrono de imagem).
+        FlenxPdfText() => _text(b, blk, null),
         FlenxPdfChecklist() => _checklist(b, blk),
         FlenxPdfSteps() => _steps(b, blk),
         FlenxPdfCompare() => _compare(b, blk),
