@@ -38,12 +38,12 @@ class FlenxCardData {
 }
 
 /// Gera um cartão de visita PDF pronto para gráfica: 2 páginas (frente e verso),
-/// 85×55 mm + 3 mm de sangria em cada lado (91×61 mm), fundo escuro sangrando
-/// até a borda, QR (WhatsApp) na frente. Mesmo pipeline dos documentos.
+/// 85×55 mm + 3 mm de sangria em cada lado (91×61 mm). Segue o manual de
+/// identidade da Alstop: fundo navy em gradiente, faixas de velocidade
+/// diagonais (laranja) como grafismo, logo claro e QR do WhatsApp.
 class FlenxCardPdf {
   static const _mm = PdfPageFormat.mm;
-  static const _bleed = 3.0 * _mm; // sangria
-  static const _safe = 6.0 * _mm; // margem segura do conteúdo (borda + sangria)
+  static const _safe = 6.0 * _mm; // margem segura (borda + sangria)
 
   static PdfColor _c(String hex) => PdfColor.fromHex(hex.replaceAll('#', ''));
 
@@ -67,50 +67,41 @@ class FlenxCardPdf {
     return pdf.save();
   }
 
-  // ---------- páginas ----------
+  // ---------- fundo (gradiente noturno da marca) ----------
+  static pw.BoxDecoration _bg(FlenxCardBrand b) => pw.BoxDecoration(
+        gradient: pw.LinearGradient(
+          begin: pw.Alignment.topRight,
+          end: pw.Alignment.bottomLeft,
+          colors: [_c('#1a3059'), _c(b.ink)],
+        ),
+      );
 
+  // ---------- frente ----------
   static pw.Widget _front(FlenxCardBrand b, FlenxCardData d, pw.MemoryImage? logo) {
     return pw.Container(
-      color: _c(b.ink),
+      decoration: _bg(b),
       child: pw.Stack(children: [
-        // Faixa de destaque (laranja) na borda esquerda — sangra até o topo/base.
-        pw.Positioned(left: 0, top: 0, bottom: 0, child: pw.Container(width: _bleed + 2.2 * _mm, color: _c(b.accent))),
+        // Grafismo: faixas de velocidade diagonais no canto superior direito.
+        pw.Positioned(top: -1 * _mm, right: -1 * _mm, child: _stripes(b, 30 * _mm, 34 * _mm)),
         pw.Padding(
-          padding: pw.EdgeInsets.fromLTRB(_safe + 2.5 * _mm, _safe, _safe, _safe),
+          padding: pw.EdgeInsets.all(_safe),
           child: pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, mainAxisAlignment: pw.MainAxisAlignment.spaceBetween, children: [
             if (logo != null)
               pw.SizedBox(height: 9 * _mm, child: pw.Align(alignment: pw.Alignment.centerLeft, child: pw.FittedBox(fit: pw.BoxFit.contain, child: pw.Image(logo)))),
             pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
-              pw.Text(d.name, style: pw.TextStyle(color: PdfColors.white, fontWeight: pw.FontWeight.bold, fontSize: 13)),
-              pw.SizedBox(height: 1.2),
-              pw.Text(d.role.toUpperCase(), style: pw.TextStyle(color: _c('#8fa3c9'), fontSize: 6.5, letterSpacing: 1.2)),
-              pw.SizedBox(height: 6),
-              pw.Text(d.phone, style: pw.TextStyle(color: _c(b.accentLight), fontWeight: pw.FontWeight.bold, fontSize: 14)),
-              pw.Text('ATENDIMENTO', style: pw.TextStyle(color: _c('#8fa3c9'), fontSize: 5.5, letterSpacing: 1.5)),
+              pw.Text(d.name, style: pw.TextStyle(color: PdfColors.white, fontWeight: pw.FontWeight.bold, fontSize: 13.5)),
+              pw.SizedBox(height: 2),
+              pw.Text(d.role.toUpperCase(), style: pw.TextStyle(color: _c('#8791a3'), fontSize: 6.5, letterSpacing: 1.3)),
             ]),
-            pw.Row(crossAxisAlignment: pw.CrossAxisAlignment.end, children: [
-              pw.Expanded(
-                child: pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
-                  _line(b, d.email),
-                  _line(b, d.site),
-                  _line(b, d.city),
-                ]),
-              ),
-              // QR (WhatsApp) num selo branco p/ leitura garantida.
-              pw.Container(
-                padding: const pw.EdgeInsets.all(3),
-                decoration: pw.BoxDecoration(color: PdfColors.white, borderRadius: pw.BorderRadius.circular(4)),
-                child: pw.SizedBox(
-                  width: 15 * _mm,
-                  height: 15 * _mm,
-                  child: pw.BarcodeWidget(
-                    barcode: pw.Barcode.qrCode(errorCorrectLevel: pw.BarcodeQRCorrectionLevel.medium),
-                    data: d.whatsappUrl,
-                    color: _c(b.ink),
-                    drawText: false,
-                  ),
-                ),
-              ),
+            pw.Row(crossAxisAlignment: pw.CrossAxisAlignment.end, mainAxisAlignment: pw.MainAxisAlignment.spaceBetween, children: [
+              pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
+                _dot(b, d.phone, PdfColors.white, true),
+                pw.SizedBox(height: 3),
+                _dot(b, d.email, _c('#e7edf7'), false),
+                pw.SizedBox(height: 1.5),
+                _dot(b, '${d.site}   ·   ${d.city}', _c('#8791a3'), false),
+              ]),
+              _qr(b, d.whatsappUrl),
             ]),
           ]),
         ),
@@ -118,50 +109,74 @@ class FlenxCardPdf {
     );
   }
 
+  // ---------- verso ----------
   static pw.Widget _back(FlenxCardBrand b, FlenxCardData d, pw.MemoryImage? logo) {
     return pw.Container(
-      color: _c(b.ink),
+      decoration: _bg(b),
       child: pw.Stack(children: [
-        // Chevrons sutis (marca-d'água) no canto — eco do motivo da marca.
-        pw.Positioned(right: -6 * _mm, bottom: -2 * _mm, child: pw.Opacity(opacity: 0.10, child: _chevrons(b, 26 * _mm))),
+        pw.Positioned(top: -1 * _mm, right: -1 * _mm, child: _stripes(b, 22 * _mm, 26 * _mm)),
         pw.Center(
           child: pw.Column(mainAxisSize: pw.MainAxisSize.min, children: [
             if (logo != null)
-              pw.SizedBox(width: 46 * _mm, height: 14 * _mm, child: pw.FittedBox(fit: pw.BoxFit.contain, child: pw.Image(logo))),
+              pw.SizedBox(width: 48 * _mm, height: 15 * _mm, child: pw.FittedBox(fit: pw.BoxFit.contain, child: pw.Image(logo))),
             pw.SizedBox(height: 4 * _mm),
-            pw.Container(width: 14 * _mm, height: 1.5, color: _c(b.accent)),
-            pw.SizedBox(height: 3 * _mm),
-            pw.Text(d.tagline, textAlign: pw.TextAlign.center, style: pw.TextStyle(color: _c('#c3d2ec'), fontSize: 7, letterSpacing: .3)),
+            pw.Container(width: 16 * _mm, height: 2, color: _c(b.accent)),
+            pw.SizedBox(height: 3.5 * _mm),
+            pw.Text(d.tagline, textAlign: pw.TextAlign.center, style: pw.TextStyle(color: _c('#c3d2ec'), fontSize: 7.5, letterSpacing: .3)),
           ]),
         ),
       ]),
     );
   }
 
-  static pw.Widget _line(FlenxCardBrand b, String t) => pw.Padding(
-        padding: const pw.EdgeInsets.only(bottom: 1.5),
-        child: pw.Text(t, style: pw.TextStyle(color: _c('#e7edf7'), fontSize: 7)),
+  /// Linha de contato com bolinha laranja de destaque.
+  static pw.Widget _dot(FlenxCardBrand b, String t, PdfColor color, bool strong) => pw.Row(
+        crossAxisAlignment: pw.CrossAxisAlignment.center,
+        children: [
+          pw.Container(width: 3, height: 3, margin: const pw.EdgeInsets.only(right: 5), decoration: pw.BoxDecoration(color: _c(b.accent), shape: pw.BoxShape.circle)),
+          pw.Text(t, style: pw.TextStyle(color: color, fontSize: strong ? 9 : 7.5, fontWeight: strong ? pw.FontWeight.bold : pw.FontWeight.normal)),
+        ],
       );
 
-  /// Três chevrons (») apontando à direita — motivo de velocidade da marca.
-  static pw.Widget _chevrons(FlenxCardBrand b, double size) => pw.SizedBox(
-        width: size,
-        height: size,
+  /// QR do WhatsApp num selo branco arredondado (leitura garantida).
+  static pw.Widget _qr(FlenxCardBrand b, String url) => pw.Column(mainAxisSize: pw.MainAxisSize.min, children: [
+        pw.Container(
+          padding: const pw.EdgeInsets.all(3),
+          decoration: pw.BoxDecoration(color: PdfColors.white, borderRadius: pw.BorderRadius.circular(4)),
+          child: pw.SizedBox(
+            width: 13.5 * _mm,
+            height: 13.5 * _mm,
+            child: pw.BarcodeWidget(
+              barcode: pw.Barcode.qrCode(errorCorrectLevel: pw.BarcodeQRCorrectionLevel.medium),
+              data: url,
+              color: _c(b.ink),
+              drawText: false,
+            ),
+          ),
+        ),
+        pw.SizedBox(height: 2),
+        pw.Text('WHATSAPP', style: pw.TextStyle(color: _c('#8791a3'), fontSize: 5, letterSpacing: 1.2)),
+      ]);
+
+  /// Faixas de velocidade: duas barras diagonais laranja (~15°) — grafismo
+  /// oficial da marca. Sangram pelo canto.
+  static pw.Widget _stripes(FlenxCardBrand b, double w, double h) => pw.SizedBox(
+        width: w,
+        height: h,
         child: pw.CustomPaint(
-          size: PdfPoint(size, size),
+          size: PdfPoint(w, h),
           painter: (c, s) {
-            c.setFillColor(_c(b.accent));
-            final w = s.x, h = s.y;
-            for (var k = 0; k < 3; k++) {
-              final ox = w * (0.12 + k * 0.28);
+            c
+              ..setStrokeColor(_c(b.accent))
+              ..setLineCap(PdfLineCap.butt)
+              ..setLineWidth(s.x * 0.15);
+            final slant = s.y * 0.27; // ~15° da vertical
+            for (var k = 0; k < 2; k++) {
+              final x0 = s.x * 0.46 + k * s.x * 0.30;
               c
-                ..moveTo(ox, h * 0.15)
-                ..lineTo(ox + w * 0.2, h * 0.5)
-                ..lineTo(ox, h * 0.85)
-                ..lineTo(ox + w * 0.09, h * 0.85)
-                ..lineTo(ox + w * 0.29, h * 0.5)
-                ..lineTo(ox + w * 0.09, h * 0.15)
-                ..fillPath();
+                ..moveTo(x0, -2)
+                ..lineTo(x0 - slant, s.y + 2)
+                ..strokePath();
             }
           },
         ),
