@@ -39,6 +39,29 @@ font-weight:800;font-size:.9rem;color:#fff;text-decoration:none;transition:trans
 .fxpv__frame{flex:1;border:0;width:100%}
 ''';
 
+  /// Safari (WebKit) ignora `#toolbar=1` — o visor nativo dele não mostra
+  /// nenhuma barra dentro de iframe — e ignora o atributo `download` em
+  /// links de PDF, abrindo o arquivo em vez de baixar. Por isso o clique no
+  /// botão baixa via fetch+blob (funciona em qualquer navegador) em vez de
+  /// depender só do atributo `download`; se o fetch falhar, cai para a
+  /// navegação normal do link.
+  static const _js = '''
+(function(){
+  var dl=document.getElementById('fxpv-dl');
+  if(dl&&!dl.__b){dl.__b=1;
+    dl.addEventListener('click',function(ev){
+      ev.preventDefault();
+      var url=dl.getAttribute('href'), name=dl.getAttribute('data-name')||'documento.pdf';
+      fetch(url).then(function(r){return r.blob();}).then(function(blob){
+        var obj=URL.createObjectURL(blob), a=document.createElement('a');
+        a.href=obj; a.download=name; document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(function(){URL.revokeObjectURL(obj);},1000);
+      }).catch(function(){window.location.href=url;});
+    });
+  }
+})();
+''';
+
   @override
   Component build(BuildContext context) {
     return div(classes: 'fxpv', [
@@ -49,17 +72,21 @@ font-weight:800;font-size:.9rem;color:#fff;text-decoration:none;transition:trans
         a(
           [Component.text('⭳  Baixar PDF')],
           href: pdfUrl,
+          download: downloadName ?? '',
+          id: 'fxpv-dl',
           classes: 'fxpv__dl',
           styles: Styles(raw: {'background': accent}),
-          attributes: {'download': downloadName ?? ''},
+          attributes: {'data-name': downloadName ?? 'documento.pdf'},
         ),
       ]),
       Component.element(
         tag: 'iframe',
+        id: 'fxpv-frame',
         classes: 'fxpv__frame',
         attributes: {'src': '$pdfUrl#toolbar=1&view=FitH', 'title': title},
         children: const [],
       ),
+      Component.element(tag: 'script', children: const [RawText(_js)]),
     ]);
   }
 }

@@ -37,11 +37,24 @@ color:#fff;transition:transform .15s ease}
 @media print{.fxdoc-bar{display:none !important}}
 ''';
 
+  /// Imprime o iframe do PDF (se houver — página `FlenxPdfViewer`) em vez da
+  /// folha inteira: no Safari, `window.print()` no documento-pai não imprime
+  /// o PDF embutido (imprime uma folha em branco no lugar do iframe). Focar
+  /// e chamar `print()` na `contentWindow` do iframe aciona o fluxo nativo
+  /// de impressão do PDF em qualquer navegador.
   static const _js = '''
 (function(){var b=document.getElementById('fxdoc-print');if(b&&!b.__b){b.__b=1;
-b.addEventListener('click',function(){window.print();});}
+b.addEventListener('click',function(){
+  var f=document.getElementById('fxpv-frame');
+  if(f&&f.contentWindow){try{f.contentWindow.focus();f.contentWindow.print();return;}catch(e){}}
+  window.print();
+});}
 if(location.search.indexOf('print=1')!==-1){window.addEventListener('load',function(){
-setTimeout(function(){window.print();},400);});}})();
+setTimeout(function(){
+  var f=document.getElementById('fxpv-frame');
+  if(f&&f.contentWindow){try{f.contentWindow.focus();f.contentWindow.print();return;}catch(e){}}
+  window.print();
+},400);});}})();
 ''';
 
   @override
