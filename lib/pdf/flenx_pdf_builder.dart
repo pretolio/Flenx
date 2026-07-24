@@ -157,15 +157,19 @@ class FlenxPdf {
     );
   }
 
-  /// Papel timbrado (mesmo padrão do .docx): logo nítido no canto superior
-  /// esquerdo + régua laranja separando do conteúdo.
+  /// Papel timbrado (mesmo padrão do .docx): logo no canto superior esquerdo —
+  /// sempre esmaecido, como marca-d'água de cabeçalho — + régua laranja
+  /// separando do conteúdo. As barras laranja seguem nítidas.
   static pw.Widget _letterhead(FlenxPdfBrand b, FlenxPdfTone tone, pw.MemoryImage logo) {
     return pw.Column(mainAxisSize: pw.MainAxisSize.min, crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
-      pw.SizedBox(
-        height: 36,
-        child: pw.Align(
-          alignment: pw.Alignment.centerLeft,
-          child: pw.FittedBox(fit: pw.BoxFit.contain, child: pw.Image(logo)),
+      pw.Opacity(
+        opacity: 0.30,
+        child: pw.SizedBox(
+          height: 36,
+          child: pw.Align(
+            alignment: pw.Alignment.centerLeft,
+            child: pw.FittedBox(fit: pw.BoxFit.contain, child: pw.Image(logo)),
+          ),
         ),
       ),
       pw.SizedBox(height: 12),
