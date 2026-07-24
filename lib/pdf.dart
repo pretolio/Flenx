@@ -6,3 +6,4 @@ library;
 
 export 'pdf/flenx_pdf_models.dart';
 export 'pdf/flenx_pdf_builder.dart';
+export 'pdf/flenx_card_pdf.dart';
