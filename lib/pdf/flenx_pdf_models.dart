@@ -15,6 +15,7 @@ class FlenxPdfBrand {
     required this.ink2,
     this.light = '#F5F8FD',
     this.logoDarkBgPath,
+    this.logoLightBgPath,
   });
 
   /// Cores em hex (#RRGGBB).
@@ -27,6 +28,9 @@ class FlenxPdfBrand {
 
   /// Caminho do arquivo do logo para fundo escuro (usado na capa/contato).
   final String? logoDarkBgPath;
+
+  /// Caminho do logo para fundo claro (usado em cabeçalhos de página claros).
+  final String? logoLightBgPath;
 }
 
 /// Item de lista (título + descrição opcional).
@@ -110,12 +114,17 @@ class FlenxPdfText extends FlenxPdfPage {
     required this.title,
     this.paragraphs = const [],
     this.stats = const [],
+    this.imagePath,
     this.tone = FlenxPdfTone.white,
   });
   final String? eyebrow;
   final String title;
   final List<String> paragraphs;
   final List<FlenxPdfStat> stats;
+
+  /// Imagem opcional abaixo do texto/estatísticas — preenche o resto da folha,
+  /// emoldurada (ex.: foto ilustrativa da operação).
+  final String? imagePath;
   final FlenxPdfTone tone;
 }
 
@@ -139,10 +148,24 @@ class FlenxPdfSpotlight extends FlenxPdfPage {
 
 /// Passos numerados.
 class FlenxPdfSteps extends FlenxPdfPage {
-  const FlenxPdfSteps({this.eyebrow, required this.title, required this.steps, this.tone = FlenxPdfTone.white});
+  const FlenxPdfSteps({
+    this.eyebrow,
+    required this.title,
+    required this.steps,
+    this.highlight,
+    this.timeline = false,
+    this.tone = FlenxPdfTone.white,
+  });
   final String? eyebrow;
   final String title;
   final List<FlenxPdfItem> steps;
+
+  /// Frase de fechamento em destaque, num card abaixo dos passos (opcional).
+  final String? highlight;
+
+  /// `true` = passos empilhados numa coluna com uma linha vertical conectando
+  /// os números (visual de linha do tempo). `false` = grade de duas colunas.
+  final bool timeline;
   final FlenxPdfTone tone;
 }
 

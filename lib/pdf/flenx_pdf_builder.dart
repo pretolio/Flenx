@@ -54,7 +54,8 @@ class FlenxPdf {
         case FlenxPdfChecklist():
           pdf.addPage(_sectionPage(b, page.tone, _checklist(b, page), page: pageNum, total: total));
         case FlenxPdfText():
-          pdf.addPage(_sectionPage(b, page.tone, _text(b, page), page: pageNum, total: total));
+          final im = await image(page.imagePath);
+          pdf.addPage(_sectionPage(b, page.tone, _text(b, page, im), page: pageNum, total: total));
         case FlenxPdfSpotlight():
           final im = await image(page.imagePath);
           pdf.addPage(_sectionPage(b, page.tone, _spotlight(b, page, im), page: pageNum, total: total));
@@ -144,7 +145,9 @@ class FlenxPdf {
     ]);
   }
 
-  static pw.Widget _head(FlenxPdfBrand b, FlenxPdfTone tone, String? eyebrow, String title, [String? subtitle, bool center = true]) {
+  // Cabeçalho de seção — sempre à esquerda, no topo. Padronizado para que o
+  // eyebrow + título fiquem SEMPRE na mesma posição em toda página (simetria).
+  static pw.Widget _head(FlenxPdfBrand b, FlenxPdfTone tone, String? eyebrow, String title, [String? subtitle, bool center = false]) {
     return pw.Column(crossAxisAlignment: center ? pw.CrossAxisAlignment.center : pw.CrossAxisAlignment.start, children: [
       if (eyebrow != null)
         pw.Text(eyebrow.toUpperCase(), style: pw.TextStyle(color: _eye(b, tone), fontWeight: pw.FontWeight.bold, fontSize: 9, letterSpacing: 2)),
@@ -333,10 +336,11 @@ class FlenxPdf {
         ]),
       );
 
-  /// Cabeçalho + parágrafos/estatísticas ancorados no topo da folha.
-  static pw.Widget _text(FlenxPdfBrand b, FlenxPdfText p) {
+  /// Cabeçalho + parágrafos/estatísticas ancorados no topo da folha. Se houver
+  /// [im], ela cresce para preencher o resto da folha, emoldurada.
+  static pw.Widget _text(FlenxPdfBrand b, FlenxPdfText p, [pw.MemoryImage? im]) {
     final block = pw.Column(mainAxisSize: pw.MainAxisSize.min, crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
-      _head(b, p.tone, p.eyebrow, p.title, null, false),
+      _head(b, p.tone, p.eyebrow, p.title),
       pw.SizedBox(height: 20),
       for (final para in p.paragraphs) ...[
         pw.Text(para, style: pw.TextStyle(color: _body(b, p.tone), fontSize: 12, lineSpacing: 2.6)),
@@ -347,7 +351,19 @@ class FlenxPdf {
         pw.Wrap(spacing: 14, runSpacing: 14, children: [for (final s in p.stats) _statCard(b, p.tone, s)]),
       ],
     ]);
-    return pw.Align(alignment: pw.Alignment.topLeft, child: block);
+    if (im == null) return pw.Align(alignment: pw.Alignment.topLeft, child: block);
+    return pw.Column(mainAxisSize: pw.MainAxisSize.max, crossAxisAlignment: pw.CrossAxisAlignment.stretch, children: [
+      block,
+      pw.SizedBox(height: 24),
+      pw.Expanded(
+        child: pw.Container(
+          decoration: pw.BoxDecoration(
+            borderRadius: pw.BorderRadius.circular(10),
+            image: pw.DecorationImage(image: im, fit: pw.BoxFit.cover),
+          ),
+        ),
+      ),
+    ]);
   }
 
   static pw.Widget _bullet(FlenxPdfBrand b, FlenxPdfTone tone, String t) => pw.Padding(
@@ -393,34 +409,77 @@ class FlenxPdf {
     ]);
   }
 
-  /// Cabeçalho + passos numerados, ancorados no topo da folha.
-  static pw.Widget _steps(FlenxPdfBrand b, FlenxPdfSteps p) {
-    var n = 0;
-    final rows = p.steps.map((s) {
-      n++;
-      return pw.Padding(
-        padding: const pw.EdgeInsets.only(bottom: 22),
-        child: pw.Row(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
-          pw.Container(width: 30, height: 30, margin: const pw.EdgeInsets.only(right: 14),
-              decoration: pw.BoxDecoration(color: _c(b.primary), borderRadius: pw.BorderRadius.circular(8)),
-              alignment: pw.Alignment.center,
-              child: pw.Text('$n', style: pw.TextStyle(color: PdfColors.white, fontWeight: pw.FontWeight.bold, fontSize: 13))),
-          pw.Expanded(child: pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
-            pw.Text(s.title, style: pw.TextStyle(color: _title(b, p.tone), fontWeight: pw.FontWeight.bold, fontSize: 13.5)),
-            if (s.description != null) ...[
-              pw.SizedBox(height: 3),
-              pw.Text(s.description!, style: pw.TextStyle(color: _body(b, p.tone), fontSize: 11, lineSpacing: 1.7)),
-            ],
-          ])),
-        ]),
+  static pw.Widget _stepBadge(FlenxPdfBrand b, int n) => pw.Container(
+        width: 30, height: 30,
+        decoration: pw.BoxDecoration(color: _c(b.primary), borderRadius: pw.BorderRadius.circular(8)),
+        alignment: pw.Alignment.center,
+        child: pw.Text('$n', style: pw.TextStyle(color: PdfColors.white, fontWeight: pw.FontWeight.bold, fontSize: 13)),
       );
-    }).toList();
+
+  static pw.Widget _stepText(FlenxPdfBrand b, FlenxPdfTone tone, FlenxPdfItem s) =>
+      pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
+        pw.Text(s.title, style: pw.TextStyle(color: _title(b, tone), fontWeight: pw.FontWeight.bold, fontSize: 13.5)),
+        if (s.description != null) ...[
+          pw.SizedBox(height: 3),
+          pw.Text(s.description!, style: pw.TextStyle(color: _body(b, tone), fontSize: 11, lineSpacing: 1.7)),
+        ],
+      ]);
+
+  /// Card de frase em destaque (barra lateral colorida) — fechamento de seção.
+  static pw.Widget _highlightBox(FlenxPdfBrand b, FlenxPdfTone tone, String text) => pw.Container(
+        padding: const pw.EdgeInsets.fromLTRB(18, 14, 18, 14),
+        decoration: pw.BoxDecoration(
+          color: tone == FlenxPdfTone.ink ? _c('#0f2a57') : _c(b.light),
+          borderRadius: pw.BorderRadius.circular(8),
+          border: pw.Border(left: pw.BorderSide(color: _c(b.primary), width: 3)),
+        ),
+        child: pw.Text(text, style: pw.TextStyle(color: _title(b, tone), fontWeight: pw.FontWeight.bold, fontSize: 12, lineSpacing: 1.6)),
+      );
+
+  /// Cabeçalho + passos, ancorados no topo. [timeline] empilha numa coluna com
+  /// linha conectando os números; senão, grade de duas colunas.
+  static pw.Widget _steps(FlenxPdfBrand b, FlenxPdfSteps p) {
+    pw.Widget body;
+    if (p.timeline) {
+      final items = <pw.Widget>[];
+      for (var i = 0; i < p.steps.length; i++) {
+        final last = i == p.steps.length - 1;
+        items.add(pw.Row(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
+          pw.Column(children: [
+            _stepBadge(b, i + 1),
+            if (!last) pw.Container(width: 2, height: 30, color: _c(b.primaryLight)),
+          ]),
+          pw.SizedBox(width: 14),
+          pw.Expanded(child: pw.Padding(
+            padding: pw.EdgeInsets.only(bottom: last ? 0 : 20),
+            child: _stepText(b, p.tone, p.steps[i]),
+          )),
+        ]));
+      }
+      body = pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: items);
+    } else {
+      final rows = <pw.Widget>[];
+      for (var i = 0; i < p.steps.length; i++) {
+        rows.add(pw.Padding(
+          padding: const pw.EdgeInsets.only(bottom: 22),
+          child: pw.Row(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
+            pw.Padding(padding: const pw.EdgeInsets.only(right: 14), child: _stepBadge(b, i + 1)),
+            pw.Expanded(child: _stepText(b, p.tone, p.steps[i])),
+          ]),
+        ));
+      }
+      body = _twoCols(rows);
+    }
     return pw.Align(
       alignment: pw.Alignment.topLeft,
       child: pw.Column(mainAxisSize: pw.MainAxisSize.min, crossAxisAlignment: pw.CrossAxisAlignment.stretch, children: [
         _head(b, p.tone, p.eyebrow, p.title),
         pw.SizedBox(height: 30),
-        _twoCols(rows),
+        body,
+        if (p.highlight != null) ...[
+          pw.SizedBox(height: 24),
+          _highlightBox(b, p.tone, p.highlight!),
+        ],
       ]),
     );
   }
