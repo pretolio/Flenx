@@ -147,17 +147,17 @@ class FlenxPdf {
 
   // Cabeçalho de seção — sempre à esquerda, no topo. Padronizado para que o
   // eyebrow + título fiquem SEMPRE na mesma posição em toda página (simetria).
-  static pw.Widget _head(FlenxPdfBrand b, FlenxPdfTone tone, String? eyebrow, String title, [String? subtitle, bool center = false]) {
+  static pw.Widget _head(FlenxPdfBrand b, FlenxPdfTone tone, String? eyebrow, String title, [String? subtitle, bool center = false, bool compact = false]) {
     return pw.Column(crossAxisAlignment: center ? pw.CrossAxisAlignment.center : pw.CrossAxisAlignment.start, children: [
       if (eyebrow != null)
-        pw.Text(eyebrow.toUpperCase(), style: pw.TextStyle(color: _eye(b, tone), fontWeight: pw.FontWeight.bold, fontSize: 9, letterSpacing: 2)),
-      pw.SizedBox(height: 6),
+        pw.Text(eyebrow.toUpperCase(), style: pw.TextStyle(color: _eye(b, tone), fontWeight: pw.FontWeight.bold, fontSize: compact ? 8.5 : 9, letterSpacing: 2)),
+      pw.SizedBox(height: compact ? 5 : 6),
       pw.Text(title, textAlign: center ? pw.TextAlign.center : pw.TextAlign.left,
-          style: pw.TextStyle(color: _title(b, tone), fontWeight: pw.FontWeight.bold, fontSize: 25, lineSpacing: 1.5)),
+          style: pw.TextStyle(color: _title(b, tone), fontWeight: pw.FontWeight.bold, fontSize: compact ? 17 : 25, lineSpacing: compact ? 1.3 : 1.5)),
       if (subtitle != null) ...[
-        pw.SizedBox(height: 10),
+        pw.SizedBox(height: compact ? 8 : 10),
         pw.Text(subtitle, textAlign: center ? pw.TextAlign.center : pw.TextAlign.left,
-            style: pw.TextStyle(color: _body(b, tone), fontSize: 11.5, lineSpacing: 1.6)),
+            style: pw.TextStyle(color: _body(b, tone), fontSize: compact ? 10.5 : 11.5, lineSpacing: 1.6)),
       ],
     ]);
   }
@@ -192,8 +192,8 @@ class FlenxPdf {
 
   static pw.Widget _dash() => pw.Container(width: 9, height: 1.8, color: PdfColors.white);
 
-  static pw.Widget _itemRow(FlenxPdfBrand b, FlenxPdfTone tone, FlenxPdfItem it, bool negative) => pw.Padding(
-        padding: const pw.EdgeInsets.only(bottom: 20),
+  static pw.Widget _itemRow(FlenxPdfBrand b, FlenxPdfTone tone, FlenxPdfItem it, bool negative, [bool compact = false]) => pw.Padding(
+        padding: pw.EdgeInsets.only(bottom: compact ? 13 : 20),
         child: pw.Row(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
           _marker(b, negative),
           pw.Expanded(
@@ -225,39 +225,35 @@ class FlenxPdf {
     return pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: lines);
   }
 
-  /// Cabeçalho + lista, sempre ancorados no topo da folha — sem centralizar
-  /// e sem espaçamento artificial; a página se preenche com conteúdo real
-  /// (mais itens/descrição), não com espaço em branco distribuído.
-  static pw.Widget _checklist(FlenxPdfBrand b, FlenxPdfChecklist p) {
-    final rows = p.items.map((it) => _itemRow(b, p.tone, it, p.negative)).toList();
+  /// Corpo compacto do checklist (mainAxisSize.min, sem Align/Expanded): serve
+  /// para empilhar dentro de um [FlenxPdfCombo] sem "comer" o espaço dos
+  /// blocos vizinhos. Inclui o highlight, mas não o trend (que é de página
+  /// inteira).
+  static pw.Widget _checklistCompact(FlenxPdfBrand b, FlenxPdfChecklist p, {bool compact = false}) {
+    final rows = p.items.map((it) => _itemRow(b, p.tone, it, p.negative, compact)).toList();
     final twoCol = p.columns >= 2 && rows.length > 3;
-    return pw.Align(
-      alignment: pw.Alignment.topLeft,
-      child: pw.Column(mainAxisSize: pw.MainAxisSize.max, crossAxisAlignment: pw.CrossAxisAlignment.stretch, children: [
-        _head(b, p.tone, p.eyebrow, p.title, p.subtitle),
-        pw.SizedBox(height: 28),
-        twoCol ? _twoCols(rows) : pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: rows),
-        if (p.highlight != null) ...[
-          pw.SizedBox(height: 22),
-          pw.Container(
-            padding: const pw.EdgeInsets.fromLTRB(18, 14, 18, 14),
-            decoration: pw.BoxDecoration(
-              color: p.tone == FlenxPdfTone.ink ? _c('#0f2a57') : _c(b.light),
-              borderRadius: pw.BorderRadius.circular(8),
-              border: pw.Border(left: pw.BorderSide(color: _c(b.primary), width: 3)),
-            ),
-            child: pw.Text(p.highlight!,
-                style: pw.TextStyle(color: _title(b, p.tone), fontWeight: pw.FontWeight.bold, fontSize: 12, lineSpacing: 1.6)),
-          ),
-        ],
-        if (p.trend != null) ...[
-          pw.SizedBox(height: 22),
-          // Expanded: o card cresce pra ocupar todo o resto da folha (o
-          // gráfico dentro dele também escala com o espaço disponível).
-          pw.Expanded(child: _trendCard(b, p.tone, p.trend!)),
-        ],
-      ]),
-    );
+    return pw.Column(mainAxisSize: pw.MainAxisSize.min, crossAxisAlignment: pw.CrossAxisAlignment.stretch, children: [
+      _head(b, p.tone, p.eyebrow, p.title, p.subtitle, false, compact),
+      pw.SizedBox(height: compact ? 16 : 28),
+      twoCol ? _twoCols(rows) : pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: rows),
+      if (p.highlight != null) ...[
+        pw.SizedBox(height: compact ? 16 : 22),
+        _highlightBox(b, p.tone, p.highlight!),
+      ],
+    ]);
+  }
+
+  /// Página de checklist: corpo compacto no topo + (quando há) o card de
+  /// tendência preenchendo o resto da folha.
+  static pw.Widget _checklist(FlenxPdfBrand b, FlenxPdfChecklist p) {
+    if (p.trend == null) {
+      return pw.Align(alignment: pw.Alignment.topLeft, child: _checklistCompact(b, p));
+    }
+    return pw.Column(mainAxisSize: pw.MainAxisSize.max, crossAxisAlignment: pw.CrossAxisAlignment.stretch, children: [
+      _checklistCompact(b, p),
+      pw.SizedBox(height: 22),
+      pw.Expanded(child: _trendCard(b, p.tone, p.trend!)),
+    ]);
   }
 
   /// Card de estatística + mini-gráfico de linha em queda (valores
@@ -464,7 +460,7 @@ class FlenxPdf {
 
   /// Cabeçalho + passos, ancorados no topo. [timeline] empilha numa coluna com
   /// linha conectando os números; senão, grade de duas colunas.
-  static pw.Widget _steps(FlenxPdfBrand b, FlenxPdfSteps p) {
+  static pw.Widget _steps(FlenxPdfBrand b, FlenxPdfSteps p, {bool compact = false}) {
     pw.Widget body;
     if (p.timeline) {
       final items = <pw.Widget>[];
@@ -487,7 +483,7 @@ class FlenxPdf {
       final rows = <pw.Widget>[];
       for (var i = 0; i < p.steps.length; i++) {
         rows.add(pw.Padding(
-          padding: const pw.EdgeInsets.only(bottom: 22),
+          padding: pw.EdgeInsets.only(bottom: compact ? 14 : 22),
           child: pw.Row(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
             pw.Padding(padding: const pw.EdgeInsets.only(right: 14), child: _stepBadge(b, i + 1)),
             pw.Expanded(child: _stepText(b, p.tone, p.steps[i])),
@@ -499,11 +495,11 @@ class FlenxPdf {
     return pw.Align(
       alignment: pw.Alignment.topLeft,
       child: pw.Column(mainAxisSize: pw.MainAxisSize.min, crossAxisAlignment: pw.CrossAxisAlignment.stretch, children: [
-        _head(b, p.tone, p.eyebrow, p.title),
-        pw.SizedBox(height: 30),
+        _head(b, p.tone, p.eyebrow, p.title, null, false, compact),
+        pw.SizedBox(height: compact ? 16 : 30),
         body,
         if (p.highlight != null) ...[
-          pw.SizedBox(height: 24),
+          pw.SizedBox(height: compact ? 16 : 24),
           _highlightBox(b, p.tone, p.highlight!),
         ],
       ]),
@@ -632,8 +628,8 @@ class FlenxPdf {
 
   static pw.Widget _renderBlock(FlenxPdfBrand b, FlenxPdfPage blk) => switch (blk) {
         FlenxPdfText() => _text(b, blk),
-        FlenxPdfChecklist() => _checklist(b, blk),
-        FlenxPdfSteps() => _steps(b, blk),
+        FlenxPdfChecklist() => _checklistCompact(b, blk, compact: true),
+        FlenxPdfSteps() => _steps(b, blk, compact: true),
         FlenxPdfCompare() => _compare(b, blk),
         FlenxPdfTable() => _table(b, blk),
         _ => throw UnsupportedError('Bloco não suportado em FlenxPdfCombo: ${blk.runtimeType}'),
@@ -646,9 +642,9 @@ class FlenxPdf {
     final children = <pw.Widget>[];
     for (var i = 0; i < p.blocks.length; i++) {
       if (i > 0) {
-        children.add(pw.SizedBox(height: 26));
+        children.add(pw.SizedBox(height: 20));
         children.add(pw.Container(height: 0.75, color: _c(rule)));
-        children.add(pw.SizedBox(height: 26));
+        children.add(pw.SizedBox(height: 20));
       }
       children.add(_renderBlock(b, p.blocks[i]));
     }
