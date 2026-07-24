@@ -3,13 +3,15 @@ import 'package:jaspr/jaspr.dart';
 
 import '../flenx_palette.dart';
 
-/// Visualizador de um PDF em tela cheia: barra (voltar + baixar) + o PDF
-/// embutido. Usado para servir um documento comercial já gerado em PDF —
-/// imprime/baixa sempre igual, sem depender do CSS de impressão do navegador.
+/// Visualizador de um PDF em tela cheia: opcionalmente uma barra (voltar +
+/// imprimir + baixar) por cima do PDF embutido. Usado para servir um
+/// documento comercial já gerado em PDF — imprime/baixa sempre igual, sem
+/// depender do CSS de impressão do navegador.
 class FlenxPdfViewer extends StatelessComponent {
   const FlenxPdfViewer({
     required this.pdfUrl,
     required this.title,
+    this.showBar = true,
     this.backHref = '/comercial',
     this.backLabel = 'Central',
     this.accent = FlenxPalette.primary,
@@ -20,6 +22,11 @@ class FlenxPdfViewer extends StatelessComponent {
 
   final String pdfUrl;
   final String title;
+
+  /// Sem a barra, é só o PDF em tela cheia — voltar/imprimir/baixar ficam
+  /// por conta do próprio visualizador nativo do navegador (e do botão
+  /// voltar). Sem chrome nenhum por cima do documento.
+  final bool showBar;
   final String backHref;
   final String backLabel;
   final String accent;
@@ -81,20 +88,21 @@ font-weight:800;font-size:.9rem;font-family:inherit;color:#fff;transition:transf
   Component build(BuildContext context) {
     return div(classes: 'fxpv', [
       Component.element(tag: 'style', children: const [RawText(_css)]),
-      div(classes: 'fxpv__bar', styles: Styles(raw: {'background': barColor}), [
-        a([Component.text('← $backLabel')], href: backHref, classes: 'fxpv__back'),
-        span(classes: 'fxpv__title', [Component.text(title)]),
-        button(id: 'fxpv-print', classes: 'fxpv__print', [Component.text('🖨  Imprimir')]),
-        a(
-          [Component.text('⭳  Baixar PDF')],
-          href: pdfUrl,
-          download: downloadName ?? '',
-          id: 'fxpv-dl',
-          classes: 'fxpv__dl',
-          styles: Styles(raw: {'background': accent}),
-          attributes: {'data-name': downloadName ?? 'documento.pdf'},
-        ),
-      ]),
+      if (showBar)
+        div(classes: 'fxpv__bar', styles: Styles(raw: {'background': barColor}), [
+          a([Component.text('← $backLabel')], href: backHref, classes: 'fxpv__back'),
+          span(classes: 'fxpv__title', [Component.text(title)]),
+          button(id: 'fxpv-print', classes: 'fxpv__print', [Component.text('🖨  Imprimir')]),
+          a(
+            [Component.text('⭳  Baixar PDF')],
+            href: pdfUrl,
+            download: downloadName ?? '',
+            id: 'fxpv-dl',
+            classes: 'fxpv__dl',
+            styles: Styles(raw: {'background': accent}),
+            attributes: {'data-name': downloadName ?? 'documento.pdf'},
+          ),
+        ]),
       Component.element(
         tag: 'iframe',
         id: 'fxpv-frame',
@@ -102,7 +110,7 @@ font-weight:800;font-size:.9rem;font-family:inherit;color:#fff;transition:transf
         attributes: {'src': '$pdfUrl#toolbar=1&view=FitH', 'title': title},
         children: const [],
       ),
-      Component.element(tag: 'script', children: const [RawText(_js)]),
+      if (showBar) Component.element(tag: 'script', children: const [RawText(_js)]),
     ]);
   }
 }
