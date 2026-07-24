@@ -82,7 +82,8 @@ class FlenxPdf {
         case FlenxPdfCombo():
           pdf.addPage(_sectionPage(b, page.tone, _combo(b, page), page: pageNum, total: total, logo: letterhead(page.tone)));
         case FlenxPdfContact():
-          pdf.addPage(_sectionPage(b, page.tone, _contact(b, page, logoDark), page: pageNum, total: total, logo: letterhead(page.tone)));
+          // Fechamento não leva papel timbrado (a própria página já traz o logo).
+          pdf.addPage(_sectionPage(b, page.tone, _contact(b, page, logoDark), page: pageNum, total: total));
       }
     }
     return pdf.save();
@@ -145,21 +146,22 @@ class FlenxPdf {
     );
   }
 
-  /// Papel timbrado: logo da empresa no topo da folha + fina régua — dá
-  /// presença de marca em toda página, igual a um cabeçalho timbrado.
+  /// Papel timbrado: logo da empresa no topo da folha, grande e esmaecido —
+  /// igual a uma imagem no cabeçalho do Word (efeito "desbotado"/marca-d'água),
+  /// dando presença de marca sem competir com o conteúdo.
   static pw.Widget _letterhead(FlenxPdfBrand b, FlenxPdfTone tone, pw.MemoryImage logo) {
-    final rule = tone == FlenxPdfTone.ink ? _c('#1c3565') : _c('#e3e9f5');
     return pw.Column(mainAxisSize: pw.MainAxisSize.min, crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
-      pw.SizedBox(
-        height: 28,
-        child: pw.Align(
-          alignment: pw.Alignment.centerLeft,
-          child: pw.FittedBox(fit: pw.BoxFit.contain, child: pw.Image(logo)),
+      pw.Opacity(
+        opacity: 0.22,
+        child: pw.SizedBox(
+          height: 50,
+          child: pw.Align(
+            alignment: pw.Alignment.centerLeft,
+            child: pw.FittedBox(fit: pw.BoxFit.contain, child: pw.Image(logo)),
+          ),
         ),
       ),
-      pw.SizedBox(height: 12),
-      pw.Container(height: 0.75, color: rule),
-      pw.SizedBox(height: 22),
+      pw.SizedBox(height: 20),
     ]);
   }
 
@@ -730,36 +732,6 @@ class FlenxPdf {
             color: _c(b.ink),
             padding: const pw.EdgeInsets.fromLTRB(46, 34, 46, 40),
             child: pw.Column(mainAxisSize: pw.MainAxisSize.min, crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
-              if (clientLogo != null || clientName != null) ...[
-                pw.Row(mainAxisSize: pw.MainAxisSize.min, crossAxisAlignment: pw.CrossAxisAlignment.center, children: [
-                  if (clientLogo != null) ...[
-                    pw.Container(
-                      padding: const pw.EdgeInsets.all(9),
-                      decoration: pw.BoxDecoration(color: PdfColors.white, borderRadius: pw.BorderRadius.circular(10)),
-                      child: pw.SizedBox(height: 30, width: 30, child: pw.FittedBox(fit: pw.BoxFit.contain, child: pw.Image(clientLogo))),
-                    ),
-                    pw.SizedBox(width: 14),
-                  ],
-                  pw.Column(mainAxisSize: pw.MainAxisSize.min, crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
-                    pw.Text('PROPOSTA PREPARADA PARA', style: pw.TextStyle(color: _c(b.primaryLight), fontWeight: pw.FontWeight.bold, fontSize: 8, letterSpacing: 1.8)),
-                    if (clientName != null) ...[
-                      pw.SizedBox(height: 3),
-                      pw.Text(clientName, style: pw.TextStyle(color: PdfColors.white, fontWeight: pw.FontWeight.bold, fontSize: 15)),
-                    ],
-                  ]),
-                ]),
-                pw.SizedBox(height: 22),
-              ],
-              if (logo != null) ...[
-                pw.SizedBox(
-                  height: 34,
-                  child: pw.Align(
-                    alignment: pw.Alignment.centerLeft,
-                    child: pw.FittedBox(fit: pw.BoxFit.contain, child: pw.Image(logo)),
-                  ),
-                ),
-                pw.SizedBox(height: 22),
-              ],
               if (eyebrow != null)
                 pw.Text(eyebrow.toUpperCase(), style: pw.TextStyle(color: _c(b.primaryLight), fontWeight: pw.FontWeight.bold, fontSize: 10, letterSpacing: 2)),
               pw.SizedBox(height: 12),
