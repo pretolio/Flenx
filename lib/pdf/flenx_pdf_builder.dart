@@ -62,6 +62,8 @@ class FlenxPdf {
           pdf.addPage(_sectionPage(b, page.tone, _steps(b, page), page: pageNum, total: total));
         case FlenxPdfCompare():
           pdf.addPage(_sectionPage(b, page.tone, _compare(b, page), page: pageNum, total: total));
+        case FlenxPdfTable():
+          pdf.addPage(_sectionPage(b, page.tone, _table(b, page), page: pageNum, total: total));
         case FlenxPdfCombo():
           pdf.addPage(_sectionPage(b, page.tone, _combo(b, page), page: pageNum, total: total));
         case FlenxPdfContact():
@@ -486,11 +488,69 @@ class FlenxPdf {
     );
   }
 
+  /// Tabela genérica (preços, prazos, faixas etc.) — cabeçalho + linhas
+  /// listradas, largura de coluna configurável.
+  static pw.Widget _table(FlenxPdfBrand b, FlenxPdfTable p) {
+    final flex = p.columnFlex ?? List.filled(p.columns.length, 1);
+    pw.Widget cell(String text, int i, {bool header = false}) => pw.Expanded(
+          flex: flex[i],
+          child: pw.Text(
+            text,
+            style: header
+                ? pw.TextStyle(color: PdfColors.white, fontWeight: pw.FontWeight.bold, fontSize: 9.5, letterSpacing: .3)
+                : pw.TextStyle(color: _title(b, p.tone), fontSize: 10.5),
+          ),
+        );
+
+    final rowsW = <pw.Widget>[
+      for (var i = 0; i < p.rows.length; i++)
+        pw.Container(
+          color: i.isOdd ? _c(p.tone == FlenxPdfTone.light ? '#eef2f9' : '#f5f8fd') : null,
+          padding: const pw.EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+          child: pw.Row(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
+            for (var c = 0; c < p.rows[i].length; c++) ...[
+              if (c > 0) pw.SizedBox(width: 10),
+              cell(p.rows[i][c], c),
+            ],
+          ]),
+        ),
+    ];
+
+    return pw.Align(
+      alignment: pw.Alignment.topLeft,
+      child: pw.Column(mainAxisSize: pw.MainAxisSize.min, crossAxisAlignment: pw.CrossAxisAlignment.stretch, children: [
+        _head(b, p.tone, p.eyebrow, p.title, p.subtitle),
+        pw.SizedBox(height: 26),
+        pw.Container(
+          decoration: pw.BoxDecoration(border: pw.Border.all(color: _c('#e3e9f5'), width: 1), borderRadius: pw.BorderRadius.circular(10)),
+          child: pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.stretch, children: [
+            pw.Container(
+              color: _c(b.ink),
+              padding: const pw.EdgeInsets.symmetric(vertical: 11, horizontal: 12),
+              child: pw.Row(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
+                for (var c = 0; c < p.columns.length; c++) ...[
+                  if (c > 0) pw.SizedBox(width: 10),
+                  cell(p.columns[c].toUpperCase(), c, header: true),
+                ],
+              ]),
+            ),
+            pw.ClipRRect(horizontalRadius: 10, verticalRadius: 10, child: pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.stretch, children: rowsW)),
+          ]),
+        ),
+        if (p.note != null) ...[
+          pw.SizedBox(height: 10),
+          pw.Text(p.note!, style: pw.TextStyle(color: _body(b, p.tone), fontSize: 9.5, lineSpacing: 1.5)),
+        ],
+      ]),
+    );
+  }
+
   static pw.Widget _renderBlock(FlenxPdfBrand b, FlenxPdfPage blk) => switch (blk) {
         FlenxPdfText() => _text(b, blk),
         FlenxPdfChecklist() => _checklist(b, blk),
         FlenxPdfSteps() => _steps(b, blk),
         FlenxPdfCompare() => _compare(b, blk),
+        FlenxPdfTable() => _table(b, blk),
         _ => throw UnsupportedError('Bloco não suportado em FlenxPdfCombo: ${blk.runtimeType}'),
       };
 

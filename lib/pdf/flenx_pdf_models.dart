@@ -146,6 +146,33 @@ class FlenxPdfSteps extends FlenxPdfPage {
   final FlenxPdfTone tone;
 }
 
+/// Tabela genérica de dados (preços, prazos, faixas etc.) — cabeçalho +
+/// linhas listradas. [columnFlex] controla a largura relativa de cada
+/// coluna (default: todas iguais); use um valor maior na 1ª coluna quando
+/// ela tiver texto mais longo (nome de região, por exemplo).
+class FlenxPdfTable extends FlenxPdfPage {
+  const FlenxPdfTable({
+    this.eyebrow,
+    required this.title,
+    this.subtitle,
+    required this.columns,
+    required this.rows,
+    this.columnFlex,
+    this.note,
+    this.tone = FlenxPdfTone.white,
+  });
+  final String? eyebrow;
+  final String title;
+  final String? subtitle;
+  final List<String> columns;
+  final List<List<String>> rows;
+  final List<int>? columnFlex;
+
+  /// Nota de rodapé abaixo da tabela (ex.: "+ R$ 3,00 por envio via Correios").
+  final String? note;
+  final FlenxPdfTone tone;
+}
+
 /// Uma linha do comparativo: recurso + se a Alstop e a alternativa atendem.
 class FlenxPdfCompareRow {
   const FlenxPdfCompareRow(this.label, {this.ours = true, this.theirs = false, this.theirsNote});
