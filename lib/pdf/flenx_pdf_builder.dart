@@ -208,14 +208,21 @@ class FlenxPdf {
         ]),
       );
 
-  /// Duas colunas de linhas, alinhadas no topo.
+  /// Duas colunas emparelhadas POR LINHA: o item i (coluna esquerda) e o item
+  /// i+metade (coluna direita) ficam sempre na mesma linha, alinhados no topo —
+  /// mesmo que um seja mais alto que o outro. Evita o desalinhamento de uma
+  /// coluna "subir" quando a outra tem um item com título/descrição maior.
   static pw.Widget _twoCols(List<pw.Widget> rows) {
     final mid = (rows.length / 2).ceil();
-    return pw.Row(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
-      pw.Expanded(child: pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: rows.sublist(0, mid))),
-      pw.SizedBox(width: 34),
-      pw.Expanded(child: pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: rows.sublist(mid))),
-    ]);
+    final lines = <pw.Widget>[];
+    for (var i = 0; i < mid; i++) {
+      lines.add(pw.Row(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
+        pw.Expanded(child: rows[i]),
+        pw.SizedBox(width: 34),
+        pw.Expanded(child: (i + mid) < rows.length ? rows[i + mid] : pw.SizedBox()),
+      ]));
+    }
+    return pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: lines);
   }
 
   /// Cabeçalho + lista, sempre ancorados no topo da folha — sem centralizar
@@ -320,9 +327,28 @@ class FlenxPdf {
     );
   }
 
-  /// Card de estatística (valor + rótulo) com borda — usado em [_text].
+  /// Grade de estatísticas com colunas de largura IGUAL, sempre simétrica:
+  /// 4 cards viram 2×2 (nunca 3+1), 2 viram 2×1, 3 viram 3×1, 5–6 viram 3 por
+  /// linha. Últimas células vazias mantêm o alinhamento das colunas.
+  static pw.Widget _statGrid(FlenxPdfBrand b, FlenxPdfTone tone, List<FlenxPdfStat> stats) {
+    final n = stats.length;
+    final cols = n <= 3 ? n : (n == 4 ? 2 : 3);
+    final rows = <pw.Widget>[];
+    for (var i = 0; i < n; i += cols) {
+      final cells = <pw.Widget>[];
+      for (var j = 0; j < cols; j++) {
+        if (j > 0) cells.add(pw.SizedBox(width: 14));
+        final idx = i + j;
+        cells.add(pw.Expanded(child: idx < n ? _statCard(b, tone, stats[idx]) : pw.SizedBox()));
+      }
+      if (rows.isNotEmpty) rows.add(pw.SizedBox(height: 14));
+      rows.add(pw.Row(crossAxisAlignment: pw.CrossAxisAlignment.start, children: cells));
+    }
+    return pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: rows);
+  }
+
+  /// Card de estatística (valor + rótulo) com borda — largura vem do pai (grid).
   static pw.Widget _statCard(FlenxPdfBrand b, FlenxPdfTone tone, FlenxPdfStat s) => pw.Container(
-        width: 132,
         padding: const pw.EdgeInsets.fromLTRB(14, 12, 14, 14),
         decoration: pw.BoxDecoration(
           color: tone == FlenxPdfTone.ink ? _c('#0f2a57') : PdfColors.white,
@@ -348,7 +374,7 @@ class FlenxPdf {
       ],
       if (p.stats.isNotEmpty) ...[
         pw.SizedBox(height: 10),
-        pw.Wrap(spacing: 14, runSpacing: 14, children: [for (final s in p.stats) _statCard(b, p.tone, s)]),
+        _statGrid(b, p.tone, p.stats),
       ],
     ]);
     if (im == null) return pw.Align(alignment: pw.Alignment.topLeft, child: block);
