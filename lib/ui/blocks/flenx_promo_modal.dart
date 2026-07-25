@@ -25,6 +25,7 @@ class FlenxPromo {
     this.start,
     this.end,
     this.repeat = FlenxPromoRepeat.daily,
+    this.enabled = true,
   });
 
   final String id;
@@ -42,6 +43,10 @@ class FlenxPromo {
   final String? start;
   final String? end;
   final FlenxPromoRepeat repeat;
+
+  /// Liga/desliga manual. `false` desativa a campanha imediatamente, sem mexer
+  /// nas datas ([start]/[end]) — útil para pausar/retomar quando quiser.
+  final bool enabled;
 }
 
 /// Modal de propaganda no centro da tela, agendado por período. Passe uma lista
@@ -111,7 +116,8 @@ class FlenxPromoModal extends StatelessComponent {
       '{id:${_js(p.id)},title:${_js(p.title)},message:${_js(p.message)},'
       'image:${_js(p.imageUrl)},images:${_jsArr(p.images)},'
       'ctaLabel:${_js(p.ctaLabel)},ctaHref:${_js(p.ctaHref)},'
-      'start:${_js(p.start)},end:${_js(p.end)},repeat:${_js(p.repeat.name)}}';
+      'start:${_js(p.start)},end:${_js(p.end)},repeat:${_js(p.repeat.name)},'
+      'enabled:${p.enabled}}';
 
   String get _script {
     final list = promos.map(_promoLiteral).join(',');
@@ -119,6 +125,7 @@ class FlenxPromoModal extends StatelessComponent {
 (function(){
   var P=[$list],DELAY=$delayMs,IVAL=$intervalMs;
   function within(p){var n=new Date();
+    if(p.enabled===false)return false;
     if(p.start&&n<new Date(p.start))return false;
     if(p.end){var e=new Date(p.end);if(p.end.length<=10)e.setHours(23,59,59,999);if(n>e)return false;}
     return true;}
