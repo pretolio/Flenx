@@ -142,9 +142,15 @@ class FlenxPdf {
           // topo de toda página de conteúdo, não só na capa. Apagado (como
           // no cabeçalho/rodapé do Word) pra não competir com o título.
           if (logo != null) ...[
-            pw.Align(
-              alignment: pw.Alignment.centerLeft,
-              child: pw.Opacity(opacity: 0.35, child: pw.Image(logo, width: 100, height: 59)),
+            pw.Opacity(
+              opacity: 0.35,
+              child: pw.SizedBox(
+                height: 30,
+                child: pw.Align(
+                  alignment: pw.Alignment.centerLeft,
+                  child: pw.FittedBox(fit: pw.BoxFit.contain, child: pw.Image(logo)),
+                ),
+              ),
             ),
             pw.SizedBox(height: 18),
           ],
