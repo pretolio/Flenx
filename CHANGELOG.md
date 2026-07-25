@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.3.4
+
+### PDF (`package:flenx/pdf.dart`)
+- **Novo módulo de PDF on-brand** — `FlenxPdf.build(FlenxPdfDoc)` monta documentos
+  A4 a partir de blocos tipados: `FlenxPdfCover`, `FlenxPdfChecklist`,
+  `FlenxPdfSpotlight`, `FlenxPdfSteps`, `FlenxPdfCompare`, `FlenxPdfCombo`,
+  `FlenxPdfText`, `FlenxPdfContact` e `FlenxPdfTable`, com paleta/logo por
+  `FlenxPdfBrand`. Sem HTML — tudo em Dart.
+- **`FlenxCardPdf`** — cartão de visita em PDF (frente/verso, 85×55 mm com sangria,
+  QR code) no padrão da marca.
+- **Rodapé configurável por marca** — `FlenxPdfBrand.footerText` / `footerSite`
+  (antes o rodapé era fixo). Sem quebra de API (ambos opcionais).
+- **Papel timbrado preserva a proporção do logo** (`FittedBox`) — logos largos não
+  são mais distorcidos.
+
+### UI
+- **`FlenxPromo`**: liga/desliga manual via `enabled`, além do agendamento por
+  `start`/`end`. Padrão `enabled: true` (sem quebra de API).
+
 ## 0.3.3
 
 - `FlenxFloatingButton`: novos parâmetros `pulse` (animação de anel/pulso para
