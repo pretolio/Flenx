@@ -36,6 +36,8 @@ export 'blocks/flenx_steps.dart';
 export 'blocks/flenx_feature_spotlight.dart';
 export 'blocks/flenx_checklist.dart';
 export 'blocks/flenx_compare.dart';
+export 'blocks/flenx_stats.dart';
+export 'blocks/flenx_lead_form.dart';
 export 'blocks/flenx_cta.dart';
 export 'blocks/flenx_footer.dart';
 export 'blocks/flenx_alert_variant.dart';

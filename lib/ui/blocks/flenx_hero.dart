@@ -16,23 +16,41 @@ class FlenxHero extends StatelessComponent {
     required this.title,
     this.eyebrow,
     this.subtitle,
+    this.bullets = const [],
+    this.bulletColor = '#7dd3fc',
     this.actions = const [],
     this.aside,
     this.background = 'linear-gradient(135deg, #01406F 0%, #01589B 100%)',
+    this.backgroundImage,
+    this.backgroundImageOpacity = 1.0,
+    this.id,
     super.key,
   });
 
   final String title;
   final String? eyebrow;
   final String? subtitle;
+
+  /// Itens com marcador (✓) abaixo do subtítulo — reforços/benefícios.
+  final List<String> bullets;
+  final String bulletColor;
   final List<FlenxButton> actions;
   final Component? aside;
   final String background;
 
+  /// Imagem de fundo (cover). Use [background] como overlay semitransparente
+  /// (ex.: gradiente escuro) para legibilidade do texto.
+  final String? backgroundImage;
+  final double backgroundImageOpacity;
+  final String? id;
+
   @override
   Component build(BuildContext context) {
     return FlenxSection(
+      id: id,
       background: background,
+      backgroundImage: backgroundImage,
+      backgroundImageOpacity: backgroundImageOpacity,
       paddingY: 96,
       child: FlenxRow(
         gap: 48,
@@ -46,6 +64,14 @@ class FlenxHero extends StatelessComponent {
             FlenxHeading(title, level: 1, color: '#ffffff', size: 46),
             if (subtitle != null)
               FlenxText(subtitle!, size: 18, color: '#dbeafe', lineHeight: 1.6),
+            if (bullets.isNotEmpty)
+              FlenxColumn(gap: 10, [
+                for (final b in bullets)
+                  FlenxRow(gap: 10, cross: FlenxAlign.start, [
+                    FlenxText('✓', weight: 800, color: bulletColor),
+                    FlenxText(b, color: '#f2f7fd'),
+                  ]),
+              ]),
             if (actions.isNotEmpty) FlenxRow(gap: 12, wrap: true, actions),
           ]),
           if (aside != null) aside!,
