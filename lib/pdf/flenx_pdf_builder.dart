@@ -162,8 +162,8 @@ class FlenxPdf {
       pw.Container(height: 0.75, color: rule),
       pw.SizedBox(height: 10),
       pw.Row(mainAxisAlignment: pw.MainAxisAlignment.spaceBetween, children: [
-        pw.Text('ALSTOP EXPRESS · PROPOSTA COMERCIAL', style: pw.TextStyle(color: txt, fontSize: 7.5, letterSpacing: 0.6)),
-        pw.Text('alstop.com.br', style: pw.TextStyle(color: txt, fontSize: 7.5, letterSpacing: 0.6)),
+        pw.Text(b.footerText ?? '', style: pw.TextStyle(color: txt, fontSize: 7.5, letterSpacing: 0.6)),
+        pw.Text(b.footerSite ?? '', style: pw.TextStyle(color: txt, fontSize: 7.5, letterSpacing: 0.6)),
         pw.Text('$page / $total', style: pw.TextStyle(color: txt, fontSize: 7.5, letterSpacing: 0.6)),
       ]),
     ]);

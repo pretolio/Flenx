@@ -16,6 +16,8 @@ class FlenxPdfBrand {
     this.light = '#F5F8FD',
     this.logoDarkBgPath,
     this.logoLightBgPath,
+    this.footerText,
+    this.footerSite,
   });
 
   /// Cores em hex (#RRGGBB).
@@ -32,6 +34,12 @@ class FlenxPdfBrand {
   /// Caminho do logo para fundo claro/branco — usado no cabeçalho tipo
   /// "papel timbrado" de cada página de conteúdo (ver [FlenxPdf._sectionPage]).
   final String? logoLightBgPath;
+
+  /// Rodapé de cada página: texto à esquerda (ex.: "EMPRESA · PROPOSTA
+  /// COMERCIAL") e site à direita (ex.: "empresa.com.br"). Se nulos, o rodapé
+  /// mostra só a numeração de página.
+  final String? footerText;
+  final String? footerSite;
 }
 
 /// Item de lista (título + descrição opcional).
