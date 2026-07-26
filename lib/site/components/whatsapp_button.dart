@@ -9,11 +9,15 @@ class WhatsappButton extends StatelessComponent {
   const WhatsappButton({
     required this.url,
     this.label = 'Fale no WhatsApp',
+    this.trackEvent = FlenxEvent.contact,
     super.key,
   });
 
   final String url;
   final String label;
+
+  /// Evento de `flenx.track` no clique. Nulo = não rastreia. Padrão: `Contact`.
+  final String? trackEvent;
 
   @override
   Component build(BuildContext context) {
@@ -27,7 +31,7 @@ class WhatsappButton extends StatelessComponent {
       attributes: {
         'rel': 'noopener noreferrer',
         'aria-label': label,
-        'onclick': flenxTrackJs(FlenxEvent.contact),
+        if (trackEvent != null) 'onclick': flenxTrackJs(trackEvent!),
       },
       styles: Styles(
         raw: {

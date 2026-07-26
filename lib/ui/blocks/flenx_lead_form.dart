@@ -51,6 +51,8 @@ class FlenxLeadForm extends StatelessComponent {
     this.consentText,
     this.consentHref,
     this.consentLinkLabel = 'Política de Privacidade',
+    this.requiredMessage = 'Preencha os campos obrigatórios (*).',
+    this.consentRequiredMessage = 'É preciso aceitar para continuar.',
     super.key,
   });
 
@@ -66,17 +68,18 @@ class FlenxLeadForm extends StatelessComponent {
   final String? noteEmail;
   final String formId;
 
-  /// Se informado, o envio faz POST JSON deste endpoint (Brevo/HubSpot/webhook)
-  /// em vez de `mailto`; em falha, cai no `mailto` como fallback.
+  /// Se informado, POST JSON deste endpoint (Brevo/HubSpot/webhook); falha → mailto.
   final String? postUrl;
   final String successMessage;
-
-  /// Texto do checkbox de consentimento (LGPD). Nulo = sem checkbox. Quando
-  /// presente, o envio exige o aceite. [consentHref] adiciona o link da
-  /// política ao lado.
+  /// Checkbox de consentimento (LGPD). Nulo = sem checkbox; presente = exige
+  /// aceite. [consentHref] adiciona o link da política.
   final String? consentText;
   final String? consentHref;
   final String consentLinkLabel;
+
+  /// Alertas (JS) configuráveis (i18n).
+  final String requiredMessage;
+  final String consentRequiredMessage;
 
   static const _css = '''
 .fxlf{background:#fff;border-radius:20px;padding:28px 26px;box-shadow:0 34px 80px rgba(0,0,0,.32);font-family:inherit;border-top:5px solid var(--fxlf-accent)}
@@ -125,7 +128,7 @@ class FlenxLeadForm extends StatelessComponent {
     final reqNames = fields.where((f) => f.required).map((f) => "'${f.name}'").join(',');
     final consentCheck = consentText == null
         ? ''
-        : "var cc=document.getElementById('$formId-consent');if(cc&&!cc.checked){alert('É preciso aceitar para continuar.');return;}";
+        : "var cc=document.getElementById('$formId-consent');if(cc&&!cc.checked){alert('${consentRequiredMessage.replaceAll("'", r"\'")}');return;}";
     final mailto =
         "window.location.href='mailto:$mailtoTo?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body);";
     final send = postUrl == null
@@ -141,7 +144,7 @@ class FlenxLeadForm extends StatelessComponent {
   function v(n){var el=document.getElementById('$formId-'+n);return el?el.value.trim():'';}
   f.addEventListener('submit',function(e){
     e.preventDefault();
-    for(var i=0;i<RQ.length;i++){if(!v(RQ[i])){alert('Preencha os campos obrigatórios (*).');return;}}
+    for(var i=0;i<RQ.length;i++){if(!v(RQ[i])){alert('${requiredMessage.replaceAll("'", r"\'")}');return;}}
     $consentCheck
     if(window.flenx)flenx.track('Lead',{});
     var body='';for(var j=0;j<FN.length;j++){var val=v(FN[j]);if(val)body+=LB[FN[j]]+': '+val+'\\n';}

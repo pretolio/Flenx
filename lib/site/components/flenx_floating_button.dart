@@ -37,14 +37,14 @@ class FlenxFloatingButton extends StatelessComponent {
     this.corner = FlenxCorner.bottomRight,
     this.newTab = true,
     this.offset = 20,
+    this.trackEvent = FlenxEvent.contact,
     super.key,
   }) : icon = '💬',
        iconImage = null,
        background = '#25D366',
        textColor = '#ffffff',
        pulse = false,
-       pulseColor = 'rgba(37,99,235,.55)',
-       trackEvent = FlenxEvent.contact;
+       pulseColor = 'rgba(37,99,235,.55)';
 
   /// Preset Telegram.
   const FlenxFloatingButton.telegram({
@@ -53,14 +53,14 @@ class FlenxFloatingButton extends StatelessComponent {
     this.corner = FlenxCorner.bottomRight,
     this.newTab = true,
     this.offset = 20,
+    this.trackEvent = FlenxEvent.contact,
     super.key,
   }) : icon = '✈️',
        iconImage = null,
        background = '#229ED9',
        textColor = '#ffffff',
        pulse = false,
-       pulseColor = 'rgba(37,99,235,.55)',
-       trackEvent = FlenxEvent.contact;
+       pulseColor = 'rgba(37,99,235,.55)';
 
   /// Preset Messenger.
   const FlenxFloatingButton.messenger({
@@ -69,14 +69,14 @@ class FlenxFloatingButton extends StatelessComponent {
     this.corner = FlenxCorner.bottomRight,
     this.newTab = true,
     this.offset = 20,
+    this.trackEvent = FlenxEvent.contact,
     super.key,
   }) : icon = '💬',
        iconImage = null,
        background = '#0084FF',
        textColor = '#ffffff',
        pulse = false,
-       pulseColor = 'rgba(37,99,235,.55)',
-       trackEvent = FlenxEvent.contact;
+       pulseColor = 'rgba(37,99,235,.55)';
 
   final String href;
   final String label;
