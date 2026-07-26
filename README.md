@@ -66,6 +66,7 @@ O que ele faz por você, sem configuração:
 - **Aparece bem no Google (SEO)** — sozinho, gera as meta tags, `sitemap.xml`, `robots.txt`, arquivos para IAs (`llms.txt`) e a página de erro `404` — a partir da lista de páginas.
 - **Sua marca sem escrever CSS** — cor principal, favicon, tamanho do logo e estilos globais por parâmetros simples (`primaryColor`, `faviconUrl`, `globalStyles`…).
 - **Extras em todas as páginas** — botão flutuante de WhatsApp/Telegram (`floatingButtons`), scripts de analytics (`globalScripts`) e pré-carregamento de imagens (`preloadImages`).
+- **Marketing e medição** — ligue pixels (Google Analytics, Meta, Google Ads, Bing, LinkedIn), push (Firebase) e o banner de cookies (LGPD) só passando os IDs. Um `flenx.track('Lead')` avisa todos os pixels de uma vez.
 - **Publicar é 1 comando** — gera o site pronto (HTML + SEO + `404` + favicon + `.htaccess`) pra subir em qualquer hospedagem.
 - **Cresce quando você precisar** — blog (Markdown e/ou banco, com editor), painel administrativo, formulários, APIs e banco de dados (Supabase, Firebase, REST…).
 - **Interatividade com Flutter** — quando precisar de algo dinâmico (carrinho, mapa, gráfico), embute um widget Flutter de verdade na página.
@@ -84,7 +85,7 @@ dart pub add dev:build_runner dev:build_web_compilers dev:jaspr_builder
 environment:
   sdk: ^3.10.0
 dependencies:
-  flenx: ^0.3.0
+  flenx: ^0.4.0
   jaspr: ^0.23.1
 jaspr:
   mode: server
@@ -696,6 +697,8 @@ Future<void> FlenxApp.run({
   EmailSender? onEmail,
   TokenVerifier? tokenVerifier,
   AdsConfig? ads,
+  FlenxTracking? tracking,            // pixels/analytics (Meta, GA4, Google Ads…)
+  FlenxConsent? consent,              // banner de cookies (LGPD)
   String lang = 'pt-BR',
   int? port,
   // Marca / UI (sem escrever CSS):
@@ -720,6 +723,8 @@ SeoConfig({required String baseUrl, required String siteName, required String de
   String defaultLocale = 'pt_BR', String? twitterHandle, String? logoUrl, String? defaultImage,
   String? organizationName, List<String> sameAs = const [], String? searchUrlTemplate,
   String? themeColor, String? telephone, String? email, SeoAddress? address, String? about,
+  String? googleSiteVerification, String? bingSiteVerification,   // metas do Search Console
+  double? ratingValue, int? reviewCount,                          // AggregateRating (estrelas)
   List<String> globalDisallow = const [], List<CrawlerRule>? crawlerRules})
 // defaultImage: og:image/twitter:image padrão das páginas (cai para logoUrl).
 ```
@@ -731,9 +736,12 @@ RouteMeta({required String path, required String title, required String descript
   PageKind kind = PageKind.website, String? image, ChangeFreq? changeFreq, double? priority,
   DateTime? lastmod, List<String> keywords = const [], bool noindex = false, String? section,
   String? summary, String? markdown, List<FaqItem> faqs = const [], List<Breadcrumb> breadcrumbs = const [],
+  List<SeoService> services = const [],                                    // → JSON-LD Service (GEO)
   String? author, DateTime? datePublished, Map<String, String> alternates = const {}})
 
 FaqItem({required String question, required String answer})              // → JSON-LD FAQPage
+SeoService({required String name, String? description, String? serviceType,
+  List<String> areaServed = const [], String? url})                      // um serviço → schema.org Service
 PageKind   // website, article, blogPost, faq, product, collection, profile
 ChangeFreq // always, hourly, daily, weekly, monthly, yearly, never
 ```
@@ -745,6 +753,55 @@ DynamicRouteSource<Post>(
   build: (p) => RouteMeta(path: '/blog/${p.slug}', title: p.title, description: p.excerpt, kind: PageKind.blogPost),
 )  // passe em extraSources: [...]
 ```
+</details>
+
+<details>
+<summary><strong>Marketing: pixels, cookies (LGPD) e eventos — <code>tracking</code> / <code>consent</code></strong></summary>
+
+Quer medir visitas e rodar anúncios? Passe os **pixels** que você usa em `tracking`.
+O Flenx injeta os scripts no `<head>` sozinho. Você só informa os IDs — nada fica fixo.
+
+```dart
+FlenxApp.run(
+  ...,
+  tracking: FlenxTracking(providers: [
+    Ga4('G-XXXX'),                 // Google Analytics 4
+    MetaPixel('123456'),           // Facebook/Instagram
+    GoogleAds('AW-123', conversions: {'Lead': 'AW-123/abc'}),
+    BingUet('456'),                // Microsoft/Bing
+    LinkedInInsight('789'),
+    FirebasePush(config: "{apiKey:'..',projectId:'..'}", vapidKey: 'XXX'),  // push
+    CustomPixel(id: 'tiktok', head: "...snippet..."),  // qualquer outro pixel
+  ]),
+  consent: const FlenxConsent(policyHref: '/privacidade'),  // banner de cookies (LGPD)
+);
+```
+
+**Como funciona, em 1 frase:** com o banner ligado (`consent`), os pixels só disparam
+**depois** que a pessoa aceita (Google Consent Mode já vem configurado). Sem banner,
+disparam na hora.
+
+**Registrar uma ação** (ex.: alguém pediu orçamento) — chame `flenx.track` no navegador,
+que ele avisa **todos os pixels de uma vez**:
+
+```js
+flenx.track('Lead');      // ou 'Contact', 'ViewContent', 'Purchase'…
+```
+
+Já vem pronto: o **botão de WhatsApp** dispara `Contact`, o **`FlenxLeadForm`** dispara
+`Lead` ao enviar (e aceita `postUrl:` para mandar o lead pra Brevo/HubSpot + checkbox LGPD).
+Para marcar a visita a uma página de serviço, coloque `FlenxViewEvent()` nela.
+
+| Provedor | Classe |
+|---|---|
+| Google Analytics 4 | `Ga4(id)` |
+| Google Ads | `GoogleAds(id, conversions: {...})` |
+| Meta (Facebook/Instagram) | `MetaPixel(id)` |
+| Microsoft/Bing | `BingUet(id)` |
+| LinkedIn | `LinkedInInsight(id)` |
+| Push (Firebase) | `FirebasePush(config:, vapidKey:)` |
+| Qualquer outro | `CustomPixel(id:, head:)` |
+
 </details>
 
 <details>

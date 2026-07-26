@@ -1,5 +1,33 @@
 # Changelog
 
+## 0.4.0
+
+### Marketing e medição (novo — `package:flenx/app.dart`)
+- **`FlenxTracking`** — ligue pixels e analytics só passando os IDs (nada fica fixo):
+  `Ga4`, `GoogleAds`, `MetaPixel`, `BingUet`, `LinkedInInsight`, `FirebasePush` e
+  `CustomPixel` (para qualquer outro pixel, sem alterar a lib).
+- **`flenx.track('Lead')`** — um comando avisa TODOS os pixels de uma vez.
+  Eventos prontos: WhatsApp → `Contact`, `FlenxLeadForm` → `Lead`, `FlenxViewEvent`
+  → `ViewContent`.
+- **`FlenxConsent`** — banner de cookies (LGPD) com Google Consent Mode: os pixels
+  só disparam depois do aceite.
+- **`FlenxLeadForm`** agora envia o lead por `postUrl` (Brevo/HubSpot/webhook) além
+  do mailto, com checkbox de consentimento opcional. Textos dos alertas configuráveis.
+
+### SEO
+- **`FlenxFaq`** — seção de perguntas & respostas visível (sem JS); combine com
+  `RouteMeta.faqs` para o rich result FAQPage.
+- **`RouteMeta.services`** (`SeoService`) → JSON-LD `Service` (ajuda a aparecer em
+  buscas por IA / GEO).
+- **`SeoConfig`**: `googleSiteVerification` / `bingSiteVerification` (metas do Search
+  Console) e `ratingValue` / `reviewCount` (JSON-LD `AggregateRating` — estrelas).
+
+### Acessibilidade / tema
+- Cor do "eyebrow" das seções agora escurece automaticamente para passar no contraste
+  WCAG **considerando o fundo real** da seção (não só o branco).
+- Componentes usam tokens da paleta (`var(--token)`) em vez de cinzas fixos — qualquer
+  projeto re-tematiza sobrescrevendo os tokens.
+
 ## 0.3.4
 
 ### PDF (`package:flenx/pdf.dart`)
