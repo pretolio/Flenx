@@ -87,7 +87,7 @@ justify-content:center;color:#fff;font-size:15px;font-weight:900;margin-top:1px}
               div(classes: 'fxck__item', [
                 div(
                   classes: 'fxck__mk',
-                  styles: Styles(raw: {'background': negative ? '#94a3b8' : accent}),
+                  styles: Styles(raw: {'background': negative ? 'var(--muted, ${FlenxPalette.muted})' : accent}),
                   [Component.text(negative ? '×' : '✓')],
                 ),
                 div([

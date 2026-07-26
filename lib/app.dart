@@ -10,6 +10,8 @@ import 'dart:async';
 import 'package:jaspr/dom.dart' show script, link;
 import 'package:jaspr/server.dart';
 
+import 'flenx_palette.dart';
+
 import 'ads/ads_config.dart';
 import 'api/api.dart';
 import 'ui/flenx_style.dart';
@@ -161,11 +163,14 @@ class FlenxApp {
       notFound: notFound,
       // Estilos tipados (FlenxStyle) convertidos em regras CSS.
       styleRules: [for (final s in globalStyles) s.toRule()],
-      // CSS puro: token da marca (--primary) + strings passadas pelo app.
+      // CSS puro: tokens da paleta central (fonte única) + override da marca
+      // (--primary) + strings do app. Componentes usam `var(--token)`; qualquer
+      // projeto re-tematiza sobrescrevendo estes tokens.
       rawStyles: [
+        FlenxPalette.rootCss,
         if (primaryColor != null)
           ':root{--primary:$primaryColor'
-              '${primaryColorDark != null ? ';--primary-dark:$primaryColorDark' : ''}}',
+              '${primaryColorDark != null ? ';--primary-dark:$primaryColorDark;--primary-d:$primaryColorDark' : ''}}',
         ...rawGlobalStyles,
       ],
       headExtra: [

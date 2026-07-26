@@ -22,6 +22,15 @@ class FlenxPalette {
   static const String darkBorder = '#243245';
   static const String darkInk = '#E2E8F0';
 
+  /// Bloco `:root` com todos os tokens de cor da paleta. Injetado globalmente
+  /// pelo [FlenxApp] — os componentes usam `var(--token)` e QUALQUER projeto
+  /// re-tematiza sobrescrevendo estes tokens (ex.: `--primary` da marca).
+  static String get rootCss =>
+      ':root{'
+      '--ink:$ink;--muted:$muted;--border:$border;--surface:$surface;'
+      '--accent:$accent;--primary:$primary;--primary-dark:$primaryDark;--primary-d:$primaryDark'
+      '}';
+
   /// Converte um hex (`#RRGGBB`) no inteiro 0xFFRRGGBB usado por `Color`.
   static int argb(String hex) =>
       int.parse('FF${hex.replaceAll('#', '')}', radix: 16);
