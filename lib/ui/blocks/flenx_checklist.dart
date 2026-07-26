@@ -74,7 +74,7 @@ justify-content:center;color:#fff;font-size:15px;font-weight:900;margin-top:1px}
         if (eyebrow != null || title != null || subtitle != null)
           div(classes: 'fxck__head', [
             if (eyebrow != null)
-              p(classes: 'fxck__eyebrow', styles: Styles(raw: {'color': eyebrowColor ?? FlenxPalette.contrastOnLight(accent)}), [Component.text(eyebrow!)]),
+              p(classes: 'fxck__eyebrow', styles: Styles(raw: {'color': FlenxPalette.contrastOnLight(eyebrowColor ?? accent, bg: background ?? '#ffffff')}), [Component.text(eyebrow!)]),
             if (title != null)
               h2(classes: 'fxck__title', styles: Styles(raw: {'color': titleColor}), [Component.text(title!)]),
             if (subtitle != null)

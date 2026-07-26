@@ -89,7 +89,7 @@ class FlenxCompare extends StatelessComponent {
         if (eyebrow != null || title != null || subtitle != null)
           div(classes: 'fxcmp__head', [
             if (eyebrow != null)
-              p(classes: 'fxcmp__eyebrow', styles: Styles(raw: {'color': eyebrowColor ?? FlenxPalette.contrastOnLight(accent)}), [Component.text(eyebrow!)]),
+              p(classes: 'fxcmp__eyebrow', styles: Styles(raw: {'color': FlenxPalette.contrastOnLight(eyebrowColor ?? accent, bg: background ?? '#ffffff')}), [Component.text(eyebrow!)]),
             if (title != null)
               h2(classes: 'fxcmp__title', styles: Styles(raw: {'color': titleColor}), [Component.text(title!)]),
             if (subtitle != null)

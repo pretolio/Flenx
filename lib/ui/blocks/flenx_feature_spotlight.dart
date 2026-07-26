@@ -68,7 +68,7 @@ border:1px solid rgba(15,30,56,.1);box-shadow:0 30px 70px -30px rgba(7,28,67,.55
         // Texto
         div([
           if (eyebrow != null)
-            p(classes: 'fxspot__eyebrow', styles: Styles(raw: {'color': eyebrowColor ?? FlenxPalette.contrastOnLight(accent)}), [Component.text(eyebrow!)]),
+            p(classes: 'fxspot__eyebrow', styles: Styles(raw: {'color': FlenxPalette.contrastOnLight(eyebrowColor ?? accent, bg: background ?? '#ffffff')}), [Component.text(eyebrow!)]),
           h2(classes: 'fxspot__title', styles: Styles(raw: {'color': titleColor}), [Component.text(title)]),
           if (description != null)
             p(classes: 'fxspot__desc', styles: Styles(raw: {'color': textColor}), [Component.text(description!)]),

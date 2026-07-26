@@ -41,15 +41,22 @@ class FlenxPalette {
       0.2126 * _lin(r / 255) + 0.7152 * _lin(g / 255) + 0.0722 * _lin(b / 255);
 
   /// Escurece [hex] até atingir contraste WCAG [minRatio] (padrão AA 4.5:1)
-  /// contra o branco — para usar cores de marca vibrantes como TEXTO em fundo
-  /// claro sem falhar acessibilidade. Não altera a cor se ela já passa.
-  static String contrastOnLight(String hex, {double minRatio = 4.5}) {
+  /// contra o fundo [bg] (padrão branco) — para usar cores de marca vibrantes
+  /// como TEXTO em fundo claro sem falhar acessibilidade. Não altera a cor se
+  /// ela já passa. Se [bg] não for um hex simples (ex.: gradiente) ou for
+  /// ESCURO, mantém a cor: nesses casos a cor clara é intencional.
+  static String contrastOnLight(String hex, {double minRatio = 4.5, String bg = '#ffffff'}) {
     final m = RegExp(r'^#?([0-9a-fA-F]{6})$').firstMatch(hex.trim());
     if (m == null) return hex;
+    final bm = RegExp(r'^#?([0-9a-fA-F]{6})$').firstMatch(bg.trim());
+    if (bm == null) return hex; // fundo não-hex (gradiente): mantém
+    final bn = int.parse(bm.group(1)!, radix: 16);
+    final lbg = _luminance((bn >> 16) & 255, (bn >> 8) & 255, bn & 255);
+    if (lbg < 0.5) return hex; // fundo escuro: mantém
     final n = int.parse(m.group(1)!, radix: 16);
     var r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
     for (var i = 0; i < 40; i++) {
-      final ratio = 1.05 / (_luminance(r, g, b) + 0.05);
+      final ratio = (lbg + 0.05) / (_luminance(r, g, b) + 0.05);
       if (ratio >= minRatio) break;
       r = (r * 0.9).round();
       g = (g * 0.9).round();

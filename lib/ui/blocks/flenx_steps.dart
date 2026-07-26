@@ -77,7 +77,7 @@ class FlenxSteps extends StatelessComponent {
             FlenxText(
               eyebrow!,
               align: FlenxTextAlign.center,
-              color: FlenxPalette.contrastOnLight(badgeColor),
+              color: FlenxPalette.contrastOnLight(badgeColor, bg: background ?? '#ffffff'),
               weight: 700,
             ),
             FlenxAnimation.slideUp,
