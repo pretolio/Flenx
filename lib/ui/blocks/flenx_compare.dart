@@ -70,7 +70,7 @@ class FlenxCompare extends StatelessComponent {
 .fxcmp__t th,.fxcmp__t td{padding:15px 18px;text-align:left}
 .fxcmp__t thead th{font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.03em}
 .fxcmp__t th.us{color:#fff;text-align:center;border-radius:12px 12px 0 0}
-.fxcmp__t th.them{color:#94a3b8;text-align:center}
+.fxcmp__t th.them{color:#475569;text-align:center}
 .fxcmp__t tbody td{border-top:1px solid #eef2f7;font-size:.95rem}
 .fxcmp__t td.c{text-align:center}
 .fxcmp__t tbody tr:last-child td.us{border-radius:0 0 12px 12px}
