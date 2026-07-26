@@ -29,16 +29,16 @@ class FlenxAccordion extends StatelessComponent {
   final String accentColor;
 
   static const _css = '''
-.facc details{border-bottom:1px solid #e2e8f0}
-.facc details:first-child{border-top:1px solid #e2e8f0}
-.facc summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 4px;cursor:pointer;font-weight:600;font-size:16px;color:#0f172a;user-select:none}
+.facc details{border-bottom:1px solid var(--border,#E2E8F0)}
+.facc details:first-child{border-top:1px solid var(--border,#E2E8F0)}
+.facc summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 4px;cursor:pointer;font-weight:600;font-size:16px;color:var(--ink,#0F172A);user-select:none}
 .facc summary::-webkit-details-marker{display:none}
-.facc summary::after{content:'+';font-size:22px;font-weight:400;color:#94a3b8;transition:transform .25s ease,color .25s ease;flex-shrink:0}
+.facc summary::after{content:'+';font-size:22px;font-weight:400;color:var(--muted,#475569);transition:transform .25s ease,color .25s ease;flex-shrink:0}
 .facc details[open] summary::after{transform:rotate(45deg)}
 .facc .facc-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease}
 .facc details[open] .facc-body{grid-template-rows:1fr}
 .facc .facc-inner{overflow:hidden}
-.facc .facc-text{padding:0 4px 18px;color:#64748b;line-height:1.65;font-size:15px}
+.facc .facc-text{padding:0 4px 18px;color:var(--muted,#475569);line-height:1.65;font-size:15px}
 ''';
 
   String get _accentCss =>

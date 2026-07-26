@@ -89,8 +89,8 @@ class FlenxPromoModal extends StatelessComponent {
 .fxpromo-dots button{width:8px;height:8px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.55);cursor:pointer;transition:background .16s ease,transform .16s ease}
 .fxpromo-dots button.active{background:#fff;transform:scale(1.25)}
 .fxpromo-body{padding:24px 24px 26px;text-align:center}
-.fxpromo-title{margin:0 0 8px;font-family:'Barlow Condensed',Impact,sans-serif;font-weight:800;font-size:1.6rem;line-height:1.1;color:#0f172a;text-transform:uppercase;letter-spacing:.3px}
-.fxpromo-msg{margin:0;color:#475569;font-size:1rem;line-height:1.5}
+.fxpromo-title{margin:0 0 8px;font-family:'Barlow Condensed',Impact,sans-serif;font-weight:800;font-size:1.6rem;line-height:1.1;color:var(--ink,#0F172A);text-transform:uppercase;letter-spacing:.3px}
+.fxpromo-msg{margin:0;color:var(--muted,#475569);font-size:1rem;line-height:1.5}
 .fxpromo-cta{display:inline-block;margin-top:18px;padding:12px 26px;border-radius:999px;background:$accentColor;color:#fff;font-weight:700;font-size:.98rem;text-decoration:none;box-shadow:0 8px 22px rgba(2,6,23,.22);transition:transform .16s ease}
 .fxpromo-cta:hover{transform:translateY(-2px)}
 .fxpromo-x{position:absolute;top:10px;right:10px;width:34px;height:34px;border:0;border-radius:50%;background:rgba(15,23,42,.55);color:#fff;font-size:20px;line-height:34px;text-align:center;cursor:pointer;padding:0;z-index:3}
