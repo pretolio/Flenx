@@ -1,6 +1,8 @@
 import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
 
+import '../../growth/flenx_events.dart';
+
 /// Botão flutuante de WhatsApp (canto inferior direito). Abre o wa.me com a
 /// mensagem pré-preenchida. Estilizado inline (sem classes CSS).
 class WhatsappButton extends StatelessComponent {
@@ -22,7 +24,11 @@ class WhatsappButton extends StatelessComponent {
       ],
       href: url,
       target: Target.blank,
-      attributes: {'rel': 'noopener noreferrer', 'aria-label': label},
+      attributes: {
+        'rel': 'noopener noreferrer',
+        'aria-label': label,
+        'onclick': flenxTrackJs(FlenxEvent.contact),
+      },
       styles: Styles(
         raw: {
           'position': 'fixed',

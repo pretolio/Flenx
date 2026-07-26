@@ -11,6 +11,7 @@ export 'models/page_kind.dart';
 export 'models/route_meta.dart';
 export 'models/seo_config.dart';
 export 'models/seo_address.dart';
+export 'models/seo_service.dart';
 export 'sources/dynamic_route_source.dart';
 export 'sources/i_route_source.dart';
 export 'sources/route_registry.dart';

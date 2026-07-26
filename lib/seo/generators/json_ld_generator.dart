@@ -1,6 +1,7 @@
 import '../models/page_kind.dart';
 import '../models/route_meta.dart';
 import '../models/seo_config.dart';
+import '../models/seo_service.dart';
 import '../utils/xml_utils.dart';
 
 /// Constrói os objetos schema.org (JSON-LD) de uma página: Organization e
@@ -20,8 +21,24 @@ class JsonLdGenerator {
       _page(route),
       if (route.faqs.isNotEmpty) _faq(route),
       if (route.breadcrumbs.isNotEmpty) _breadcrumbs(route),
+      for (final s in route.services) _service(s),
     ];
   }
+
+  Map<String, dynamic> _service(SeoService s) => {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    'name': s.name,
+    if (s.description != null) 'description': s.description,
+    if (s.serviceType != null) 'serviceType': s.serviceType,
+    'provider': {
+      '@type': config.address != null ? 'LocalBusiness' : 'Organization',
+      'name': config.organizationName ?? config.siteName,
+      'url': config.baseUrl,
+    },
+    if (s.areaServed.isNotEmpty) 'areaServed': s.areaServed,
+    if (s.url != null) 'url': config.url(s.url!),
+  };
 
   Map<String, dynamic> _organization() {
     final addr = config.address;

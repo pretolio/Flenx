@@ -46,6 +46,11 @@ class FlenxLeadForm extends StatelessComponent {
     this.accentDark = FlenxPalette.ink,
     this.noteEmail,
     this.formId = 'fx-lead',
+    this.postUrl,
+    this.successMessage = 'Recebemos seu contato! Em breve retornamos.',
+    this.consentText,
+    this.consentHref,
+    this.consentLinkLabel = 'Política de Privacidade',
     super.key,
   });
 
@@ -60,6 +65,18 @@ class FlenxLeadForm extends StatelessComponent {
   final String accentDark;
   final String? noteEmail;
   final String formId;
+
+  /// Se informado, o envio faz POST JSON deste endpoint (Brevo/HubSpot/webhook)
+  /// em vez de `mailto`; em falha, cai no `mailto` como fallback.
+  final String? postUrl;
+  final String successMessage;
+
+  /// Texto do checkbox de consentimento (LGPD). Nulo = sem checkbox. Quando
+  /// presente, o envio exige o aceite. [consentHref] adiciona o link da
+  /// política ao lado.
+  final String? consentText;
+  final String? consentHref;
+  final String consentLinkLabel;
 
   static const _css = '''
 .fxlf{background:#fff;border-radius:20px;padding:28px 26px;box-shadow:0 34px 80px rgba(0,0,0,.32);font-family:inherit;border-top:5px solid var(--fxlf-accent)}
@@ -76,6 +93,9 @@ class FlenxLeadForm extends StatelessComponent {
 .fxlf__btn:hover{transform:translateY(-2px);box-shadow:0 16px 32px rgba(14,34,64,.36)}
 .fxlf__note{margin:12px 0 0;font-size:.82rem;color:#61728c;text-align:center}
 .fxlf__note a{color:var(--fxlf-accent);text-decoration:none;font-weight:700}
+.fxlf__consent{display:flex;gap:8px;align-items:flex-start;margin:14px 0 0;font-size:.8rem;color:#485a74;font-weight:500}
+.fxlf__consent input{width:auto;margin-top:2px}
+.fxlf__consent a{color:var(--fxlf-accent);font-weight:700;text-decoration:none}
 ''';
 
   Component _control(FlenxFormField f) {
@@ -103,6 +123,17 @@ class FlenxLeadForm extends StatelessComponent {
     final labels = {for (final f in fields) f.name: f.label};
     final labelMap = labels.entries.map((e) => "'${e.key}':'${e.value.replaceAll("'", r"\'")}'").join(',');
     final reqNames = fields.where((f) => f.required).map((f) => "'${f.name}'").join(',');
+    final consentCheck = consentText == null
+        ? ''
+        : "var cc=document.getElementById('$formId-consent');if(cc&&!cc.checked){alert('É preciso aceitar para continuar.');return;}";
+    final mailto =
+        "window.location.href='mailto:$mailtoTo?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body);";
+    final send = postUrl == null
+        ? mailto
+        : "var data={};for(var k=0;k<FN.length;k++){data[FN[k]]=v(FN[k]);}"
+            "fetch('$postUrl',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})"
+            ".then(function(r){if(!r.ok)throw 0;f.reset();alert('${successMessage.replaceAll("'", r"\'")}');})"
+            ".catch(function(){$mailto});";
     return '''
 (function(){
   var f=document.getElementById('$formId'); if(!f) return;
@@ -111,9 +142,11 @@ class FlenxLeadForm extends StatelessComponent {
   f.addEventListener('submit',function(e){
     e.preventDefault();
     for(var i=0;i<RQ.length;i++){if(!v(RQ[i])){alert('Preencha os campos obrigatórios (*).');return;}}
+    $consentCheck
+    if(window.flenx)flenx.track('Lead',{});
     var body='';for(var j=0;j<FN.length;j++){var val=v(FN[j]);if(val)body+=LB[FN[j]]+': '+val+'\\n';}
     var subj='$subjectPrefix';var inst=v('inst')||v('instituicao');if(inst)subj+=' — '+inst;
-    window.location.href='mailto:$mailtoTo?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body);
+    $send
   });
 })();''';
   }
@@ -142,6 +175,15 @@ class FlenxLeadForm extends StatelessComponent {
         if (title != null) Component.element(tag: 'h3', classes: 'fxlf__title', children: [Component.text(title!)]),
         if (subtitle != null) p(classes: 'fxlf__sub', [Component.text(subtitle!)]),
         ...rows,
+        if (consentText != null)
+          Component.element(tag: 'label', classes: 'fxlf__consent', attributes: {'for': '$formId-consent'}, children: [
+            Component.element(tag: 'input', attributes: {'type': 'checkbox', 'id': '$formId-consent', 'name': 'consent'}),
+            span([
+              Component.text('$consentText '),
+              if (consentHref != null)
+                Component.element(tag: 'a', attributes: {'href': consentHref!, 'target': '_blank', 'rel': 'noopener'}, children: [Component.text(consentLinkLabel)]),
+            ]),
+          ]),
         Component.element(tag: 'button', classes: 'fxlf__btn', attributes: const {'type': 'submit'}, children: [Component.text(submitLabel)]),
         if (noteEmail != null)
           p(classes: 'fxlf__note', [

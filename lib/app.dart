@@ -13,6 +13,8 @@ import 'package:jaspr/server.dart';
 import 'flenx_palette.dart';
 
 import 'ads/ads_config.dart';
+import 'growth/flenx_tracking.dart';
+import 'growth/flenx_consent.dart';
 import 'api/api.dart';
 import 'ui/flenx_style.dart';
 import 'auth/token_verifier.dart';
@@ -93,6 +95,13 @@ class FlenxApp {
     // arquivo .css). Ex.: `['.x{height:48px}', await File('site.css').readAsString()]`.
     List<String> rawGlobalStyles = const [],
     AdsConfig? ads,
+    // Rastreamento/omnipresença: pixels e analytics (Ga4, MetaPixel, GoogleAds,
+    // BingUet, LinkedInInsight, FirebasePush, CustomPixel). Injeta os snippets
+    // no <head> + o dispatcher `flenx.track`. Nada é fixo — só o que passar.
+    FlenxTracking? tracking,
+    // Banner de consentimento (LGPD). Quando presente, o rastreamento espera o
+    // aceite (Consent Mode negado por padrão) antes de ativar os pixels.
+    FlenxConsent? consent,
     String lang = 'pt-BR',
     int? port,
     // Cor da marca: define o token CSS `--primary` (e `--primary-dark`) usado
@@ -174,6 +183,9 @@ class FlenxApp {
         ...rawGlobalStyles,
       ],
       headExtra: [
+        // Rastreamento primeiro: o Consent Mode precisa vir antes do gtag.
+        if (tracking != null)
+          ...tracking.headComponents(requireConsent: consent != null),
         if (faviconUrl != null) link(rel: 'icon', href: faviconUrl),
         if (appleTouchIconUrl != null)
           link(rel: 'apple-touch-icon', href: appleTouchIconUrl),
@@ -185,7 +197,10 @@ class FlenxApp {
             attributes: const {'crossorigin': 'anonymous'},
           ),
       ],
-      floatingButtons: floatingButtons,
+      floatingButtons: [
+        ...floatingButtons,
+        if (consent != null) consent,
+      ],
       preloadImages: preloadImages,
       emitHtaccess: emitHtaccess,
       lang: lang,

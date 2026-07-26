@@ -33,6 +33,8 @@ export 'pay/pay.dart';
 export 'ads/ads_config.dart';
 export 'ads/ad_slot.dart';
 
+export 'growth/growth.dart';
+
 // SEO/GEO/AEO + sitemap + robots + llms
 export 'seo/seo.dart';
 

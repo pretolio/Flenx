@@ -2,6 +2,7 @@ import 'breadcrumb.dart';
 import 'change_freq.dart';
 import 'faq_item.dart';
 import 'page_kind.dart';
+import 'seo_service.dart';
 
 /// Metadados de UMA rota — a **fonte única de verdade**. A partir dela o
 /// framework deriva automaticamente: meta tags, Open Graph/Twitter, JSON-LD,
@@ -25,6 +26,7 @@ class RouteMeta {
     this.summary,
     this.markdown,
     this.faqs = const [],
+    this.services = const [],
     this.breadcrumbs = const [],
     this.author,
     this.datePublished,
@@ -72,6 +74,9 @@ class RouteMeta {
 
   /// Perguntas/respostas → JSON-LD FAQPage (AEO).
   final List<FaqItem> faqs;
+
+  /// Serviços da página → JSON-LD `Service` (GEO). Ideal em páginas /serviços.
+  final List<SeoService> services;
 
   /// Trilha de navegação → JSON-LD BreadcrumbList.
   final List<Breadcrumb> breadcrumbs;

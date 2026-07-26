@@ -1,6 +1,8 @@
 import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
 
+import '../../growth/flenx_events.dart';
+
 /// Canto onde o botão flutuante fica fixado.
 enum FlenxCorner { bottomRight, bottomLeft }
 
@@ -24,6 +26,7 @@ class FlenxFloatingButton extends StatelessComponent {
     this.offset = 20,
     this.pulse = false,
     this.pulseColor = 'rgba(37,99,235,.55)',
+    this.trackEvent,
     super.key,
   });
 
@@ -40,7 +43,8 @@ class FlenxFloatingButton extends StatelessComponent {
        background = '#25D366',
        textColor = '#ffffff',
        pulse = false,
-       pulseColor = 'rgba(37,99,235,.55)';
+       pulseColor = 'rgba(37,99,235,.55)',
+       trackEvent = FlenxEvent.contact;
 
   /// Preset Telegram.
   const FlenxFloatingButton.telegram({
@@ -55,7 +59,8 @@ class FlenxFloatingButton extends StatelessComponent {
        background = '#229ED9',
        textColor = '#ffffff',
        pulse = false,
-       pulseColor = 'rgba(37,99,235,.55)';
+       pulseColor = 'rgba(37,99,235,.55)',
+       trackEvent = FlenxEvent.contact;
 
   /// Preset Messenger.
   const FlenxFloatingButton.messenger({
@@ -70,7 +75,8 @@ class FlenxFloatingButton extends StatelessComponent {
        background = '#0084FF',
        textColor = '#ffffff',
        pulse = false,
-       pulseColor = 'rgba(37,99,235,.55)';
+       pulseColor = 'rgba(37,99,235,.55)',
+       trackEvent = FlenxEvent.contact;
 
   final String href;
   final String label;
@@ -92,6 +98,10 @@ class FlenxFloatingButton extends StatelessComponent {
 
   /// Cor do anel do pulso (aceita rgba para o fade ficar suave).
   final String pulseColor;
+
+  /// Evento de `flenx.track` disparado no clique (ex.: [FlenxEvent.contact]).
+  /// Nulo = não rastreia. Os presets de contato já usam `Contact`.
+  final String? trackEvent;
 
   static String _px(double v) =>
       v == v.roundToDouble() ? '${v.toInt()}px' : '${v}px';
@@ -129,6 +139,7 @@ class FlenxFloatingButton extends StatelessComponent {
       attributes: {
         if (newTab) 'rel': 'noopener noreferrer',
         'aria-label': label.isNotEmpty ? label : 'Abrir',
+        if (trackEvent != null) 'onclick': flenxTrackJs(trackEvent!),
       },
       styles: Styles(
         raw: {
