@@ -16,3 +16,4 @@ export 'tracking_providers.dart';
 export 'flenx_tracking.dart';
 export 'flenx_consent.dart';
 export 'flenx_events.dart';
+export 'flenx_view_event.dart';

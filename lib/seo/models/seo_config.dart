@@ -20,6 +20,10 @@ class SeoConfig {
     this.email,
     this.address,
     this.about,
+    this.googleSiteVerification,
+    this.bingSiteVerification,
+    this.ratingValue,
+    this.reviewCount,
     this.globalDisallow = const [],
     List<CrawlerRule>? crawlerRules,
   }) : crawlerRules = crawlerRules ?? defaultCrawlerRules;
@@ -59,6 +63,16 @@ class SeoConfig {
   /// Injetado no topo de `/llms.txt` e `/llms-full.txt` para maximizar
   /// a extração por AI assistants (GEO/AEO).
   final String? about;
+
+  /// Verificação do Search Console — emite `<meta google-site-verification>` e
+  /// `<meta msvalidate.01>` (Bing). Só o token, sem a tag.
+  final String? googleSiteVerification;
+  final String? bingSiteVerification;
+
+  /// Avaliação agregada da empresa → JSON-LD `AggregateRating` (estrelas nos
+  /// resultados / credibilidade B2B). Informe os dois juntos.
+  final double? ratingValue;
+  final int? reviewCount;
 
   /// Caminhos bloqueados para todos os agentes.
   final List<String> globalDisallow;

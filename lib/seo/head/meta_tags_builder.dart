@@ -30,6 +30,10 @@ class MetaTagsBuilder {
       link(rel: 'canonical', href: canonical),
       if (config.themeColor != null)
         meta(name: 'theme-color', content: config.themeColor),
+      if (config.googleSiteVerification != null)
+        meta(name: 'google-site-verification', content: config.googleSiteVerification),
+      if (config.bingSiteVerification != null)
+        meta(name: 'msvalidate.01', content: config.bingSiteVerification),
       // Open Graph
       _prop('og:type', r.kind.ogType),
       _prop('og:title', r.title),

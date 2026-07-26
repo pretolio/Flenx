@@ -51,6 +51,12 @@ class JsonLdGenerator {
       if (config.telephone != null) 'telephone': config.telephone,
       if (config.email != null) 'email': config.email,
       if (config.sameAs.isNotEmpty) 'sameAs': config.sameAs,
+      if (config.ratingValue != null && config.reviewCount != null)
+        'aggregateRating': {
+          '@type': 'AggregateRating',
+          'ratingValue': config.ratingValue,
+          'reviewCount': config.reviewCount,
+        },
       if (addr != null) 'address': addr.toJsonLd(),
       if (addr != null && addr.hasGeo)
         'geo': {
