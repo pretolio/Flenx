@@ -17,6 +17,7 @@ class FlenxFeatureSpotlight extends StatelessComponent {
     this.imageLeft = false,
     this.background,
     this.accent = FlenxPalette.primary,
+    this.eyebrowColor,
     this.titleColor = FlenxPalette.ink,
     this.textColor = FlenxPalette.muted,
     this.paddingY = 64,
@@ -33,6 +34,9 @@ class FlenxFeatureSpotlight extends StatelessComponent {
   final bool imageLeft;
   final String? background;
   final String accent;
+
+  /// Cor do eyebrow. Ausente = [accent] com contraste AA em fundo claro.
+  final String? eyebrowColor;
   final String titleColor;
   final String textColor;
   final int paddingY;
@@ -64,7 +68,7 @@ border:1px solid rgba(15,30,56,.1);box-shadow:0 30px 70px -30px rgba(7,28,67,.55
         // Texto
         div([
           if (eyebrow != null)
-            p(classes: 'fxspot__eyebrow', styles: Styles(raw: {'color': accent}), [Component.text(eyebrow!)]),
+            p(classes: 'fxspot__eyebrow', styles: Styles(raw: {'color': eyebrowColor ?? FlenxPalette.contrastOnLight(accent)}), [Component.text(eyebrow!)]),
           h2(classes: 'fxspot__title', styles: Styles(raw: {'color': titleColor}), [Component.text(title)]),
           if (description != null)
             p(classes: 'fxspot__desc', styles: Styles(raw: {'color': textColor}), [Component.text(description!)]),

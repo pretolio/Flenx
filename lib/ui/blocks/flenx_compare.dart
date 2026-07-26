@@ -33,6 +33,7 @@ class FlenxCompare extends StatelessComponent {
     this.subtitle,
     this.background,
     this.accent = FlenxPalette.primary,
+    this.eyebrowColor,
     this.titleColor = FlenxPalette.ink,
     this.textColor = FlenxPalette.muted,
     this.id,
@@ -47,6 +48,9 @@ class FlenxCompare extends StatelessComponent {
   final String? subtitle;
   final String? background;
   final String accent;
+
+  /// Cor do eyebrow. Ausente = [accent] com contraste AA em fundo claro.
+  final String? eyebrowColor;
   final String titleColor;
   final String textColor;
   final String? id;
@@ -70,7 +74,7 @@ class FlenxCompare extends StatelessComponent {
 .fxcmp__t tbody td{border-top:1px solid #eef2f7;font-size:.95rem}
 .fxcmp__t td.c{text-align:center}
 .fxcmp__t tbody tr:last-child td.us{border-radius:0 0 12px 12px}
-.fxcmp__note{display:block;font-size:.72rem;color:#94a3b8;margin-top:2px}
+.fxcmp__note{display:block;font-size:.72rem;color:#475569;margin-top:2px}
 ''';
 
   @override
@@ -85,7 +89,7 @@ class FlenxCompare extends StatelessComponent {
         if (eyebrow != null || title != null || subtitle != null)
           div(classes: 'fxcmp__head', [
             if (eyebrow != null)
-              p(classes: 'fxcmp__eyebrow', styles: Styles(raw: {'color': accent}), [Component.text(eyebrow!)]),
+              p(classes: 'fxcmp__eyebrow', styles: Styles(raw: {'color': eyebrowColor ?? FlenxPalette.contrastOnLight(accent)}), [Component.text(eyebrow!)]),
             if (title != null)
               h2(classes: 'fxcmp__title', styles: Styles(raw: {'color': titleColor}), [Component.text(title!)]),
             if (subtitle != null)
@@ -96,7 +100,7 @@ class FlenxCompare extends StatelessComponent {
             Component.element(tag: 'thead', children: [
               Component.element(tag: 'tr', children: [
                 Component.element(tag: 'th', children: [Component.text('')]),
-                Component.element(tag: 'th', classes: 'us', styles: Styles(raw: {'background': accent}), children: [Component.text(usLabel)]),
+                Component.element(tag: 'th', classes: 'us', styles: Styles(raw: {'background': FlenxPalette.contrastOnLight(accent)}), children: [Component.text(usLabel)]),
                 Component.element(tag: 'th', classes: 'them', children: [Component.text(themLabel)]),
               ]),
             ]),

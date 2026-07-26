@@ -24,6 +24,7 @@ class FlenxChecklist extends StatelessComponent {
     this.negative = false,
     this.background,
     this.accent = FlenxPalette.primary,
+    this.eyebrowColor,
     this.titleColor = FlenxPalette.ink,
     this.textColor = FlenxPalette.muted,
     this.id,
@@ -38,6 +39,10 @@ class FlenxChecklist extends StatelessComponent {
   final bool negative;
   final String? background;
   final String accent;
+
+  /// Cor do eyebrow. Ausente = versão do [accent] com contraste AA em fundo
+  /// claro. Em fundo escuro, passe o próprio accent (ex.: azul-claro).
+  final String? eyebrowColor;
   final String titleColor;
   final String textColor;
   final String? id;
@@ -69,7 +74,7 @@ justify-content:center;color:#fff;font-size:15px;font-weight:900;margin-top:1px}
         if (eyebrow != null || title != null || subtitle != null)
           div(classes: 'fxck__head', [
             if (eyebrow != null)
-              p(classes: 'fxck__eyebrow', styles: Styles(raw: {'color': accent}), [Component.text(eyebrow!)]),
+              p(classes: 'fxck__eyebrow', styles: Styles(raw: {'color': eyebrowColor ?? FlenxPalette.contrastOnLight(accent)}), [Component.text(eyebrow!)]),
             if (title != null)
               h2(classes: 'fxck__title', styles: Styles(raw: {'color': titleColor}), [Component.text(title!)]),
             if (subtitle != null)

@@ -45,7 +45,7 @@ class FlenxRedirect extends StatelessComponent {
           Component.element(
             tag: 'a',
             attributes: {'href': to, 'rel': 'noopener'},
-            styles: Styles(raw: {'color': accent, 'font-weight': '700', 'text-decoration': 'none'}),
+            styles: Styles(raw: {'color': FlenxPalette.contrastOnLight(accent), 'font-weight': '700', 'text-decoration': 'none'}),
             children: [Component.text(linkLabel)],
           ),
         ],
