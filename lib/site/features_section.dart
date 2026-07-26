@@ -63,8 +63,9 @@ class FeaturesSection extends StatelessComponent {
         _a(
           FlenxText(
             eyebrow,
+            // eyebrow com contraste AA em fundo claro (deriva do cardGlowColor).
             align: FlenxTextAlign.center,
-            color: 'var(--primary, ${FlenxPalette.primary})',
+            color: FlenxPalette.contrastOnLight(cardGlowColor),
             weight: 700,
           ),
           FlenxAnimation.slideUp,
