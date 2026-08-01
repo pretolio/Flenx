@@ -16,7 +16,7 @@ export 'ui/ui.dart';
 
 // Documentos comerciais imprimíveis (propostas, cartões, tabelas…) só em Dart.
 // O gerador de rotas (commercialDocsRoutes) vive em `package:flenx/app.dart`.
-export 'docs/docs.dart';
+export 'documents/documents.dart';
 
 // API (envelope de retorno padrão + paginação) e banco (models + migration)
 export 'api/api.dart';

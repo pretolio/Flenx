@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.1
+
+- **fix(pub.dev/dartdoc):** renomeia `lib/docs/` → `lib/documents/` (o nome `docs` dentro de `lib/` fazia a descoberta de bibliotecas do dartdoc/pana falhar — "unable to locate the input directory at 'lib/docs'" — deixando a análise do pub.dev incompleta). API pública inalterada (mesmos símbolos exportados por `package:flenx/app.dart`).
+
 ## 0.4.0
 
 ### Marketing e medição (novo — `package:flenx/app.dart`)
