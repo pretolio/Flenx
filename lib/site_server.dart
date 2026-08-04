@@ -252,7 +252,16 @@ class FlenxServer {
       '  ExpiresByType image/webp "access plus 1 year"\n'
       '  ExpiresByType image/png "access plus 1 year"\n'
       '  ExpiresByType image/jpeg "access plus 1 year"\n'
-      '  ExpiresByType text/html "access plus 1 hour"\n'
+      '  ExpiresByType text/html "access plus 0 seconds"\n'
+      '</IfModule>\n'
+      // HTML sempre revalidado (evita servir pagina velha que aponta p/ PDF em cache).
+      '<IfModule mod_headers.c>\n'
+      '  <FilesMatch "\\.html\$">\n'
+      '    Header set Cache-Control "no-cache, must-revalidate"\n'
+      '  </FilesMatch>\n'
+      '  <FilesMatch "\\.pdf\$">\n'
+      '    Header set Cache-Control "no-cache, must-revalidate"\n'
+      '  </FilesMatch>\n'
       '</IfModule>\n';
 
   static HttpServer? _activeServer;
