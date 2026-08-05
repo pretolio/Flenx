@@ -66,13 +66,26 @@ sealed class FlenxPdfPage {
   const FlenxPdfPage();
 }
 
+/// Estilo da capa.
+/// - [fullBleed]: foto cobrindo a página + faixa sólida (ink) com texto na base.
+/// - [editorial]: foto no topo com varredura curva branca + logo e texto
+///   centralizados no branco embaixo (padrão institucional "folheto").
+enum FlenxPdfCoverStyle { fullBleed, editorial }
+
 /// Capa: imagem de fundo cobrindo a página + gradiente + texto na base.
 class FlenxPdfCover extends FlenxPdfPage {
-  const FlenxPdfCover({required this.imagePath, this.eyebrow, required this.title, this.subtitle});
+  const FlenxPdfCover({
+    required this.imagePath,
+    this.eyebrow,
+    required this.title,
+    this.subtitle,
+    this.style = FlenxPdfCoverStyle.fullBleed,
+  });
   final String imagePath;
   final String? eyebrow;
   final String title;
   final String? subtitle;
+  final FlenxPdfCoverStyle style;
 }
 
 /// Lista de itens com marcador (✓ ou ×), 1–2 colunas.

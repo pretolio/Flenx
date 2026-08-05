@@ -56,9 +56,9 @@ class FlenxPdf {
     for (final page in doc.pages) {
       pageNum++;
       switch (page) {
-        case FlenxPdfCover(:final imagePath, :final eyebrow, :final title, :final subtitle):
+        case FlenxPdfCover(:final imagePath, :final eyebrow, :final title, :final subtitle, :final style):
           final im = await image(imagePath);
-          pdf.addPage(_coverPage(b, im, coverLogo, eyebrow, title, subtitle));
+          pdf.addPage(_coverPage(b, im, coverLogo, logoLight, eyebrow, title, subtitle, style));
         case FlenxPdfChecklist():
           pdf.addPage(_sectionPage(b, page.tone, _checklist(b, page), page: pageNum, total: total, logo: headerLogo(page.tone)));
         case FlenxPdfText():
@@ -747,7 +747,10 @@ class FlenxPdf {
     return pw.Align(alignment: pw.Alignment.center, child: block);
   }
 
-  static pw.Page _coverPage(FlenxPdfBrand b, pw.MemoryImage? im, pw.MemoryImage? logo, String? eyebrow, String title, String? subtitle) {
+  static pw.Page _coverPage(FlenxPdfBrand b, pw.MemoryImage? im, pw.MemoryImage? logo, pw.MemoryImage? logoLight, String? eyebrow, String title, String? subtitle, FlenxPdfCoverStyle style) {
+    if (style == FlenxPdfCoverStyle.editorial) {
+      return _coverEditorial(b, im, logoLight ?? logo, eyebrow, title, subtitle);
+    }
     return pw.Page(
       pageFormat: PdfPageFormat.a4,
       margin: pw.EdgeInsets.zero,
@@ -781,6 +784,69 @@ class FlenxPdf {
               ],
             ]),
           ),
+        ),
+      ]),
+    );
+  }
+
+  /// Capa "editorial" (modelo folheto): foto no topo com varredura curva
+  /// branca + logo e texto centralizados no branco embaixo.
+  static pw.Page _coverEditorial(FlenxPdfBrand b, pw.MemoryImage? im, pw.MemoryImage? logo, String? eyebrow, String title, String? subtitle) {
+    const photoH = 470.0; // altura da faixa da foto (atrás da varredura)
+    const bandTop = 380.0, bandH = 160.0; // faixa branca curva sobre a foto
+    return pw.Page(
+      pageFormat: PdfPageFormat.a4,
+      margin: pw.EdgeInsets.zero,
+      build: (ctx) => pw.Stack(fit: pw.StackFit.expand, children: [
+        pw.Container(color: PdfColors.white),
+        // Foto no topo.
+        pw.Positioned(
+          top: 0, left: 0, right: 0,
+          child: pw.SizedBox(
+            height: photoH,
+            child: im != null ? pw.Image(im, fit: pw.BoxFit.cover) : pw.Container(color: _c(b.ink)),
+          ),
+        ),
+        // Varredura branca curva (cobre a base da foto criando o corte).
+        pw.Positioned(
+          top: bandTop, left: 0, right: 0,
+          child: pw.CustomPaint(
+            size: const PdfPoint(595.28, bandH),
+            painter: (canvas, size) {
+              canvas
+                ..setFillColor(PdfColors.white)
+                ..moveTo(0, 0)
+                ..lineTo(0, size.y)
+                ..curveTo(size.x * 0.30, 6, size.x * 0.70, 6, size.x, size.y)
+                ..lineTo(size.x, 0)
+                ..fillPath();
+            },
+          ),
+        ),
+        // Fio de destaque + logo + texto centralizados no branco.
+        pw.Positioned(
+          top: 560, left: 46, right: 46,
+          child: pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.center, children: [
+            if (logo != null) pw.Image(logo, height: 66),
+            pw.SizedBox(height: 22),
+            pw.Container(width: 46, height: 3, color: _c(b.primaryLight)),
+            pw.SizedBox(height: 22),
+            if (eyebrow != null) ...[
+              pw.Text(eyebrow.toUpperCase(),
+                  textAlign: pw.TextAlign.center,
+                  style: pw.TextStyle(color: _c(b.primaryDark), fontWeight: pw.FontWeight.bold, fontSize: 9.5, letterSpacing: 2)),
+              pw.SizedBox(height: 12),
+            ],
+            pw.Text(title,
+                textAlign: pw.TextAlign.center,
+                style: pw.TextStyle(color: _c(b.ink), fontWeight: pw.FontWeight.bold, fontSize: 23, lineSpacing: 2)),
+            if (subtitle != null) ...[
+              pw.SizedBox(height: 14),
+              pw.Text(subtitle,
+                  textAlign: pw.TextAlign.center,
+                  style: pw.TextStyle(color: _c('#43536b'), fontSize: 11, lineSpacing: 2.5)),
+            ],
+          ]),
         ),
       ]),
     );
