@@ -57,7 +57,7 @@ class FlenxPdf {
       switch (page) {
         case FlenxPdfCover(:final imagePath, :final eyebrow, :final title, :final subtitle):
           final im = await image(imagePath);
-          pdf.addPage(_coverPage(b, im, eyebrow, title, subtitle));
+          pdf.addPage(_coverPage(b, im, logoDark, eyebrow, title, subtitle));
         case FlenxPdfChecklist():
           pdf.addPage(_sectionPage(b, page.tone, _checklist(b, page), page: pageNum, total: total, logo: headerLogo(page.tone)));
         case FlenxPdfText():
@@ -746,13 +746,22 @@ class FlenxPdf {
     return pw.Align(alignment: pw.Alignment.center, child: block);
   }
 
-  static pw.Page _coverPage(FlenxPdfBrand b, pw.MemoryImage? im, String? eyebrow, String title, String? subtitle) {
+  static pw.Page _coverPage(FlenxPdfBrand b, pw.MemoryImage? im, pw.MemoryImage? logo, String? eyebrow, String title, String? subtitle) {
     return pw.Page(
       pageFormat: PdfPageFormat.a4,
       margin: pw.EdgeInsets.zero,
       build: (ctx) => pw.Stack(fit: pw.StackFit.expand, children: [
         // Foto ocupa a página inteira.
         if (im != null) pw.Image(im, fit: pw.BoxFit.cover) else pw.Container(color: _c(b.ink)),
+        // Logo da marca no topo (sobre a foto escura).
+        if (logo != null)
+          pw.Align(
+            alignment: pw.Alignment.topLeft,
+            child: pw.Padding(
+              padding: const pw.EdgeInsets.fromLTRB(46, 40, 46, 0),
+              child: pw.Image(logo, height: 58),
+            ),
+          ),
         // Faixa inferior sólida (ink) com o texto — legível sobre qualquer foto.
         pw.Align(
           alignment: pw.Alignment.bottomLeft,
