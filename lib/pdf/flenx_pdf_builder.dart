@@ -48,6 +48,7 @@ class FlenxPdf {
     // ou escuro conforme o tom de fundo.
     final logoLight = await image(b.logoLightBgPath);
     final logoDark = await image(b.logoDarkBgPath);
+    final coverLogo = await image(b.coverLogoPath) ?? logoDark;
     pw.MemoryImage? headerLogo(FlenxPdfTone tone) => tone == FlenxPdfTone.ink ? logoDark : logoLight;
 
     final total = doc.pages.length;
@@ -57,7 +58,7 @@ class FlenxPdf {
       switch (page) {
         case FlenxPdfCover(:final imagePath, :final eyebrow, :final title, :final subtitle):
           final im = await image(imagePath);
-          pdf.addPage(_coverPage(b, im, logoDark, eyebrow, title, subtitle));
+          pdf.addPage(_coverPage(b, im, coverLogo, eyebrow, title, subtitle));
         case FlenxPdfChecklist():
           pdf.addPage(_sectionPage(b, page.tone, _checklist(b, page), page: pageNum, total: total, logo: headerLogo(page.tone)));
         case FlenxPdfText():
@@ -721,7 +722,7 @@ class FlenxPdf {
   /// documento que não fica ancorada no topo: é o encerramento).
   static pw.Widget _contact(FlenxPdfBrand b, FlenxPdfContact p, pw.MemoryImage? logo) {
     final block = pw.Column(mainAxisSize: pw.MainAxisSize.min, crossAxisAlignment: pw.CrossAxisAlignment.center, children: [
-      if (logo != null) ...[pw.Image(logo, width: 210), pw.SizedBox(height: 30)],
+      if (logo != null) ...[pw.Image(logo, width: 290), pw.SizedBox(height: 30)],
       pw.Text(p.title, textAlign: pw.TextAlign.center, style: pw.TextStyle(color: PdfColors.white, fontWeight: pw.FontWeight.bold, fontSize: 26, lineSpacing: 1.4)),
       if (p.subtitle != null) ...[
         pw.SizedBox(height: 12),
