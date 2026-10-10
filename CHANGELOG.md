@@ -1,5 +1,9 @@
 # Changelog
 
+## Não publicado
+
+- **feat(seo):** `SeoConfig(trailingSlash: true)` — canonical, `og:url`, sitemap, JSON-LD e `llms.txt` passam a usar `/pagina/` (com barra final). Para hospedagem estática que serve `pasta/index.html` e redireciona `/pagina` → `/pagina/`: antes o canonical e o sitemap apontavam para uma URL que dava 301. Arquivos (`.png`, `.xml`, `.txt`) e a raiz não mudam; o padrão continua `false` (nada muda para quem não ligar).
+
 ## 0.4.1
 
 - **fix(pub.dev/dartdoc):** renomeia `lib/docs/` → `lib/documents/` (o nome `docs` dentro de `lib/` fazia a descoberta de bibliotecas do dartdoc/pana falhar — "unable to locate the input directory at 'lib/docs'" — deixando a análise do pub.dev incompleta). API pública inalterada (mesmos símbolos exportados por `package:flenx/app.dart`).

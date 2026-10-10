@@ -25,6 +25,7 @@ class SeoConfig {
     this.ratingValue,
     this.reviewCount,
     this.globalDisallow = const [],
+    this.trailingSlash = false,
     List<CrawlerRule>? crawlerRules,
   }) : crawlerRules = crawlerRules ?? defaultCrawlerRules;
 
@@ -74,6 +75,14 @@ class SeoConfig {
   final double? ratingValue;
   final int? reviewCount;
 
+  /// Páginas terminam em `/` nas URLs públicas (canonical, og:url, sitemap,
+  /// JSON-LD, llms.txt). Ligue em hospedagem estática que serve cada página
+  /// como `pasta/index.html` (Apache/LiteSpeed): o servidor redireciona
+  /// `/pagina` → `/pagina/`, e sem isto o canonical e o sitemap apontavam para
+  /// uma URL que redireciona (301). Arquivos (`/x.png`, `/sitemap.xml`) e a
+  /// raiz não mudam.
+  final bool trailingSlash;
+
   /// Caminhos bloqueados para todos os agentes.
   final List<String> globalDisallow;
 
@@ -84,7 +93,18 @@ class SeoConfig {
   String url(String path) {
     if (path.startsWith('http')) return path;
     final p = path.startsWith('/') ? path : '/$path';
-    return '$baseUrl$p';
+    return '$baseUrl${trailingSlash ? _comBarraFinal(p) : p}';
+  }
+
+  /// `/a/b` → `/a/b/`; mantém `?query`/`#âncora`, a raiz e arquivos (último
+  /// trecho com ponto: `.png`, `.xml`, `.html`).
+  static String _comBarraFinal(String p) {
+    final corte = p.indexOf(RegExp(r'[?#]'));
+    final caminho = corte < 0 ? p : p.substring(0, corte);
+    final resto = corte < 0 ? '' : p.substring(corte);
+    if (caminho == '/' || caminho.endsWith('/')) return p;
+    if (caminho.split('/').last.contains('.')) return p;
+    return '$caminho/$resto';
   }
 
   /// Política padrão: permite buscadores e crawlers de IA que geram
