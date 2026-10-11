@@ -15,6 +15,7 @@ class FlenxColumn extends StatelessComponent {
     this.cross = FlenxAlign.start,
     this.main = FlenxAlign.start,
     this.maxWidthPx,
+    this.fillHeight = false,
     this.animation,
     this.animationDelay = 0,
     this.animationDuration = 600,
@@ -27,6 +28,11 @@ class FlenxColumn extends StatelessComponent {
   final FlenxAlign cross;
   final FlenxAlign main;
   final double? maxWidthPx;
+
+  /// Ocupa toda a altura do pai. Dentro de um `FlenxCard` num `FlenxGrid`,
+  /// combine com `FlenxExpanded` para empurrar o último item (ex.: botão) para
+  /// o fim do cartão, alinhando todos independentemente do tamanho do texto.
+  final bool fillHeight;
 
   /// Tipo de animação aplicada a cada filho. `null` = sem animação.
   final FlenxAnimation? animation;
@@ -64,6 +70,7 @@ class FlenxColumn extends StatelessComponent {
           'align-items': cross.css,
           'justify-content': main.css,
           if (maxWidthPx != null) 'max-width': '${maxWidthPx}px',
+          if (fillHeight) 'height': '100%',
         },
       ),
       _kids,

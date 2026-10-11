@@ -24,6 +24,7 @@ export 'flenx_section.dart';
 export 'flenx_grid.dart';
 export 'flenx_page.dart';
 export 'flenx_fullscreen.dart';
+export 'flenx_expanded.dart';
 export 'flenx_spacer.dart';
 
 // Blocos de seção prontos
