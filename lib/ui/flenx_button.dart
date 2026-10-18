@@ -2,6 +2,7 @@ import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
 
 import '../flenx_palette.dart';
+import '../growth/flenx_events.dart';
 import 'flenx_animated.dart';
 import 'flenx_ui_enums.dart';
 
@@ -17,6 +18,7 @@ class FlenxButton extends StatelessComponent {
     this.color,
     this.newTab = false,
     this.hover = true,
+    this.trackEvent,
     this.animation,
     this.animationDelay = 0,
     this.animationDuration = 600,
@@ -33,6 +35,9 @@ class FlenxButton extends StatelessComponent {
 
   /// Efeito de hover predefinido. `false` desliga.
   final bool hover;
+
+  /// Evento de `flenx.track` disparado no clique (ex.: `FlenxEvent.contact`). Nulo = não rastreia.
+  final String? trackEvent;
 
   /// Anima o botão com scroll-reveal. `null` = sem animação.
   final FlenxAnimation? animation;
@@ -63,7 +68,10 @@ class FlenxButton extends StatelessComponent {
       href: href,
       classes: hover ? cls : null,
       target: newTab ? Target.blank : null,
-      attributes: newTab ? {'rel': 'noopener noreferrer'} : null,
+      attributes: {
+        if (newTab) 'rel': 'noopener noreferrer',
+        if (trackEvent != null) 'onclick': flenxTrackJs(trackEvent!),
+      },
       styles: Styles(
         raw: {
           'display': 'inline-block',

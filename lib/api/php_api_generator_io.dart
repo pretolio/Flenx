@@ -138,8 +138,16 @@ class PhpApiGenerator {
         return "\$stmt = flenx_db()->prepare('UPDATE `${model.table}` SET $sets WHERE `id` = ?');\n"
             "\$stmt->execute([$vals, \$in['id'] ?? null]);\n"
             "\$flenx_result = ['updated' => true];\n";
-      case SendEmail(:final to, :final subject):
-        return "@mail('$to', '$subject', json_encode(\$in));\n";
+      case SendEmail(:final to, :final subject, :final from):
+        final fromPhp = from == null
+            ? "'nao-responder@' . preg_replace('/^www\\./', '', \$_SERVER['HTTP_HOST'] ?? 'localhost')"
+            : "'${from.replaceAll("'", '')}'";
+        final subj = subject.replaceAll("'", r"\'");
+        return "\$flenx_body = '';\n"
+            "foreach (\$in as \$k => \$v) { if (is_scalar(\$v) && trim((string)\$v) !== '') \$flenx_body .= \$k . ': ' . \$v . \"\\n\"; }\n"
+            "\$flenx_headers = 'From: ' . $fromPhp . \"\\r\\nContent-Type: text/plain; charset=UTF-8\";\n"
+            "if (filter_var(\$in['email'] ?? '', FILTER_VALIDATE_EMAIL)) \$flenx_headers .= \"\\r\\nReply-To: \" . \$in['email'];\n"
+            "@mail('$to', '=?UTF-8?B?' . base64_encode('$subj') . '?=', \$flenx_body, \$flenx_headers);\n";
       case RespondJson(:final body):
         return "flenx_respond(true, json_decode('${_jsonLiteral(body)}', true));\n";
       case Redirect(:final location):

@@ -2,6 +2,10 @@
 
 ## Não publicado
 
+- **feat(ui):** `FlenxButton(trackEvent:)` — dispara `flenx.track(evento)` no clique.
+
+- **feat(ui):** `FlenxLeadForm` ganha `extraData` (valores fixos no POST), `pagePathKey` (envia o caminho da página) e `successRedirect` (redireciona após o envio com sucesso).
+
 - **feat(seo):** `SeoConfig(trailingSlash: true)` — canonical, `og:url`, sitemap, JSON-LD e `llms.txt` passam a usar `/pagina/` (com barra final). Para hospedagem estática que serve `pasta/index.html` e redireciona `/pagina` → `/pagina/`: antes o canonical e o sitemap apontavam para uma URL que dava 301. Arquivos (`.png`, `.xml`, `.txt`) e a raiz não mudam; o padrão continua `false` (nada muda para quem não ligar).
 
 ## 0.4.1

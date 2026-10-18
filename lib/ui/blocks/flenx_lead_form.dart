@@ -47,6 +47,9 @@ class FlenxLeadForm extends StatelessComponent {
     this.noteEmail,
     this.formId = 'fx-lead',
     this.postUrl,
+    this.extraData = const {},
+    this.pagePathKey,
+    this.successRedirect,
     this.successMessage = 'Recebemos seu contato! Em breve retornamos.',
     this.consentText,
     this.consentHref,
@@ -71,6 +74,16 @@ class FlenxLeadForm extends StatelessComponent {
   /// Se informado, POST JSON deste endpoint (Brevo/HubSpot/webhook); falha → mailto.
   final String? postUrl;
   final String successMessage;
+
+  /// Valores fixos enviados junto no POST de [postUrl] (ex.: `{'origem': 'landing'}`).
+  final Map<String, String> extraData;
+
+  /// Se informado, o POST de [postUrl] inclui o caminho da página atual nesta chave.
+  final String? pagePathKey;
+
+  /// Se informado, redireciona para este endereço após o envio com sucesso
+  /// (em vez do alerta de [successMessage]).
+  final String? successRedirect;
   /// Checkbox de consentimento (LGPD). Nulo = sem checkbox; presente = exige
   /// aceite. [consentHref] adiciona o link da política.
   final String? consentText;
@@ -131,11 +144,16 @@ class FlenxLeadForm extends StatelessComponent {
         : "var cc=document.getElementById('$formId-consent');if(cc&&!cc.checked){alert('${consentRequiredMessage.replaceAll("'", r"\'")}');return;}";
     final mailto =
         "window.location.href='mailto:$mailtoTo?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body);";
+    final extraJson = '{${extraData.entries.map((e) => "'${e.key.replaceAll("'", r"\'")}':'${e.value.replaceAll("'", r"\'")}'").join(',')}}';
+    final onSuccess = successRedirect == null
+        ? "alert('${successMessage.replaceAll("'", r"\'")}');"
+        : "window.location.href='${successRedirect!.replaceAll("'", r"\'")}';";
     final send = postUrl == null
         ? mailto
-        : "var data={};for(var k=0;k<FN.length;k++){data[FN[k]]=v(FN[k]);}"
+        : "var data=$extraJson;for(var k=0;k<FN.length;k++){data[FN[k]]=v(FN[k]);}"
+            "${pagePathKey == null ? '' : "data['$pagePathKey']=location.pathname;"}"
             "fetch('$postUrl',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})"
-            ".then(function(r){if(!r.ok)throw 0;f.reset();alert('${successMessage.replaceAll("'", r"\'")}');})"
+            ".then(function(r){if(!r.ok)throw 0;f.reset();$onSuccess})"
             ".catch(function(){$mailto});";
     return '''
 (function(){

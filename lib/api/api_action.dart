@@ -40,9 +40,17 @@ class DeleteById extends ApiAction {
 
 /// Envia um e-mail (servidor) para [to].
 class SendEmail extends ApiAction {
-  const SendEmail({required this.to, this.subject = 'Novo contato'});
+  const SendEmail({
+    required this.to,
+    this.subject = 'Novo contato',
+    this.from,
+  });
   final String to;
   final String subject;
+
+  /// Remetente (`From`) do e-mail gerado em PHP. Nulo = `nao-responder@<domínio do site>`.
+  /// Se o formulário tiver um campo `email` válido, ele vai em `Reply-To`.
+  final String? from;
 }
 
 /// Responde com um JSON fixo.
