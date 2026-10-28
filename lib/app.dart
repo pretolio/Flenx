@@ -24,6 +24,7 @@ import 'blog/sources/database_blog_source.dart';
 import 'blog/sources/dynamic_blog_route_source.dart';
 import 'blog/sources/markdown_blog_source.dart';
 import 'seo/seo.dart';
+import 'site/components/google_preferred_source.dart';
 import 'site_server.dart';
 
 // Reexporta o barrel principal para o app importar só `package:flenx/app.dart`
@@ -82,6 +83,8 @@ class FlenxApp {
     bool blogFromDb = false,
     String blogTable = 'blog_posts',
     BlogLayoutBuilder? blogLayout,
+    // Botão "fonte preferencial no Google" exibido em cada post do blog.
+    GooglePreferredSource? blogPreferredSource,
     List<IRouteSource> extraSources = const [],
     List<ApiEndpoint> apis = const [],
     DbExecutor? db,
@@ -211,6 +214,7 @@ class FlenxApp {
             path,
             query: query['q'],
             page: int.tryParse(query['page'] ?? '') ?? 1,
+            preferredSource: blogPreferredSource,
           );
           if (page == null) return null;
           return PageResult(blogLayout != null ? blogLayout(page) : page);

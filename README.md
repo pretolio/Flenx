@@ -546,6 +546,14 @@ FlenxFloatingButton({required String href, String label = '', String icon = '�
 Fixo no canto da tela. Use em `FlenxApp.run(floatingButtons: [...])` para que apareça em
 **todas as páginas** (global). `WhatsappButton` continua disponível como atalho.
 
+### `GooglePreferredSource` — "fonte preferencial no Google"
+```dart
+GooglePreferredSource({required String name, String? publicationId, String? domain,
+  String lang = 'pt-BR', String? trackEvent})   // informe publicationId OU domain
+```
+Botão que abre o popup do Google para o leitor adicionar o site como fonte preferida.
+No blog, use `FlenxApp.run(blogPreferredSource: ...)`; em outras páginas, use o componente direto.
+
 ### `FlenxNotFound` — página 404 pronta
 ```dart
 FlenxNotFound({required SiteBrand brand, List<MenuLink> links = const [], List<LoginOption> loginOptions = const [],
@@ -691,6 +699,7 @@ Future<void> FlenxApp.run({
   bool blogFromDb = false,            // + posts do banco
   String blogTable = 'blog_posts',
   List<BlogSource> blogSources = const [],
+  GooglePreferredSource? blogPreferredSource,   // botão no topo de cada post
   List<IRouteSource> extraSources = const [],   // rotas dinâmicas (sitemap)
   List<ApiEndpoint> apis = const [],
   DbExecutor? db,
@@ -817,6 +826,8 @@ FlenxApp.run(
   ...,
   blog: 'lib/content/blog',   // posts em Markdown
   blogFromDb: true,           // (opcional) + posts no banco (tabela blog_posts)
+  // (opcional) botão "fonte preferencial no Google" em cada post:
+  blogPreferredSource: GooglePreferredSource(name: 'Meu Site', domain: 'meusite.com.br'),
 );
 ```
 Índice, post, categorias, tags, busca (`?q=`) e paginação (`?page=N`) são automáticos.

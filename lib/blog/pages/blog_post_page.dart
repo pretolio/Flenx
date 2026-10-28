@@ -7,12 +7,20 @@ import '../utils/date_format.dart';
 /// Renderiza um post completo (SSR): trilha, cabeçalho e o corpo markdown já
 /// convertido em HTML ([htmlBody]). Conteúdo semântico, ótimo para SEO/AEO.
 class BlogPostPage extends StatelessComponent {
-  const BlogPostPage({required this.post, required this.htmlBody, super.key});
+  const BlogPostPage({
+    required this.post,
+    required this.htmlBody,
+    this.preferredSource,
+    super.key,
+  });
 
   final BlogPost post;
 
   /// Corpo do post em HTML (gerado pelo MarkdownRenderer no servidor).
   final String htmlBody;
+
+  /// Botão "fonte preferencial no Google" (opcional), exibido abaixo da data.
+  final Component? preferredSource;
 
   @override
   Component build(BuildContext context) {
@@ -35,6 +43,8 @@ class BlogPostPage extends StatelessComponent {
           span([.text(DateFormatBr.short(post.date))]),
         ]),
       ]),
+      if (preferredSource != null)
+        div(styles: Styles(raw: {'margin': '0 0 24px'}), [preferredSource!]),
       if (post.image != null && post.image!.trim().isNotEmpty)
         figure(classes: 'cover', [img(src: post.image!, alt: post.title)]),
       // Corpo markdown renderizado no servidor.

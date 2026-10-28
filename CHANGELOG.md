@@ -1,6 +1,8 @@
 # Changelog
 
-## Não publicado
+## 0.5.0
+
+- **feat(site):** `GooglePreferredSource` — botão "Adicione o <veículo> como fonte preferencial no Google" (popup do Google), por `publicationId` ou por `domain`. No blog: `FlenxApp.run(blogPreferredSource: ...)` exibe o botão em cada post (`BlogPostPage`/`Blog.pageFor` ganham `preferredSource`).
 
 - **feat(ui):** `FlenxButton(trackEvent:)` — dispara `flenx.track(evento)` no clique.
 

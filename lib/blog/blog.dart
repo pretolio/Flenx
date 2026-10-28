@@ -50,7 +50,12 @@ class Blog {
 
   /// Resolve o caminho no componente correspondente, ou `null` se não existir.
   /// [query] é o termo de busca (`/blog?q=...`) e [page] a página (`?page=N`).
-  Component? pageFor(String path, {String? query, int page = 1}) {
+  Component? pageFor(
+    String path, {
+    String? query,
+    int page = 1,
+    Component? preferredSource,
+  }) {
     if (path == '/blog') {
       return BlogIndexPage(
         posts: _published,
@@ -113,7 +118,11 @@ class Blog {
     final slug = path.substring('/blog/'.length);
     final post = _first(_published.where((p) => p.slug == slug));
     if (post == null) return null;
-    return BlogPostPage(post: post, htmlBody: _md.toHtml(post.bodyMarkdown));
+    return BlogPostPage(
+      post: post,
+      htmlBody: _md.toHtml(post.bodyMarkdown),
+      preferredSource: preferredSource,
+    );
   }
 
   static T? _first<T>(Iterable<T> items) => items.isEmpty ? null : items.first;

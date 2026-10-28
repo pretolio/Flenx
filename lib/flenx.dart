@@ -84,6 +84,7 @@ export 'site/components/flenx_not_found.dart';
 export 'site/components/flenx_floating_button.dart';
 export 'site/components/iframe_embed.dart';
 export 'site/components/lead_form.dart';
+export 'site/components/google_preferred_source.dart';
 export 'site/components/whatsapp_button.dart';
 export 'site/models/feature.dart';
 export 'site/models/lead.dart';
