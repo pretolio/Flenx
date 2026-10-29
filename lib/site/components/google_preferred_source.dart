@@ -3,7 +3,7 @@ import 'package:jaspr/jaspr.dart';
 
 import '../../growth/flenx_events.dart';
 
-/// Botão "Adicione o <veículo> como fonte preferencial no Google". Abre o
+/// Botão "Adicione o `<veículo>` como fonte preferencial no Google". Abre o
 /// popup do Google para o leitor marcar o site como fonte preferida nas buscas.
 /// Identifique o veículo por [publicationId] (Google News Publisher Center) ou
 /// por [domain] (ex.: `tribunademinas.com.br`); se vier os dois, vale o ID.

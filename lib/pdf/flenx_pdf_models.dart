@@ -1,6 +1,7 @@
 /// Modelos declarativos para gerar um documento PDF comercial (A4) — você
 /// descreve as páginas em Dart e o [FlenxPdf] renderiza. Reutilizável entre
 /// sites: cada proposta é só uma lista de páginas.
+library;
 
 /// Cor de fundo de uma página.
 enum FlenxPdfTone { white, light, ink }

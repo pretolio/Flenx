@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.1
+
+- **fix(lint):** corrige avisos de análise estática do pub.dev (comentário de biblioteca solto em `flenx_pdf_models.dart` e `<veículo>` interpretado como HTML em `GooglePreferredSource`).
+
 ## 0.5.0
 
 - **feat(site):** `GooglePreferredSource` — botão "Adicione o <veículo> como fonte preferencial no Google" (popup do Google), por `publicationId` ou por `domain`. No blog: `FlenxApp.run(blogPreferredSource: ...)` exibe o botão em cada post (`BlogPostPage`/`Blog.pageFor` ganham `preferredSource`).
